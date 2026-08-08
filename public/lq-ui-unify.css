@@ -1,0 +1,53 @@
+/* Phase 8 — UI unification: mobile shell + simplified auth */
+.ev-auth-tab.lq-auth-hidden {
+  display: none !important;
+}
+
+.ev-auth-note {
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 241, 184, 0.85);
+  background: rgba(216, 177, 91, 0.08);
+  border: 1px solid rgba(216, 177, 91, 0.2);
+}
+
+@media (max-width: 768px) {
+  .ev-auth-tabs {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .ev-auth-tab {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .saas-sidebar,
+  .sidebar {
+    max-width: 100vw;
+  }
+
+  .saas-fab-dock {
+    bottom: max(12px, env(safe-area-inset-bottom));
+    right: max(12px, env(safe-area-inset-right));
+  }
+
+  .login-glass-card,
+  .ev-auth-card {
+    margin: 12px;
+    max-width: calc(100vw - 24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ev-holo-orbs,
+  .ev-cinema-lights,
+  .ev-neural-canvas {
+    display: none !important;
+  }
+}

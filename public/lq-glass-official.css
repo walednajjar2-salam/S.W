@@ -1,0 +1,351 @@
+/* ============================================================
+   Launch Quality — OFFICIAL GLASS + NO TURQUOISE + TYPE LOCK
+   Must load LAST. Owner final warning lock.
+   Font: IBM Plex Sans Arabic · 12px · bold · black
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@700;800&display=swap");
+
+:root{
+  --lq-font:"IBM Plex Sans Arabic","Cairo","Segoe UI",Tahoma,sans-serif !important;
+  --lq-font-ar:var(--lq-font) !important;
+  --lq-font-display:var(--lq-font) !important;
+  --lq-fw:700 !important;
+  --lq-fw-strong:800 !important;
+  --lq-official-black:#000000 !important;
+  --lq-glass-bg:rgba(255,255,255,.55) !important;
+  --lq-glass-bg-strong:rgba(255,255,255,.72) !important;
+  --lq-glass-line:rgba(15,42,74,.14) !important;
+  --lq-glass-gold:rgba(201,169,110,.42) !important;
+  --lq-navy:#0f2744 !important;
+  --lq-gold:#c9a96e !important;
+  --lq-gold-deep:#8d6d2c !important;
+  /* Kill turquoise tokens everywhere */
+  --lq-turquoise:#0f2744 !important;
+  --lq-turquoise-strong:#c9a96e !important;
+  --lq-turquoise-deep:#0f2744 !important;
+  --lq-cyan:#0f2744 !important;
+  --saas-cyan:#0f2744 !important;
+  --va-cyan:#0f2744 !important;
+  --lq-tq:#0f2744 !important;
+  --lq-tq-mid:#0f2744 !important;
+  --lq-tq-soft:#c9a96e !important;
+  --lq-tq-glow:rgba(15,39,68,.12) !important;
+  --aqua:#0f2744 !important;
+  --aqua2:#0f2744 !important;
+  --aqua-text:#000000 !important;
+}
+
+/* ===== Global official type: black · 12px · bold ===== */
+body.app-ready,
+body.lq-exec.app-ready,
+body.saas-luxury.app-ready,
+body.app-ready #app,
+body.app-ready #app *{
+  font-family:"IBM Plex Sans Arabic","Cairo",sans-serif !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+}
+
+body.app-ready #app h1,
+body.app-ready #app h2,
+body.app-ready #app h3,
+body.app-ready #app h4,
+body.app-ready #app strong,
+body.app-ready #app b{
+  font-weight:800 !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  background:none !important;
+  background-image:none !important;
+  -webkit-background-clip:initial !important;
+  background-clip:initial !important;
+}
+
+/* Clock stays light-on-dark */
+body.app-ready #app #clock,
+body.app-ready #app #clock.lq-header-clock,
+body.app-ready #app .lq-header-clock{
+  color:#f5f7fa !important;
+  -webkit-text-fill-color:#f5f7fa !important;
+  background:#0f2744 !important;
+  border:1px solid #1a3a5c !important;
+}
+
+/* Gold/primary buttons: dark ink on gold (readable) */
+body.app-ready #app .gold-btn,
+body.app-ready #app .gold-btn *,
+body.app-ready #app .add-new-btn,
+body.app-ready #app .add-new-btn *,
+body.app-ready #app .saas-quick-btn{
+  color:#1a1408 !important;
+  -webkit-text-fill-color:#1a1408 !important;
+  background:linear-gradient(145deg,#d4b15d,#8d6d2c) !important;
+  border:1px solid rgba(141,109,44,.45) !important;
+  box-shadow:0 8px 18px rgba(141,109,44,.18) !important;
+}
+
+/* Logout stays danger red text */
+body.app-ready #app #logoutBtn.tb-logout,
+body.app-ready #app #logoutBtn.tb-logout *{
+  color:#991b1d !important;
+  -webkit-text-fill-color:#991b1d !important;
+  background:#fef2f2 !important;
+}
+
+/* ===== Absolute ban on turquoise / cyan / teal paints ===== */
+body.app-ready,
+body.lq-exec,
+body.saas-luxury{
+  --saas-glow:0 8px 24px rgba(15,39,68,.10) !important;
+}
+body.app-ready .brand-copy-pro h1,
+body.app-ready .lq-header-brand-text strong,
+body.app-ready #headerOrgName,
+body.saas-luxury .brand-copy-pro h1{
+  background:none !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  text-shadow:none !important;
+  filter:none !important;
+}
+
+/* Estate platform — no dark teal head, no cyan glow */
+body.app-ready .lq-estate-nx-head,
+body.lq-exec .lq-estate-nx-head,
+#sec-estate-platform .lq-estate-nx-head{
+  background:rgba(255,255,255,.58) !important;
+  background-image:none !important;
+  border:1px solid rgba(15,42,74,.14) !important;
+  outline:1px solid rgba(201,169,110,.35) !important;
+  outline-offset:-3px !important;
+  color:#000000 !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.85) inset,
+    0 14px 32px rgba(15,39,68,.10) !important;
+  backdrop-filter:blur(16px) saturate(1.2) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(1.2) !important;
+}
+body.app-ready .lq-estate-nx-head h3,
+body.app-ready .lq-estate-nx-head .mini,
+body.app-ready .lq-estate-nx-head label,
+body.app-ready .lq-estate-nx-head select,
+body.app-ready .lq-estate-nx-head *{
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  background-image:none !important;
+}
+body.app-ready .lq-estate-nx-head select{
+  background:rgba(255,255,255,.85) !important;
+  border:1px solid rgba(15,42,74,.18) !important;
+}
+body.app-ready #lqNxCopyNizwa,
+body.app-ready .lq-estate-nx-head .ghost,
+body.app-ready .lq-estate-nx-head button.ghost{
+  background:rgba(255,255,255,.78) !important;
+  border:1px solid rgba(201,169,110,.45) !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  box-shadow:0 6px 14px rgba(15,39,68,.08) !important;
+  text-shadow:none !important;
+  filter:none !important;
+}
+
+/* ===== Glass theme surfaces ===== */
+body.app-ready .card,
+body.app-ready .section .card,
+body.app-ready .lq-estate-nx-stat,
+body.app-ready .lq-estate-nx-bld,
+body.app-ready .lq-estate-nx-modules button,
+body.app-ready .lq-estate-nx-table-wrap,
+body.app-ready .sidebar-ultra,
+body.app-ready .app-header,
+body.app-ready .saas-glass,
+body.app-ready .userbox-pro,
+body.app-ready #sidebarUser.sidebar-user{
+  background:rgba(255,255,255,.58) !important;
+  border:1px solid rgba(15,42,74,.14) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 12px 28px rgba(15,39,68,.10) !important;
+  backdrop-filter:blur(16px) saturate(1.2) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(1.2) !important;
+}
+body.app-ready .lq-estate-nx-modules button.active,
+body.app-ready .lq-estate-nx-bld.active{
+  background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(247,241,228,.85)) !important;
+  border-color:rgba(201,169,110,.55) !important;
+  outline:1px solid rgba(201,169,110,.3) !important;
+  outline-offset:-3px !important;
+  box-shadow:0 10px 22px rgba(141,109,44,.14) !important;
+}
+
+/* Nav icons glass — navy/gold only, never cyan */
+body.app-ready .nav-icon,
+body.app-ready .tb-icon{
+  background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(236,242,250,.65)) !important;
+  border:1px solid rgba(15,42,74,.16) !important;
+  outline:1px solid rgba(201,169,110,.3) !important;
+  outline-offset:-3px !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 10px 20px rgba(15,39,68,.12) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 10px 20px rgba(15,39,68,.12) !important;
+  filter:none !important;
+}
+
+/* ===== Logo: full crest · swing right↔left · NOT circular ===== */
+@keyframes lqLogoFloatSlow{
+  0%{transform:translateX(8px) rotate(14deg)}
+  50%{transform:translateX(-8px) rotate(-14deg)}
+  100%{transform:translateX(8px) rotate(14deg)}
+}
+@keyframes lqLogoSpinSlow{
+  0%{transform:translateX(8px) rotate(14deg)}
+  50%{transform:translateX(-8px) rotate(-14deg)}
+  100%{transform:translateX(8px) rotate(14deg)}
+}
+@keyframes lqLogoSwingRL{
+  0%{transform:translateX(8px) rotate(14deg)}
+  50%{transform:translateX(-8px) rotate(-14deg)}
+  100%{transform:translateX(8px) rotate(14deg)}
+}
+
+body.app-ready .lq-header-brand,
+body.app-ready .brand-pro{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  padding:0 !important;
+}
+body.app-ready .lq-header-logo,
+body.app-ready .brand-logo-pro,
+body.app-ready .brand-logo-pro--circle,
+body.app-ready .brand-logo-pro--hd,
+body.app-ready .lq-brand-mark img,
+body.app-ready .login-logo-img{
+  background:transparent !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  object-fit:contain !important;
+  width:auto !important;
+  max-width:100% !important;
+  height:auto !important;
+  max-height:88px !important;
+  padding:0 !important;
+  filter:drop-shadow(0 10px 18px rgba(15,39,68,.28)) drop-shadow(0 2px 6px rgba(201,169,110,.25)) !important;
+  animation:none !important;
+  border-radius:0 !important;
+  clip-path:none !important;
+}
+/* Header crest — natural rectangle, not a circle */
+body.app-ready .lq-header-logo{
+  width:118px !important;
+  height:auto !important;
+  max-height:72px !important;
+  aspect-ratio:auto !important;
+}
+body.app-ready .brand-logo-pro{
+  width:128px !important;
+  height:auto !important;
+  max-height:82px !important;
+  aspect-ratio:auto !important;
+}
+/* Login/portal: same right↔left swing, never circular crop */
+body.login-ultra .lq-brand-mark--hero img,
+body.lq-official-portal .lq-brand-mark--portal img{
+  animation:none !important;
+  filter:drop-shadow(0 18px 30px rgba(15,39,68,.32)) drop-shadow(0 4px 10px rgba(201,169,110,.28)) !important;
+  background:transparent !important;
+  border-radius:0 !important;
+  clip-path:none !important;
+}
+body.login-ultra .lq-brand-mark::before,
+body.login-ultra .lq-brand-mark::after,
+body.lq-official-portal .lq-brand-mark::before,
+body.lq-official-portal .lq-brand-mark::after,
+body.app-ready .lq-brand-mark::before,
+body.app-ready .lq-brand-mark::after{
+  display:none !important; /* no halo plate behind crest */
+}
+
+/* Kill any remaining cyan glow utilities */
+body.app-ready .glow-pulse,
+body.app-ready .saas-glass{
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 12px 28px rgba(15,39,68,.10) !important;
+}
+body.app-ready .saas-link-btn,
+body.app-ready .saas-chip,
+body.app-ready th{
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+}
+
+@media (prefers-reduced-motion:reduce){
+  body.app-ready .lq-header-logo,
+  body.app-ready .brand-logo-pro,
+  body.login-ultra .lq-brand-mark--hero img,
+  body.lq-official-portal .lq-brand-mark--portal img{
+    animation:none !important;
+  }
+}
+
+
+/* ===== LOGO SWING — full crest rectangle, no circle plate ===== */
+body.app-ready .lq-header-brand,
+body.app-ready .brand-pro,
+body.app-ready .lq-header-brand::before,
+body.app-ready .lq-header-brand::after,
+body.app-ready .brand-pro::before,
+body.app-ready .brand-pro::after{
+  background:transparent !important;
+  background-image:none !important;
+  border:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+body.app-ready .lq-header-brand::before,
+body.app-ready .lq-header-brand::after,
+body.app-ready .brand-pro::before,
+body.app-ready .brand-pro::after{
+  content:none !important;
+  display:none !important;
+}
+body.app-ready .lq-header-logo,
+body.app-ready .brand-logo-pro,
+body.app-ready .brand-logo-pro--circle,
+body.app-ready .brand-logo-pro--hd{
+  background:transparent !important;
+  border:0 !important;
+  border-radius:0 !important;
+  clip-path:none !important;
+  padding:0 !important;
+  box-shadow:none !important;
+  object-fit:contain !important;
+  image-rendering:auto !important;
+  filter:drop-shadow(0 12px 22px rgba(15,39,68,.24)) drop-shadow(0 2px 8px rgba(201,169,110,.30)) !important;
+  animation:none !important;
+  transform-origin:50% 50% !important;
+}
+body.app-ready .lq-header-logo{
+  width:118px !important;height:auto !important;max-width:118px !important;max-height:72px !important;aspect-ratio:auto !important;
+}
+body.app-ready .brand-logo-pro--hd{
+  width:128px !important;height:auto !important;max-width:128px !important;max-height:82px !important;aspect-ratio:auto !important;
+}
+@media (prefers-reduced-motion:reduce){
+  body.app-ready .lq-header-logo,
+  body.app-ready .brand-logo-pro,
+  body.app-ready .brand-logo-pro--hd{animation:none !important}
+}

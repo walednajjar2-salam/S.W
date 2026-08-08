@@ -1,0 +1,41 @@
+plugins {
+  id 'com.android.application'
+}
+android {
+  namespace 'com.najjar.trading'
+  compileSdk 34
+  defaultConfig {
+    applicationId 'com.najjar.trading'
+    minSdk 24
+    targetSdk 34
+    versionCode 7051
+    versionName '70.5.1'
+    buildConfigField "String", "APP_URL", "\"https://web-production-08d73.up.railway.app/najjar-al-samoom-used-imported-cars/login.html\""
+  }
+  buildFeatures { buildConfig true }
+  signingConfigs {
+    release {
+      storeFile file("/workspace/tools/android/launchquality-release.jks")
+      storePassword 'launchquality'
+      keyAlias 'launchquality'
+      keyPassword 'launchquality'
+    }
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      signingConfig signingConfigs.release
+    }
+    debug {
+      signingConfig signingConfigs.release
+    }
+  }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+  }
+}
+dependencies {
+  implementation 'androidx.appcompat:appcompat:1.6.1'
+  implementation 'com.google.android.material:material:1.11.0'
+}

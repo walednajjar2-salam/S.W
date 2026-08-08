@@ -1,0 +1,988 @@
+﻿<!doctype html>
+<html lang="ar" dir="ltr">
+<head>
+  <script>
+  /* FORCE fresh load — kill service workers + caches before paint */
+  (function(){
+    try{
+      if(navigator.serviceWorker){
+        navigator.serviceWorker.getRegistrations().then(function(rs){
+          (rs||[]).forEach(function(r){ try{r.unregister()}catch(e){} });
+        });
+      }
+      if(window.caches&&caches.keys){
+        caches.keys().then(function(ks){
+          (ks||[]).forEach(function(k){ try{caches.delete(k)}catch(e){} });
+        });
+      }
+    }catch(e){}
+  })();
+  </script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071426">
+  <meta name="application-name" content="Launch Quality ERP">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="جودة الانطلاقة">
+  <meta name="lq-edition" content="terrifying-dev">
+  <meta name="lq-edition-label" content="جودة الانطلاقة">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/app-icon-192.png">
+  <title>Launch Quality LLC · جودة الانطلاقة</title>
+  <!-- OFFICIAL LOGIN UI 2026-08-02: lq-login-locked.css (owner-approved redesign) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@700;800&family=Cairo:wght@700;800&family=Noto+Sans+Bengali:wght@600;700&family=Noto+Sans+Devanagari:wght@600;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app.css?v=portal11">
+  <link rel="stylesheet" href="lq-shell.css?v=shell33">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="lq-ui-unify.css?v=ui3">
+  <link rel="stylesheet" href="lq-print.css?v=lq2" media="print">
+  <link rel="stylesheet" href="lq-reference-clean.css?v=ref10">
+  <link rel="stylesheet" href="lq-emergency-clean.css?v=ec15">
+  <link rel="stylesheet" href="lq-edition-terrifying.css?v=td5">
+  <link rel="stylesheet" href="lq-exec-theme.css?v=day4">
+  <link rel="stylesheet" href="lq-official-atmosphere.css?v=day3">
+  <link rel="stylesheet" href="lq-brand-mark.css?v=day7">
+  <link rel="stylesheet" href="lq-login-locked.css?v=day5">
+  <!-- Typography last so one bold stack wins site-wide -->
+  <link rel="stylesheet" href="lq-arabic-type.css?v=day8">
+  <link rel="stylesheet" href="lq-glass-3d-icons.css?v=svg2">
+  <link rel="stylesheet" href="lq-ui-final-lock.css?v=lock3">
+  <link rel="stylesheet" href="lq-glass-official.css?v=go3">
+  <link rel="stylesheet" href="lq-glass-official-theme.css?v=swing2">
+  <link rel="stylesheet" href="lq-smart-dropdowns.css?v=light2">
+  <link rel="stylesheet" href="lq-brand-layer.css?v=under1">
+  <link rel="stylesheet" href="lq-command-contrast-lock.css?v=cc2">
+  <link rel="stylesheet" href="lq-delete-dark-lock.css?v=nodark2">
+  <link rel="stylesheet" href="lq-staff-mapping.css?v=staff1">
+  <link rel="stylesheet" href="lq-crystal-building-theme.css?v=crystal3">
+  <link rel="stylesheet" href="lq-platform-reorder.css?v=reorder1">
+</head>
+<body class="login-ultra saas-login enterprise-vision va-theme lq-edition-terrifying lq-exec" data-edition="terrifying-dev">
+  <style>
+    #loginScreen,#app{position:relative;z-index:10;min-height:100vh}
+    #loginScreen.hidden,#app.hidden{display:none!important}
+    /* Hard kill: never leave a blank 100vh login block above the app */
+    body.saas-luxury #loginScreen,
+    body.app-ready #loginScreen,
+    #loginScreen.hidden{
+      display:none!important;visibility:hidden!important;pointer-events:none!important;
+      height:0!important;max-height:0!important;min-height:0!important;
+      margin:0!important;padding:0!important;overflow:hidden!important;
+    }
+    body.saas-luxury #app.app,body.app-ready #app.app{display:block!important}
+    #app > .lq-app-bg-parity,.lq-app-bg-parity{
+      position:fixed!important;inset:0!important;z-index:0!important;pointer-events:none!important;
+      margin:0!important;padding:0!important;min-height:0!important;
+    }
+    body.saas-luxury .section:not(.active),body.app-ready .section:not(.active){
+      display:none!important;height:0!important;min-height:0!important;overflow:hidden!important;
+    }
+
+    
+    /* Owner: permanently remove personal assistant + elevator FAB + top void */
+    #visionAiDock,.vision-ai-dock,#saasFabDock,.saas-fab-dock,#saasScrollTop,.saas-scroll-top{
+      display:none!important;visibility:hidden!important;pointer-events:none!important;
+      opacity:0!important;height:0!important;width:0!important;overflow:hidden!important;
+    }
+
+
+    /* Dashboard functions must always show (no hub/workspace hide cache) */
+    body.lq-hub-mode .lq-cockpit-wrap,
+    body.lq-hub-mode:not(.lq-hub-expanded) .lq-cockpit-wrap,
+    body.lq-hub-expanded .lq-cockpit-wrap,
+    body.lq-workspace-mode .lq-cockpit-wrap,
+    body.lq-workspace-mode .lq-hub-board,
+    .lq-cockpit-v30 .lq-dash-legacy,
+    #dashCommandGrid,#dashQuickActions,#saasKpiRow,#dashMegaCockpit{
+      display:block!important; visibility:visible!important; opacity:1!important;
+    }
+    .lq-cockpit-v30 .saas-kpi-grid.lq-dash-legacy,
+    .lq-cockpit-v30 .dash-mega-cockpit,
+    .lq-cockpit-v30 .saas-command-grid,
+    .lq-cockpit-v30 .saas-quick-grid{display:grid!important}
+
+    /* FORCE NO TOP VOID — v9 */
+    body.saas-luxury,body.app-ready{margin:0!important;padding:0!important}
+    body.saas-luxury #loginScreen,body.app-ready #loginScreen,#loginScreen.hidden,#loginScreen[hidden]{
+      display:none!important;height:0!important;min-height:0!important;max-height:0!important;
+      margin:0!important;padding:0!important;overflow:hidden!important;visibility:hidden!important;
+      position:fixed!important;pointer-events:none!important;opacity:0!important
+    }
+    body.saas-luxury #app.app,body.app-ready #app.app{display:block!important;margin:0!important;padding:0!important;min-height:100vh!important}
+    body.saas-luxury .content{margin:0!important;padding:8px 8px 8px!important;padding-inline-end:calc(var(--saas-side, 0px) + 16px)!important}
+    body.saas-luxury .app-shell{margin-top:0!important;min-height:auto!important}
+    body.saas-luxury .ops-quick-bar:not(:has(button)),
+    body.saas-luxury .ops-quick-bar:has(> .ops-label:only-child){display:none!important;height:0!important}
+    body.saas-luxury .app-shell:has(#sec-estate-platform.active)>.page-head{display:none!important;height:0!important;margin:0!important;padding:0!important}
+    /* dock القديم أُلغي لصالح مبدأ نزوى المطوّر داخل estate-platform */
+    #lqForceEstateDock{display:none!important}
+
+    #lqBrandWatermark{display:none!important;opacity:0!important;visibility:hidden!important}
+    #lqBrandWatermark img{display:none!important;opacity:0!important}
+    /* Login visuals owned by lq-login-locked.css (official redesign) */
+    #lqBootMsg{position:fixed;inset:0;z-index:200;display:none;place-items:center;background:#0b1a28;color:#f3efe6;font:700 16px "IBM Plex Sans Arabic",Cairo,sans-serif;text-align:center;padding:24px}
+    #lqBootMsg.show{display:grid}
+  </style>
+  <div id="lqBootMsg" role="status">جاري تحميل النظام…</div>
+  <div class="lq-cosmos" aria-hidden="true">
+    <div class="lq-cosmos-nebula"></div>
+    <canvas id="lqCosmicStars" class="lq-cosmos-stars"></canvas>
+    <div class="lq-cosmos-dust"></div>
+    <div class="lq-cine-scanline" aria-hidden="true"></div>
+  </div>
+  <script>
+    (function(){
+      try{
+        var params = new URLSearchParams(location.search || '');
+        var qToken = params.get('token');
+        if(qToken) localStorage.setItem('jawdah_cloud_token', qToken);
+      }catch(_){}
+      var token=localStorage.getItem('jawdah_cloud_token');
+      var login=document.getElementById('loginScreen');
+      var app=document.getElementById('app');
+      var boot=document.getElementById('lqBootMsg');
+      if(!login||!app) return;
+      if(token){
+        login.classList.add('hidden');
+        app.classList.remove('hidden');
+        document.body.classList.remove('login-ultra','saas-login');
+        document.body.classList.add('saas-luxury','enterprise-vision','va-theme');
+      } else {
+        login.classList.remove('hidden');
+        app.classList.add('hidden');
+        document.body.classList.add('login-ultra','saas-login','enterprise-vision','va-theme');
+        document.body.classList.remove('saas-luxury','app-ready');
+        if(boot) boot.classList.remove('show');
+      }
+    })();
+    document.addEventListener('DOMContentLoaded',function(){
+      var login=document.getElementById('loginScreen');
+      var app=document.getElementById('app');
+      var boot=document.getElementById('lqBootMsg');
+      var token=localStorage.getItem('jawdah_cloud_token');
+      if(!login||!app) return;
+      if(token){
+        login.classList.add('hidden');
+        app.classList.remove('hidden');
+        document.body.classList.remove('login-ultra','saas-login');
+        document.body.classList.add('saas-luxury','enterprise-vision','va-theme');
+        var dash=document.getElementById('sec-dashboard');
+        if(dash){
+          document.querySelectorAll('.section').forEach(function(sec){
+            if(sec!==dash) sec.classList.remove('active');
+          });
+          dash.classList.add('active');
+        }
+        if(boot){ boot.textContent='جاري تحميل لوحة التحكم…'; boot.classList.add('show'); }
+      } else {
+        login.classList.remove('hidden');
+        app.classList.add('hidden');
+        document.body.classList.add('login-ultra','saas-login','enterprise-vision','va-theme');
+        document.body.classList.remove('saas-luxury','app-ready');
+        if(boot) boot.classList.remove('show');
+      }
+    });
+  </script>
+  <canvas id="neuralCanvas" class="ev-neural-canvas" aria-hidden="true"></canvas>
+  <div class="ev-cinema-lights" aria-hidden="true"></div>
+  <div class="ev-holo-orbs" aria-hidden="true"><i></i><i></i><i></i></div>
+  <main id="loginScreen" class="login">
+    <div class="login-bg" aria-hidden="true"></div>
+    <div class="login-bg-glow" aria-hidden="true"></div>
+    <div class="login-mesh" aria-hidden="true"></div>
+    <div class="login-cinema-photo-layer lq-atm-bg" aria-hidden="true"></div>
+    <div class="login-icons" aria-hidden="true">
+      <span class="login-float-icon fi-1" data-tone="gold"><span class="lfi-orbit"></span><span class="lfi-glow"></span><span class="lfi-emoji">🏛️</span></span>
+      <span class="login-float-icon fi-2" data-tone="navy"><span class="lfi-orbit"></span><span class="lfi-glow"></span><span class="lfi-emoji">🏠</span></span>
+      <span class="login-float-icon fi-3" data-tone="amber"><span class="lfi-orbit"></span><span class="lfi-glow"></span><span class="lfi-emoji">🔑</span></span>
+      <span class="login-float-icon fi-4" data-tone="violet"><span class="lfi-orbit"></span><span class="lfi-glow"></span><span class="lfi-emoji">📊</span></span>
+      <span class="login-float-icon fi-5" data-tone="navy"><span class="lfi-orbit"></span><span class="lfi-glow"></span><span class="lfi-emoji">🌐</span></span>
+      <span class="login-float-icon fi-6" data-tone="rose"><span class="lfi-orbit"></span><span class="lfi-glow"></span><span class="lfi-emoji">✨</span></span>
+    </div>
+    <div class="login-shell">
+      <div class="login-top-logo lq-brand-layer" aria-label="مشاريع جودة الانطلاقة">
+        <div class="lq-brand-motion lq-brand-motion--hero">
+          <div class="lq-brand-mark lq-brand-mark--hero login-logo-wrap login-logo-wrap--float">
+            <img src="assets/brand-mark-gold.png?v=under1" alt="" class="login-logo-img login-logo-img--float lq-brand-crest" width="655" height="411" decoding="async" fetchpriority="high">
+          </div>
+          <div class="lq-brand-name-under lq-brand-name-under--hero">
+            <strong class="lq-brand-ar">مشاريع جودة الانطلاقة</strong>
+            <small class="lq-brand-en" dir="ltr">Launch Quality LLC</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- real-only: no fake analytics on login -->
+
+      <div class="login-stage login-stage--center">
+        <div class="login-glass-stage">
+          <div class="login-glass-stage-shine" aria-hidden="true"></div>
+          <div class="login-auth login-auth--float">
+          <section class="login-glass-card ev-auth-card login-card--floating" aria-label="تسجيل الدخول">
+            <div id="loginLangMount" class="login-topbar-lang" aria-label="اختيار اللغة"></div>
+            <div class="login-card-head">
+              <div>
+                <h2 class="login-card-title" data-i18n="welcomeBack">مرحباً بك</h2>
+                <p class="login-card-sub" data-i18n="signInContinue">سجّل الدخول للوصول إلى حسابك</p>
+              </div>
+            </div>
+            <div id="authPanePassword" class="ev-auth-pane login-form" role="tabpanel">
+              <label class="login-field">
+                <span class="login-field-label" data-i18n="username">اسم المستخدم</span>
+                <input id="loginUser" placeholder="اسم المستخدم" autocomplete="username" data-i18n-placeholder="username">
+              </label>
+              <label class="login-field">
+                <span class="login-field-label" data-i18n="password">كلمة المرور</span>
+                <input id="loginPass" placeholder="كلمة المرور" type="password" autocomplete="current-password" data-i18n-placeholder="password">
+                <button type="button" id="loginPassToggle" class="login-pass-toggle" data-i18n="showPassword" data-i18n-aria="passwordVisibility" aria-label="إظهار أو إخفاء كلمة المرور">إظهار</button>
+              </label>
+              <div id="capsHint" class="login-caps-hint hidden" data-i18n="capsLockOn">يبدو أن زر Caps Lock مفعّل</div>
+              <div class="login-inline-tools">
+                <label class="login-remember-check"><input id="loginRemember" type="checkbox"> <span data-i18n="rememberMe">تذكرني على هذا الجهاز</span></label>
+                <button type="button" class="ghost login-help-btn" onclick="window.open('tel:+96871924089','_self')" data-i18n="support">الدعم الفني</button>
+              </div>
+              <button id="loginBtn" class="gold-btn login-submit" type="button" data-i18n="signIn">دخول</button>
+            </div>
+            <div id="authPaneFace" class="ev-auth-pane ev-auth-alt hidden" role="tabpanel">
+              <div class="ev-bio-ring" aria-hidden="true"></div>
+              <p dir="ltr">Face ID · Enterprise biometric gateway</p>
+              <p>مسح الوجه للوصول الآمن إلى لوحة التحكم التنفيذية</p>
+              <button type="button" class="gold-btn login-submit" data-bio-action="face">Verify Face ID</button>
+            </div>
+            <div id="authPaneFingerprint" class="ev-auth-pane ev-auth-alt hidden" role="tabpanel">
+              <div class="ev-bio-ring" aria-hidden="true"></div>
+              <p dir="ltr">Touch ID · Fingerprint authentication</p>
+              <p>المصادقة بالبصمة — طبقة أمان مؤسسية</p>
+              <button type="button" class="gold-btn login-submit" data-bio-action="fingerprint">Scan Fingerprint</button>
+            </div>
+            <div id="authPaneSso" class="ev-auth-pane ev-auth-alt hidden" role="tabpanel">
+              <p dir="ltr">Single Sign-On · Corporate identity</p>
+              <div class="ev-sso-grid">
+                <button type="button" class="ev-sso-btn" dir="ltr">Microsoft Entra</button>
+                <button type="button" class="ev-sso-btn" dir="ltr">Okta</button>
+                <button type="button" class="ev-sso-btn" dir="ltr">Google Workspace</button>
+                <button type="button" class="ev-sso-btn">Oracle Fusion</button>
+              </div>
+              <p>تسجيل دخول موحد عبر بوابة الهوية المؤسسية</p>
+            </div>
+            <div class="ev-trust-strip">
+              <span class="ev-trust-pill" dir="ltr">256-bit TLS</span>
+              <span class="ev-trust-pill" dir="ltr">Zero Trust</span>
+              <span class="ev-trust-pill">تشفير مؤسسي</span>
+              <span class="ev-trust-pill" dir="ltr">Audit Trail</span>
+            </div>
+          </section>
+          </div>
+        </div>
+      </div>
+
+      <div class="login-bottom-center">
+        <div class="login-desc-grid">
+          <div class="login-desc-en" dir="ltr" lang="en">
+            <span class="login-desc-label">About</span>
+            <p>Premium platform for property leasing, external majlis hospitality, finance, and intelligent portfolio management — built for global standards.</p>
+          </div>
+          <div class="login-desc-ar" dir="ltr" lang="ar">
+            <span class="login-desc-label">نبذة</span>
+            <p>منصة مؤسسية متكاملة لإدارة العقارات والإيجارات وخدمات المجالس الخارجية والمالية — بمعايير عالمية واحترافية.</p>
+          </div>
+        </div>
+        <div class="login-features">
+          <span class="login-feature-chip" data-tone="gold"><i class="lf-chip-glow"></i><b>🏢</b> Properties</span>
+          <span class="login-feature-chip" data-tone="violet"><i class="lf-chip-glow"></i><b>📊</b> Finance</span>
+          <span class="login-feature-chip" data-tone="navy"><i class="lf-chip-glow"></i><b>🔧</b> Maintenance</span>
+          <span class="login-feature-chip" data-tone="rose"><i class="lf-chip-glow"></i><b>🤖</b> AI Insights</span>
+        </div>
+      </div>
+
+      <footer class="login-company-footer">
+        <div class="footer-col footer-en" dir="ltr" lang="en">
+          <strong>Launch Quality LLC</strong>
+          <span>Owner: Yaqoub Fadel Saeed Al-Khasibi</span>
+          <em>Real Estate &amp; Hospitality ERP · Sultanate of Oman · C.R. 1466316</em>
+          <small>Trusted enterprise operations · Finance · Leasing · Maintenance</small>
+        </div>
+        <div class="footer-sep" aria-hidden="true"></div>
+        <div class="footer-col footer-ar" dir="ltr" lang="ar">
+          <strong>جودة الانطلاقة ش.م.م</strong>
+          <span>المالك: يعقوب فاضل حمد الخصيبي</span>
+          <em>نظام إدارة العقارات والضيافة · سلطنة عُمان · س.ت 1466316</em>
+          <small>تشغيل مؤسسي · مالية · إيجارات · صيانة</small>
+          <small class="footer-dev" dir="ltr">Dev: Waleed Al-Najjar · info@alamal.info · +96871924089</small>
+        </div>
+      </footer>
+      <div class="login-owner-ticker" aria-label="يعقوب فاضل حمد الخصيبي · نحو التميز والتقدم في عالم الضيافة والعقارات">
+        <div class="login-owner-track">
+          <span class="login-owner-item"><em>يعقوب فاضل حمد الخصيبي</em> · <strong>نحو التميز والتقدم في عالم الضيافة والعقارات</strong></span>
+          <span class="login-owner-item" aria-hidden="true"><em>يعقوب فاضل حمد الخصيبي</em> · <strong>نحو التميز والتقدم في عالم الضيافة والعقارات</strong></span>
+          <span class="login-owner-item" aria-hidden="true"><em>يعقوب فاضل حمد الخصيبي</em> · <strong>نحو التميز والتقدم في عالم الضيافة والعقارات</strong></span>
+        </div>
+      </div>
+      <div class="login-dev-credit">اعداد وبرمجة وليد نجار · +96871924089 · +96879022201</div>
+    </div>
+  </main>
+
+  <canvas id="neuralDash" class="ev-neural-canvas hidden" aria-hidden="true"></canvas>
+  <!-- visionAiDock removed by owner request -->
+
+  <div id="portalSwitchOverlay" class="portal-switch-overlay hidden">
+    <div class="portal-switch-card">
+      <h3>اختر مسار العمل</h3>
+      <p class="mini">منصة موحّدة بثلاثة مسارات: العقارات، الضيافة، والمحاسبة.</p>
+      <div class="portal-switch-grid">
+        <button type="button" class="portal-tile" onclick="choosePortal('realestate')">
+          <span class="portal-icon">🏢</span>
+          <b>العقارات</b>
+          <small>الإدارة العقارية والمالية</small>
+        </button>
+        <button type="button" class="portal-tile" onclick="choosePortal('hospitality')">
+          <span class="portal-icon">🏨</span>
+          <b>منصة المجالس</b>
+          <small>مجالس خارجية · مناسبات · عزاء</small>
+        </button>
+        <button type="button" class="portal-tile" onclick="choosePortal('accounting')">
+          <span class="portal-icon">💼</span>
+          <b>المحاسبة</b>
+          <small>منصة مالية مستقلة للمشروع</small>
+        </button>
+      </div>
+      <div class="toolbar" style="justify-content:center;margin-top:12px">
+        <button type="button" class="ghost" onclick="closePortalSwitch()">لاحقاً</button>
+      </div>
+    </div>
+  </div>
+
+  <main id="app" class="app hidden">
+    <aside id="sidebar" class="sidebar sidebar-ultra">
+      <div class="brand brand-pro lq-brand-layer" aria-label="مشاريع جودة الانطلاقة">
+        <div class="lq-brand-motion">
+          <img
+            src="assets/brand-logo-gold-clear.png?v=under1"
+            alt=""
+            class="brand-logo-pro brand-logo-pro--hd lq-brand-crest"
+            width="160"
+            height="100"
+            decoding="async"
+          >
+          <div class="lq-brand-name-under">
+            <strong class="lq-brand-ar">مشاريع جودة الانطلاقة</strong>
+            <small class="lq-brand-en" dir="ltr">Launch Quality LLC</small>
+          </div>
+        </div>
+      </div>
+      <nav id="nav" class="nav nav-ultra"></nav>
+      <div id="sidebarUser" class="sidebar-user"></div>
+    </aside>
+    <section class="content">
+      <div class="app-shell">
+      <header class="app-header">
+        <div class="app-header-row lq-header-welcome-row">
+          <button id="menuBtn" class="tb-icon mobile-nav" type="button" aria-label="القائمة">☰</button>
+
+          <div class="lq-header-brand lq-brand-layer" aria-label="مشاريع جودة الانطلاقة">
+            <div class="lq-brand-motion">
+              <img src="assets/brand-logo-gold-clear.png?v=under1" alt="" class="lq-header-logo lq-brand-crest" width="140" height="88" decoding="async">
+              <div class="lq-brand-name-under">
+                <strong id="headerOrgName" class="lq-brand-ar">مشاريع جودة الانطلاقة</strong>
+                <small class="lq-brand-en" dir="ltr">Launch Quality LLC</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="lq-header-clock-wrap" aria-label="الساعة">
+            <div id="clock" class="top-pill top-pill-pro lq-header-clock" title="الساعة">00:00:00</div>
+          </div>
+
+            <button id="headerSettingsBtn" class="tb-icon lq-header-settings" type="button" title="الإعدادات" onclick="showSection('settings')" aria-label="الإعدادات">
+            <span class="lq-settings-ico lq-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.2M12 18.8V21M4.9 6.3l1.6 1.6M17.5 16.1l1.6 1.6M3 12h2.2M18.8 12H21M4.9 17.7l1.6-1.6M17.5 7.9l1.6-1.6"/></svg></span>
+            <span class="lq-settings-label">الإعدادات</span>
+          </button>
+
+          <span id="lqEnvModeLabel" class="lq-env-chip" title="بيئة التشغيل" hidden></span>
+
+          <div class="search search-pro"><input id="globalSearch" placeholder="بحث في المشاريع والعملاء والعقود..."></div>
+
+          <div class="app-header-actions">
+            <button id="portalSwitchBtn" class="tb-icon lq-back-platforms" type="button" title="العودة إلى اختيار المنصات" aria-label="رجوع للمنصات"><span class="lq-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></span><span>رجوع للمنصات</span></button>
+            <button class="tb-icon tb-bell" type="button" title="التنبيهات" onclick="showSection('messages')" aria-label="التنبيهات"><span class="bell-glyph lq-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16h12l-1.2-2.2a6.5 6.5 0 0 1-.8-3.1V9a5 5 0 0 0-10 0v1.7c0 1.1-.3 2.2-.8 3.1L6 16z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></span><span id="bellDot" class="bell-dot hidden"></span></button>
+            <button class="add-new-btn saas-quick-btn lq-write-only" type="button" onclick="quickAddNew()">+ جديد</button>
+            <button id="logoutBtn" class="ghost tb-logout" type="button">خروج</button>
+          </div>
+        </div>
+        <nav id="opsQuickBar" class="ops-quick-bar" aria-label="عمليات سريعة">
+          <span class="ops-label">عمليات:</span>
+        </nav>
+      </header>
+      <div class="page-head"><h2 id="sectionTitle">لوحة التحكم</h2></div>
+      <div id="launchBanner" class="launch-banner hidden"></div>
+      <div class="app-body">
+      <section id="sec-dashboard" class="section active saas-dash lq-cockpit-v30">
+        <div id="lqHubBoard" class="lq-hub-board" aria-label="مركز القيادة"></div>
+        <div id="lqCockpitWrap" class="lq-cockpit-wrap">
+        <div id="vaDashBanner" class="va-dash-banner saas-glass"></div>
+        <div class="lq-cockpit-grid">
+        <div id="dashSimStage" class="lq-sim-stage saas-glass lq-area-sim hidden" aria-hidden="true" style="display:none!important"></div>
+        <div id="dashExecHero" class="saas-exec-hero saas-glass lq-area-hero"></div>
+
+        <div id="dashLiveTicker" class="dash-live-ticker saas-glass lq-area-ticker"></div>
+
+        <div id="roleBoardBox" class="lq-role-board-host"></div>
+        <div id="saasKpiRow" class="saas-kpi-grid lq-area-kpi"></div>
+        <div id="fieldModeGrid" class="field-mode-grid lq-area-field" aria-label="اختصارات الميدان"></div>
+        <div id="staffFieldPanel" class="lq-staff-field-wrap"></div>
+        <div id="dashPropStatus" class="saas-prop-status saas-glass lq-area-status"></div>
+        <div id="saasKpiRow2" class="saas-kpi-grid saas-kpi-secondary lq-dash-legacy"></div>
+        <div id="dashSideMenu" class="saas-dash-menu lq-dash-legacy" aria-label="قائمة النظام"></div>
+        <div id="dashRenewalStrip" class="saas-renewal-strip lq-area-renewal"></div>
+        <div id="saasKpiRow3" class="saas-kpi-grid saas-kpi-tertiary lq-dash-legacy"></div>
+        <div id="dashMegaCockpit" class="dash-mega-cockpit lq-area-cockpit"></div>
+        <div class="saas-section saas-command-center lq-dash-legacy">
+          <div class="saas-section-head">
+            <h3>⚡ مركز الأوامر التنفيذية</h3>
+            <span class="saas-sub">كل أوامر النظام — كما في نسخة الفلاشة</span>
+          </div>
+          <div id="dashHeroStats" class="saas-hero-stats"></div>
+          <div id="dashQuickActions" class="saas-quick-grid"></div>
+          <div id="dashCommandGrid" class="saas-command-grid"></div>
+          <div id="dashDecisionPanel" class="saas-glass saas-decision-panel"></div>
+        </div>
+
+        <div class="saas-page-head saas-page-head-compact lq-dash-legacy">
+          <div id="dashWelcomeMeta" class="saas-head-chips"></div>
+        </div>
+
+        <div class="saas-section lq-area-insights">
+          <div class="saas-section-head"><h3>🌟 Visual Analytics · رؤى تنفيذية</h3><span class="saas-sub">Data Insights · تحليل فوري للأداء والمخاطر</span></div>
+          <div class="saas-split-grid saas-insight-grid">
+            <div id="dashInsights" class="saas-glass saas-insights-panel"></div>
+            <div id="dashCashFlow" class="saas-glass saas-cashflow-panel"></div>
+          </div>
+        </div>
+
+        <div class="saas-section lq-area-analytics">
+          <div class="saas-section-head"><h3>📊 Data Insights Dashboard</h3><span class="saas-sub">رسوم بيانية تفاعلية · BI · Visual Analytics</span></div>
+          <div class="saas-analytics-grid saas-analytics-mega">
+            <div class="saas-glass saas-chart-panel saas-chart-wide"><h4>منحنى الإيرادات</h4><span class="sub">Revenue Trend · 6 أشهر</span><div class="canvas-wrap"><canvas id="incomeChart"></canvas></div></div>
+            <div class="saas-glass saas-chart-panel"><h4>مؤشر الإشغال</h4><span class="sub">Occupancy Index</span><div class="canvas-wrap"><canvas id="occupancyChart"></canvas></div></div>
+            <div class="saas-glass saas-chart-panel"><h4>المصروفات الشهرية</h4><span class="sub">Expense Burn</span><div class="canvas-wrap"><canvas id="maintCostChart"></canvas></div></div>
+            <div class="saas-glass saas-chart-panel"><h4>إنتاجية الصيانة</h4><span class="sub">Maintenance Ops</span><div class="canvas-wrap"><canvas id="productivityChart"></canvas></div></div>
+            <div class="saas-glass saas-chart-panel"><h4>مؤشر التحصيل</h4><span class="sub">Collection Rate</span><div class="canvas-wrap"><canvas id="collectionChart"></canvas></div></div>
+            <div class="saas-glass saas-chart-panel"><h4>صافي الربح</h4><span class="sub">Net Profit</span><div class="canvas-wrap"><canvas id="netProfitChart"></canvas></div></div>
+          </div>
+        </div>
+
+        <div class="saas-section lq-area-projects">
+          <div class="saas-section-head"><h3>🏢 المشاريع والخريطة</h3><button type="button" class="saas-link-btn" onclick="showSection('estate-platform')">منصة العقارات ←</button></div>
+          <div class="saas-split-grid">
+            <div id="saasProjectsGrid" class="saas-projects-grid"></div>
+            <div class="saas-glass saas-map-panel"><div class="gis-pro"><div id="nizwaMap" class="nizwa-map"></div><div id="gisPins" class="gis-pins-layer hidden"></div><div id="mapPopup" class="map-popup hidden"></div></div></div>
+          </div>
+        </div>
+
+        <div class="saas-section lq-area-tasks">
+          <div class="saas-section-head"><h3>📋 المهام والنشاط</h3><button type="button" class="saas-link-btn" onclick="showSection('tasks')">المهام ←</button></div>
+          <div class="saas-split-grid">
+            <div id="saasTasksBox" class="saas-glass" style="padding:16px"><div class="saas-task-list"></div></div>
+            <div id="saasActivityBox" class="saas-glass" style="padding:16px"><div class="saas-timeline"></div></div>
+          </div>
+        </div>
+
+        <div class="saas-section lq-area-finance">
+          <div class="saas-section-head"><h3>💰 المالية</h3><button type="button" class="saas-link-btn" onclick="showSection('invoices')">التفاصيل ←</button></div>
+          <div id="saasFinGrid" class="saas-fin-grid"></div>
+        </div>
+
+        <div class="saas-section lq-area-invoices">
+          <div class="saas-section-head"><h3>🧾 آخر الفواتير والتحصيل</h3><button type="button" class="saas-link-btn" onclick="showSection('invoices')">كل الفواتير ←</button></div>
+          <div id="dashRecentInvoices" class="saas-glass saas-recent-table"></div>
+        </div>
+
+        <div class="saas-section lq-area-reports">
+          <div class="saas-section-head"><h3>📈 التقارير</h3><button type="button" class="saas-link-btn" onclick="showSection('reports')">كل التقارير ←</button></div>
+          <div id="saasReportsGrid" class="saas-reports-grid"></div>
+        </div>
+
+        <div id="dashLegacyHidden" class="hidden"></div>
+        <div id="maintQueue" class="hidden"></div>
+        <div id="dashPropsTable" class="hidden"></div>
+        <div id="dashMaintCards" class="hidden"></div>
+        <div id="aiAssistant" class="hidden"></div>
+        <div id="occPctLabel" class="hidden"></div>
+        <div id="heroStats" class="hidden"></div><div id="kpiGrid" class="hidden"></div><div id="decisionList" class="hidden"></div><div id="quickActions" class="hidden"></div>
+        </div>
+        </div>
+      </section>
+
+            <section id="sec-estate-platform" class="section">
+        <div class="lq-estate-nx" id="lqEstateNxBoot">
+          <header class="lq-estate-nx-head">
+            <div>
+              <h3>منصة العقارات</h3>
+              <p class="mini">بنايات ← وحدات ← عقود ← صيانة · مبدأ نزوى المطوّر</p>
+            </div>
+          </header>
+          <div class="lq-estate-nx-stats" id="lqNxStats"></div>
+          <nav class="lq-estate-nx-modules" id="lqNxModules" aria-label="وحدات العمل">
+            <button type="button" data-mod="units" class="active">الوحدات</button>
+            <button type="button" data-mod="contracts">العقود</button>
+            <button type="button" data-mod="maint">الصيانة</button>
+          </nav>
+          <div class="lq-estate-nx-filters" style="padding:0 4px 10px">
+            <label class="mini">العقار / المحفظة
+              <select id="lqNxProperty"></select>
+            </label>
+          </div>
+          <div class="lq-estate-nx-buildings" id="lqNxBuildings"></div>
+          <div class="lq-estate-nx-toolbar" id="lqNxToolbar"></div>
+          <div class="lq-estate-nx-body" id="lqNxBody"><p class="mini">جاري تحميل منصة العقارات…</p></div>
+        </div>
+      </section>
+<section id="sec-accounting-platform" class="section">
+        <div class="card accounting-hero">
+          <h3>منصة المحاسبة</h3>
+          <p class="mini">منصة محاسبية مستقلة: التحصيل، الذمم، البنوك، الفترات، التسويات، والتقارير المالية.</p>
+          <div id="accPlatformKpis" class="grid kpis"></div>
+        </div>
+        <div class="layout">
+          <div class="card">
+            <h3>لوحة تشغيل المحاسبة</h3>
+            <div id="accPlatformQuick" class="toolbar" style="flex-wrap:wrap"></div>
+          </div>
+          <div class="card">
+            <h3>تنبيهات مالية</h3>
+            <div id="accPlatformAlerts"></div>
+          </div>
+        </div>
+        <div class="layout">
+          <div class="card"><h3>آخر فواتير التحصيل</h3><div id="accPlatformInvoices"></div></div>
+          <div class="card"><h3>ملخص البنك والفترات</h3><div id="accPlatformBankPeriods"></div></div>
+        </div>
+        <div class="layout">
+          <div class="card"><h3>التدفق النقدي الشهري</h3><div id="accPlatformCashflow"></div></div>
+          <div class="card"><h3>أعمار الذمم (A/R Aging)</h3><div id="accPlatformAging"></div></div>
+        </div>
+        <div class="layout">
+          <div class="card"><h3>توقعات التحصيل (30 يوم)</h3><div id="accPlatformForecast"></div></div>
+          <div class="card"><h3>بطاقات القرار الإداري</h3><div id="accPlatformDecisions"></div></div>
+        </div>
+        <div class="layout">
+          <div class="card">
+            <h3>أهداف الموازنة الشهرية (Budget Targets)</h3>
+            <div class="form">
+              <input id="accBudgetMonth" type="month">
+              <input id="accBudgetRevenue" type="number" min="0" step="0.001" placeholder="هدف الإيرادات OMR">
+              <input id="accBudgetExpense" type="number" min="0" step="0.001" placeholder="سقف المصروفات OMR">
+              <input id="accBudgetCollection" type="number" min="0" step="0.001" placeholder="هدف التحصيل OMR">
+              <input id="accBudgetReserve" type="number" min="0" step="0.001" placeholder="حد الاحتياطي النقدي OMR">
+              <textarea id="accBudgetNotes" placeholder="ملاحظات الهدف الشهري"></textarea>
+            </div>
+            <button class="gold-btn" type="button" onclick="saveAccountingBudgetTarget()">حفظ هدف الشهر</button>
+          </div>
+          <div class="card"><h3>سجل أهداف الموازنة</h3><div id="accPlatformBudgetTable"></div></div>
+        </div>
+      </section>
+
+      <section id="sec-owner-staff" class="section"><div id="ownerStaffBox"></div></section>
+      <section id="sec-owner-live" class="section"><div id="ownerLiveHubBox"></div></section>
+      <section id="sec-daily-ops" class="section"><div id="dailyOpsBox"></div></section>
+      <section id="sec-tasks" class="section"><div id="tasksPageBox"></div></section>
+      <section id="sec-messages" class="section"><div id="messagesPageBox"></div></section>
+      <section id="sec-walid" class="section"><div id="walidIntelBox"></div></section>
+      <section id="sec-enterprise" class="section"><div id="enterpriseBox"></div></section>
+      <section id="sec-business-catalog" class="section"><div id="businessCatalogBox"></div></section>
+      <section id="sec-timeline" class="section"><div id="timelinePageBox"></div></section>
+      <section id="sec-hospitality-platform" class="section">
+        <div class="card accounting-hero">
+          <h3>منصة المجالس الخارجية</h3>
+          <p class="mini">خدمة ضيافة في المجالس والمناسبات الخارجية فقط · مفصولة تماماً عن العقارات · عربون 30% · تأكيد قبل 72 ساعة.</p>
+          <div id="hospPlatformKpis" class="grid kpis"></div>
+          <div id="hospitalityQuickBox" class="status-line" style="margin-top:10px"></div>
+        </div>
+        <div class="card">
+          <h3>لوحة تشغيل المجالس</h3>
+          <div id="hospPlatformQuick" class="toolbar" style="flex-wrap:wrap"></div>
+        </div>
+        <div class="card" id="hospMajlisSection">
+          <h3>باقات المجالس الخارجية وواجب العزاء</h3>
+          <p class="mini">تُنفَّذ في مجالس خارجية (موقع العميل) — ليست غرفاً وليست وحدات عقارية.</p>
+          <div id="hospPackagesBoard" class="status-line" style="flex-wrap:wrap;gap:8px;margin:10px 0"></div>
+          <div id="hospCondolenceBoard" class="status-line" style="flex-wrap:wrap;gap:8px;margin:0 0 12px"></div>
+          <div class="layout">
+            <div>
+              <h4>حجز مناسبة في مجلس خارجي</h4>
+              <div class="form">
+                <input id="hEventClient" placeholder="اسم العميل">
+                <input id="hEventPhone" placeholder="الهاتف">
+                <input id="hEventVenue" placeholder="موقع المجلس / العنوان">
+                <input id="hEventDate" type="date">
+                <input id="hEventGuests" type="number" min="1" placeholder="عدد الضيوف" value="150">
+                <label class="mini" style="display:flex;align-items:center;gap:6px"><input id="hEventOutside" type="checkbox"> خارج نزوى (نقل إضافي)</label>
+                <input id="hEventPaid" type="number" step="0.001" placeholder="المدفوع الآن (عربون)">
+                <textarea id="hEventNotes" placeholder="ملاحظات المناسبة"></textarea>
+              </div>
+              <div class="toolbar" style="gap:8px;margin-top:8px">
+                <button type="button" class="ghost" onclick="quoteHospitalityEvent()">عرض السعر</button>
+                <button type="button" class="gold-btn" onclick="bookHospitalityEvent()">حفظ حجز المجلس</button>
+              </div>
+              <pre id="hEventQuoteOut" class="mini" style="white-space:pre-wrap;background:rgba(0,0,0,.04);padding:10px;border-radius:8px;margin-top:8px">أدخل عدد الضيوف ثم اعرض السعر.</pre>
+            </div>
+            <div>
+              <h4>حجز واجب عزاء (3 أيام) في الموقع</h4>
+              <div class="form">
+                <input id="hCondClient" placeholder="اسم صاحب العزاء / العميل">
+                <input id="hCondPhone" placeholder="الهاتف">
+                <input id="hCondVenue" placeholder="موقع العزاء / العنوان">
+                <input id="hCondDate" type="date">
+                <select id="hCondZone">
+                  <option value="nizwa">داخل نزوى — 450 ر.ع</option>
+                  <option value="near">خارج نزوى (قريب) — 500 ر.ع</option>
+                  <option value="outside">خارج المحافظة — من 550 ر.ع</option>
+                </select>
+                <input id="hCondPaid" type="number" step="0.001" placeholder="المدفوع الآن (عربون)">
+                <textarea id="hCondNotes" placeholder="ملاحظات العزاء"></textarea>
+              </div>
+              <div class="toolbar" style="gap:8px;margin-top:8px">
+                <button type="button" class="ghost" onclick="quoteHospitalityCondolence()">عرض السعر</button>
+                <button type="button" class="gold-btn" onclick="bookHospitalityCondolence()">حفظ حجز العزاء</button>
+              </div>
+              <pre id="hCondQuoteOut" class="mini" style="white-space:pre-wrap;background:rgba(0,0,0,.04);padding:10px;border-radius:8px;margin-top:8px">اختر المنطقة ثم اعرض السعر.</pre>
+            </div>
+          </div>
+          <div style="margin-top:14px">
+            <h4>سجل حجوزات المجالس والعزاء</h4>
+            <div id="hospitalityEventsTable"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="sec-properties" class="section">
+        <div class="card" style="margin-bottom:12px">
+          <div class="toolbar" style="justify-content:space-between;align-items:center">
+            <div>
+              <h3 style="margin:0">قائمة المشاريع / الوحدات</h3>
+              <p class="mini" style="margin:4px 0 0">جدول تفصيلي ضمن منصة العقارات — للإضافة والمتابعة استخدم المنصة.</p>
+            </div>
+            <button type="button" class="gold-btn" onclick="showSection('estate-platform')">← منصة العقارات</button>
+          </div>
+        </div>
+        <div class="card"><h3>إضافة عقار / وحدة</h3><div class="form"><select id="pBranch"></select><input id="pBuilding" placeholder="رقم البناية"><input id="pApartment" placeholder="رقم الوحدة"><select id="pUnitKind"><option value="غرفة مستقلة">غرفة مستقلة</option><option value="شقة كاملة">شقة كاملة</option></select><input id="pRoom" placeholder="رقم الغرفة (للغرفة المستقلة)"><input id="pUnitRoomsCount" placeholder="عدد غرف الشقة (للشقة الكاملة)" type="number" min="1"><select id="pStatus"><option value="شاغرة">شاغرة</option><option value="محجوزة">محجوزة</option><option value="مستأجرة">مستأجرة</option><option value="تحت الصيانة">تحت الصيانة</option><option value="موقوفة">موقوفة</option></select><input id="pPrice" placeholder="السعر OMR" type="number" step="0.001"><input id="pLocation" placeholder="📍 الموقع"><input id="pLat" placeholder="🧭 Latitude (اختياري)" type="number" step="0.000001"><input id="pLng" placeholder="🧭 Longitude (اختياري)" type="number" step="0.000001"><div class="lq-prop-upload-box"><label for="pPhoto">📷 صورة العقار (اختياري)</label><input id="pPhoto" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><img id="pPhotoPreview" class="lq-prop-upload-preview hidden" alt="معاينة الصورة"><span class="mini">تُحفظ على الخادم — JPG/PNG/WebP حتى 5MB</span></div><textarea id="pNotes" placeholder="ملاحظات (اختياري)"></textarea></div><button class="gold-btn" onclick="createProperty()">حفظ العقار</button></div>
+        <div class="card"><div class="toolbar"><input id="propBuildingFilter" placeholder="فلتر رقم البناية" oninput="renderProperties()"><select id="propStatusFilter" onchange="renderProperties()"></select><select id="propContractFilter" onchange="renderProperties()"><option value="">كل الوحدات</option><option value="active">عليها عقد نشط</option><option value="none">بدون عقد نشط</option></select><button class="ghost" onclick="exportCsv('properties')">تصدير CSV</button><button class="ghost" onclick="exportFilteredPropertiesCsv()">تصدير نتائج الفلتر</button></div><div id="propQuickStats" class="status-line" style="margin-bottom:10px"></div><div id="propertiesTable"></div></div>
+      </section>
+
+      <section id="sec-clients" class="section">
+        <div class="card"><h3>إضافة عميل</h3><div class="form"><input id="cName" placeholder="اسم العميل"><input id="cPhone" placeholder="الهاتف"><input id="cEmail" placeholder="البريد"><input id="cNational" placeholder="الهوية/السجل"><label class="mini">صورة البطاقة<input id="cCardImage" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label><img id="cCardPreview" class="hidden lq-prop-upload-preview" alt="معاينة البطاقة"><textarea id="cNotes" placeholder="ملاحظات"></textarea></div><button class="gold-btn" onclick="createClient()">حفظ العميل</button></div>
+        <div class="card"><div class="toolbar"><button class="ghost" onclick="exportCsv('clients')">تصدير CSV</button><button class="ghost" onclick="exportFilteredClientsCsv()">تصدير نتائج الفلتر</button></div><div id="clientsTable"></div></div>
+      </section>
+
+      <section id="sec-contracts" class="section">
+        <div id="renewalQueueBox"></div>
+        <div class="card lq-doc-brand-strip">
+          <img src="assets/brand-logo-gold.png?v=12" alt="Launch Quality logo">
+          <div>
+            <b>نماذج العقود الرسمية — Launch Quality</b>
+            <p class="mini">صيغة عقد احترافية مع الشروط القانونية، الطباعة، PDF، وتنزيل نسخة HTML.</p>
+          </div>
+        </div>
+        <div class="card contract-engine-card"><h3>إنشاء عقد إيجار محمي</h3><div class="form"><select id="contractType"><option>Residential</option><option>Commercial</option><option>Short-Term</option><option>Hospitality</option></select><select id="contractProperty"></select><select id="contractClient"></select><select id="contractPaymentCycle"><option value="monthly">شهري</option><option value="quarterly">ربع سنوي</option><option value="yearly">سنوي</option><option value="once">مرة واحدة</option></select><div id="contractPropertyWarning" class="lq-inline-warning hidden"></div><input id="tenantNationality" placeholder="جنسية المستأجر"><input id="tenantIdNo" placeholder="رقم الهوية / السجل"><textarea id="unitDetails" placeholder="تفاصيل الوحدة المؤجرة"></textarea><input id="contractStart" type="date"><input id="contractEnd" type="date"><input id="contractRent" placeholder="الإيجار الشهري OMR"><input id="contractLateFee" placeholder="غرامة التأخير OMR"><input id="contractGraceDays" placeholder="مهلة السداد بالأيام" value="5"><input id="contractRenewalDays" placeholder="تنبيه التجديد قبل كم يوم" value="30"><input id="contractAttachments" type="file" multiple accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" aria-label="مرفقات العقد"><textarea id="contractLegalTerms" placeholder="الشروط القانونية وحماية الشركة"></textarea><textarea id="contractNotes" placeholder="ملاحظات داخلية"></textarea></div><button class="gold-btn" onclick="createContract()">حفظ مسودة العقد</button></div>
+        <div class="card"><div class="toolbar"><button class="ghost" onclick="exportCsv('contracts')">تصدير CSV</button><button class="ghost" onclick="exportFilteredContractsCsv()">تصدير نتائج الفلتر</button></div><div id="contractsTable"></div></div>
+      </section>
+
+      <section id="sec-invoices" class="section">
+        <div class="card lq-doc-brand-strip">
+          <img src="assets/brand-logo-gold.png?v=12" alt="Launch Quality logo">
+          <div>
+            <b>الفواتير الضريبية الرسمية — Launch Quality</b>
+            <p class="mini">تصميم فاخر للطباعة والـ PDF مع شعار الشركة وخيارات تنزيل متعددة.</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3>إنشاء فاتورة من عقد</h3>
+          <p class="mini">اختيار العقد يملأ المبلغ والوصف والاستحقاق المقترح تلقائيًا.</p>
+          <div class="form">
+            <select id="invoiceContractSelect"></select>
+            <input id="invoiceDueDate" type="date">
+            <input id="invoiceAmount" placeholder="المبلغ OMR" type="number" step="0.001">
+            <input id="invoiceDesc" placeholder="وصف الفاتورة">
+            <input id="invoiceType" placeholder="نوع الفاتورة (rent/deposit)" value="rent">
+          </div>
+          <button class="gold-btn" onclick="createInvoiceFromSelectedContract()">إنشاء الفاتورة</button>
+        </div>
+        <div class="card"><h3>الفواتير والتحصيل</h3><p class="mini">يتم إنشاء الفاتورة من العقد فقط لضمان الربط الصحيح. · <button type="button" class="ghost" onclick="showSection('receivables')">فتح التحصيل الذكي</button></p><div class="toolbar"><button class="ghost" onclick="exportFilteredInvoicesCsv()">تصدير نتائج الفلتر</button></div><div id="invoicesTable"></div></div>
+      </section>
+
+      <section id="sec-receivables" class="section">
+        <div class="card accounting-hero">
+          <h3>💳 التحصيل الذكي</h3>
+          <p class="mini">أعمار الذمم · المتأخرات · تذكير العملاء بالبريد/الواتساب/SMS</p>
+          <div id="recvSummary" class="status-line"></div>
+        </div>
+        <div class="card">
+          <h3>أعمار الذمم المدينة</h3>
+          <div id="recvAgingBuckets" class="grid kpis" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px"></div>
+        </div>
+        <div class="card">
+          <div class="toolbar" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+            <h3 style="margin:0">قائمة التحصيل</h3>
+            <div class="toolbar" style="margin:0">
+              <select id="recvBucketFilter" onchange="renderReceivablesSmart()">
+                <option value="">كل الأعمار</option>
+                <option value="overdue">المتأخر فقط</option>
+                <option value="current">حالي</option>
+                <option value="1-30">1–30</option>
+                <option value="31-60">31–60</option>
+                <option value="61-90">61–90</option>
+                <option value="90+">90+</option>
+              </select>
+              <button class="ghost" type="button" onclick="renderReceivablesSmart()">تحديث</button>
+              <button class="ghost" type="button" onclick="sendReceivableReminders('log')">تسجيل تذكير</button>
+              <button class="ghost" type="button" onclick="sendReceivableReminders('email')">تذكير Email</button>
+              <button class="ghost" type="button" onclick="sendReceivableReminders('whatsapp')">تذكير WhatsApp</button>
+              <button class="ghost" type="button" onclick="sendReceivableReminders('sms')">تذكير SMS</button>
+            </div>
+          </div>
+          <div id="recvChannels" class="mini" style="margin:8px 0"></div>
+          <div id="recvTable"></div>
+        </div>
+      </section>
+
+      <section id="sec-accounts" class="section">
+        <div class="card accounting-hero"><h3>محرك المحاسبة العقارية</h3><p class="mini">إيرادات، مصروفات، ذمم مدينة، كشف مستأجر، ربحية عقار، وتدفق نقدي مرتبط بالعقد والفاتورة والتحصيل.</p><div id="accountingExecutive" class="grid kpis"></div></div>
+        <div class="card"><h3>إضافة حركة مالية</h3><div class="form"><input id="accDate" type="date"><select id="accType"><option value="income">income</option><option value="expense">expense</option></select><input id="accCategory" placeholder="التصنيف"><input id="accDesc" placeholder="الوصف"><select id="accClient"></select><select id="accProperty"></select><input id="accAmount" placeholder="المبلغ"></div><button class="gold-btn" onclick="createAccount()">حفظ الحركة</button></div>
+        <div class="layout">
+          <div class="card"><h3>الإيرادات والمصروفات</h3><div id="accountSummary" class="status-line"></div><div class="canvas-wrap"><canvas id="expenseChart"></canvas></div></div>
+          <div class="card"><h3>أعمار الذمم المدينة</h3><div id="agingBox"></div></div>
+        </div>
+        <div class="card"><h3>تحليلات الحسابات الذكية</h3><div id="accountsInsightsBox" class="status-line"></div></div>
+        <div class="card">
+          <h3>SALAM · الدائرة المالية</h3>
+          <p class="mini">ايجنت تشغيلي يفحص المتأخرات والربحية والمخزون ويقترح إجراءات فورية قابلة للتنفيذ.</p>
+          <div class="toolbar"><button class="gold-btn" type="button" onclick="runSalamAgent()">تشغيل SALAM الآن</button></div>
+          <div id="salamAgentBox" class="status-line" style="margin-top:10px"></div>
+        </div>
+        <div class="layout">
+          <div class="card"><h3>كشف أرصدة المستأجرين</h3><div id="tenantBalanceBox"></div></div>
+          <div class="card"><h3>ربحية العقارات</h3><div id="propertyProfitBox"></div></div>
+        </div>
+        <div class="card">
+          <div class="toolbar">
+            <select id="accFilterType"><option value="">كل الأنواع</option><option value="income">إيراد</option><option value="expense">مصروف</option></select>
+            <select id="accFilterCategory"><option value="">كل التصنيفات</option></select>
+            <input id="accFilterFrom" type="date" title="من تاريخ">
+            <input id="accFilterTo" type="date" title="إلى تاريخ">
+            <button class="ghost" type="button" onclick="clearAccountsFilters()">مسح فلاتر الحسابات</button>
+            <button class="ghost" onclick="exportCsv('accounts')">تصدير CSV</button>
+            <button class="ghost" onclick="exportFilteredAccountsCsv()">تصدير نتائج الفلتر</button>
+            <button class="ghost" onclick="downloadFinancialReport()">تنزيل تقرير مالي HTML</button>
+          </div>
+          <div id="accountsTable"></div>
+        </div>
+      </section>
+
+      <section id="sec-maintenance" class="section">
+        <div class="card"><h3>طلب صيانة</h3><div class="form"><select id="maintProperty"></select><input id="maintTitle" placeholder="عنوان الطلب"><select id="maintPriority"><option>High</option><option>Medium</option><option>Low</option></select><input id="maintCost" placeholder="التكلفة المتوقعة"><textarea id="maintNotes" placeholder="تفاصيل"></textarea></div><button class="gold-btn" onclick="createMaintenance()">حفظ الطلب</button></div>
+        <div class="toolbar"><button class="ghost" onclick="exportFilteredMaintenanceCsv()">تصدير نتائج الفلتر</button></div><div class="grid" id="maintenanceGrid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))"></div>
+      </section>
+
+
+      <section id="sec-purchases" class="section">
+        <div class="card"><h3>فواتير المشتريات</h3><div class="form"><input id="piSupplier" placeholder="المورد"><input id="piDate" type="date"><input id="piDue" type="date"><input id="piCategory" placeholder="التصنيف"><input id="piDesc" placeholder="الوصف"><input id="piAmount" placeholder="المبلغ"><input id="piPaid" placeholder="المدفوع"><select id="piProperty"></select></div><button class="gold-btn" onclick="createPurchaseInvoice()">حفظ فاتورة مشتريات</button></div>
+        <div class="card"><div class="toolbar"><button class="ghost" onclick="exportCsv('purchase_invoices')">تصدير CSV</button><button class="ghost" onclick="exportFilteredPurchasesCsv()">تصدير نتائج الفلتر</button></div><div id="purchaseInvoicesTable"></div></div>
+      </section>
+      <section id="sec-revenues" class="section">
+        <div class="card"><h3>الإيرادات الأخرى</h3><div class="form"><input id="revDate" type="date"><input id="revSource" placeholder="المصدر"><input id="revCategory" placeholder="التصنيف"><input id="revDesc" placeholder="الوصف"><input id="revAmount" placeholder="المبلغ"><select id="revClient"></select><select id="revProperty"></select></div><button class="gold-btn" onclick="createRevenue()">حفظ الإيراد</button></div>
+        <div class="card"><div class="toolbar"><button class="ghost" onclick="exportCsv('revenues')">تصدير CSV</button><button class="ghost" onclick="exportFilteredRevenuesCsv()">تصدير نتائج الفلتر</button></div><div id="revenuesTable"></div></div>
+      </section>
+      <section id="sec-payroll" class="section">
+        <div id="lqPayrollImportHost"></div>
+        <div class="card"><h3>الرواتب — إدخال يدوي</h3><div class="form"><input id="salEmployeeNo" placeholder="رقم الموظف"><input id="salEmployee" placeholder="اسم الموظف"><input id="salProject" placeholder="المشروع"><input id="salMonth" type="month"><input id="salBasic" placeholder="الراتب الأساسي"><input id="salAllow" placeholder="بدلات"><input id="salDeduct" placeholder="استقطاعات"><input id="salDate" type="date"><select id="salStatus"><option>Pending</option><option>Paid</option></select></div><button class="gold-btn" onclick="createSalary()">حفظ الراتب</button></div>
+        <div class="card"><div class="toolbar"><button class="ghost" onclick="exportCsv('salaries')">تصدير CSV</button><button class="ghost" onclick="exportFilteredPayrollCsv()">تصدير نتائج الفلتر</button></div><div id="salariesTable"></div></div>
+      </section>
+      <section id="sec-admin-expenses" class="section">
+        <div class="card"><h3>المصاريف الإدارية والعمومية</h3><div class="form"><input id="gaDate" type="date"><input id="gaCategory" placeholder="التصنيف"><input id="gaDesc" placeholder="الوصف"><input id="gaSupplier" placeholder="المورد"><input id="gaAmount" placeholder="المبلغ"><select id="gaProperty"></select></div><button class="gold-btn" onclick="createAdminExpense()">حفظ المصروف</button></div>
+        <div class="card"><div class="toolbar"><button class="ghost" onclick="exportCsv('admin_expenses')">تصدير CSV</button><button class="ghost" onclick="exportFilteredAdminExpensesCsv()">تصدير نتائج الفلتر</button></div><div id="adminExpensesTable"></div></div>
+      </section>
+      <section id="sec-inventory" class="section">
+        <div class="card"><h3>مخزن العقارات</h3><div class="form"><input id="itemSku" placeholder="SKU"><input id="itemName" placeholder="اسم الصنف"><input id="itemCategory" placeholder="التصنيف"><input id="itemUnit" placeholder="الوحدة" value="pcs"><input id="itemQty" placeholder="الكمية"><input id="itemMin" placeholder="الحد الأدنى"><input id="itemCost" placeholder="تكلفة الوحدة"><input id="itemLocation" placeholder="الموقع"><select id="itemProperty"></select></div><button class="gold-btn" onclick="createInventoryItem()">حفظ الصنف</button></div>
+        <div class="card"><h3>حركة مخزون</h3><div class="form"><select id="stockItem"></select><input id="stockDate" type="date"><select id="stockType"><option value="in">in</option><option value="out">out</option></select><input id="stockQty" placeholder="الكمية"><input id="stockCost" placeholder="تكلفة الوحدة"><input id="stockRef" placeholder="المرجع"></div><button class="gold-btn" onclick="createInventoryTransaction()">حفظ الحركة</button></div>
+        <div class="card"><div class="toolbar"><select id="inventoryPropertyFilter"></select><button class="ghost" onclick="exportCsv('inventory_items')">تصدير الأصناف</button><button class="ghost" onclick="exportFilteredInventoryCsv()">تصدير نتائج الفلتر</button><button class="ghost" onclick="exportCsv('inventory_transactions')">تصدير الحركات</button></div><div id="inventoryTable"></div></div>
+      </section>
+      <section id="sec-bank" class="section">
+        <div class="card"><h3>كشف البنك</h3><div class="form"><input id="bankDate" type="date"><input id="bankName" placeholder="البنك"><input id="bankRef" placeholder="المرجع"><select id="bankType"><option value="deposit">deposit</option><option value="withdrawal">withdrawal</option></select><input id="bankDesc" placeholder="الوصف"><input id="bankAmount" placeholder="المبلغ"><select id="bankMatch"></select></div><button class="gold-btn" onclick="createBankTransaction()">حفظ حركة البنك</button></div>
+        <div class="card"><div class="toolbar"><button class="ghost" onclick="exportCsv('bank_transactions')">تصدير CSV</button></div><div id="bankTable"></div></div>
+      </section>
+      <section id="sec-chart-accounts" class="section">
+        <div class="card accounting-hero"><h3>دليل الحسابات (COA)</h3><p class="mini">شجرة الحسابات المحاسبية: أصول، خصوم، حقوق ملكية، إيرادات، ومصروفات — أساس القوائم المالية والتصنيف.</p><div id="coaSummary" class="status-line"></div></div>
+        <div class="card"><h3>إضافة حساب</h3><div class="form"><input id="coaCode" placeholder="رمز الحساب 5100"><input id="coaName" placeholder="اسم الحساب"><select id="coaType"><option>Asset</option><option>Liability</option><option>Equity</option><option>Revenue</option><option>Expense</option></select><select id="coaParent"></select><input id="coaNotes" placeholder="ملاحظات"></div><button class="gold-btn" onclick="createChartAccount()">حفظ الحساب</button></div>
+        <div class="card"><div class="toolbar"><button class="ghost" onclick="exportCsv('chart_accounts')">تصدير CSV</button></div><div id="chartAccountsTable"></div></div>
+      </section>
+      <section id="sec-bank-reconciliation" class="section">
+        <div class="card accounting-hero"><h3>تسوية البنك — المرحلة 4</h3><p class="mini">مطابقة كاملة، ربط تلقائي مع الفواتير، إقفال الفترة، وتقرير PDF.</p><div id="reconciliationPreview" class="status-line"></div><div id="bankAlertsBox" class="mini" style="margin-top:8px"></div></div>
+        <div id="bankReconciliationDetail"></div>
+        <div class="card"><h3>تسوية جديدة</h3><div class="form"><input id="recBank" placeholder="اسم البنك" value="Main Bank"><select id="recPeriodSelect" onchange="if(this.value){document.getElementById('recPeriod').value=this.value;previewBankReconciliation();}"><option value="">— اختر فترة مفتوحة —</option></select><input id="recPeriod" placeholder="الفترة 2026-06"><input id="recBookBalance" placeholder="رصيد الدفاتر" readonly><input id="recBankBalance" placeholder="رصيد كشف البنك" oninput="updateRecDifference()"><input id="recDifference" placeholder="الفرق" readonly><textarea id="recNotes" placeholder="ملاحظات التسوية"></textarea></div><div class="toolbar"><button class="ghost" onclick="previewBankReconciliation()">تحليل كامل</button><button class="ghost" onclick="autoMatchBank()">مطابقة تلقائية</button><button class="ghost" onclick="LQ_BANK_CLOSE.printCurrentReconciliation()">تقرير PDF</button><button class="gold-btn" onclick="createBankReconciliation()">حفظ التسوية</button></div></div>
+        <div class="card"><div class="toolbar"><button class="ghost" onclick="exportCsv('bank_reconciliations')">تصدير CSV</button></div><div id="bankReconciliationsTable"></div></div>
+      </section>
+      <section id="sec-financial-periods" class="section">
+        <div class="card"><h3>الفترات المالية</h3><p class="mini">فتح وإغلاق الفترات المحاسبية قبل إقفال الشهر أو السنة.</p><div class="form"><input id="fpName" placeholder="اسم الفترة 2026-Q2"><input id="fpStart" type="date"><input id="fpEnd" type="date"><select id="fpStatus"><option>Open</option><option>Closed</option></select><textarea id="fpNotes" placeholder="ملاحظات"></textarea></div><button class="gold-btn" onclick="createFinancialPeriod()">حفظ الفترة</button></div>
+        <div class="card"><div class="toolbar"><button class="ghost" onclick="exportCsv('financial_periods')">تصدير CSV</button></div><div id="financialPeriodsTable"></div></div>
+      </section>
+      <section id="sec-statements" class="section">
+        <div class="card"><h3>القوائم المالية التلقائية</h3><p class="mini">قائمة الدخل والميزانية تتولد مباشرة من الحسابات والفواتير والمشتريات والرواتب والمخزن وكشف البنك.</p><button class="gold-btn" onclick="loadFinancialStatements()">توليد القوائم الآن</button><div id="statementsBox" style="margin-top:16px"></div></div>
+      </section>
+      <section id="sec-approvals" class="section">
+        <div id="approvalsGuide"></div>
+        <div class="card"><div class="toolbar"><button class="ghost" onclick="exportCsv('approvals')">تصدير CSV</button><button class="gold-btn" onclick="LQ_APPROVALS.renderTable()">تحديث</button></div><div id="approvalsTable"></div></div>
+      </section>
+
+      <section id="sec-reports" class="section">
+        <div id="reportsBox"></div>
+        <div class="card"><button class="gold-btn" onclick="renderReports()">تحديث التقرير</button> <button class="gold-btn" onclick="openExecutiveReport()">تقرير تنفيذي PDF</button> <button class="ghost" onclick="downloadBackup()">تنزيل Backup</button></div>
+      </section>
+
+      <section id="sec-users" class="section">
+        <div class="card lq-staff-map-card">
+          <div class="lq-staff-map-head">
+            <div>
+              <h3>جدول الموظفين والصلاحيات المعتمد</h3>
+              <p class="mini">المرجع النهائي: اسم الدخول، الاسم الكامل، المسمى الوظيفي، وصلاحية النظام.</p>
+            </div>
+            <span class="badge paid">معتمد</span>
+          </div>
+          <div id="staffMappingTable"></div>
+        </div>
+        <div class="card"><h3>أداة إضافة حساب</h3><div class="form"><input id="uUsername" placeholder="اسم المستخدم"><input id="uName" placeholder="الاسم"><input id="uEmail" placeholder="البريد الإلكتروني (اختياري)"><select id="uRole"><option value="viewer">مشاهدة فقط</option><option value="reception">استقبال</option><option value="operations">مسؤول العقارات</option><option value="maintenance">صيانة</option><option value="accountant">محاسب</option><option value="deputy">نائب المدير</option><option value="admin">مدير النظام (وليد/يعقوب/أحمد)</option><option value="owner">المدير العام (وليد/يعقوب/أحمد)</option></select><select id="uActive"><option value="1">نشط</option><option value="0">معطّل (بدون حذف)</option></select><select id="uMustChangePassword"><option value="1">إجبار تغيير كلمة المرور عند أول دخول</option><option value="0">بدون إجبار</option></select><input id="uPassword" type="password" placeholder="كلمة المرور (≥10 أحرف + رقم + حرف)"></div><button class="gold-btn" onclick="createUser()">إضافة الحساب</button><p class="mini">لا يُحذف المستخدم — عطّله فقط للحفاظ على سجل العمليات.</p></div>
+        <div class="card">
+          <h3>أداة ضبط صلاحيات باقي الحسابات</h3>
+          <p class="mini">تثبيت أن وليد + يعقوب + أحمد بصلاحيات كاملة، وضبط بقية الحسابات على توزيع تشغيلي آمن.</p>
+          <div class="toolbar">
+            <button class="gold-btn" type="button" onclick="applyUserPermissionTemplate()">تطبيق ضبط الصلاحيات</button>
+          </div>
+          <div id="usersPermissionToolStatus" class="status-line" style="margin-top:10px"></div>
+        </div>
+        <div class="card">
+          <h3>منصة ربط البصمة المؤسسية</h3>
+          <p class="mini">ربط جهاز الموظف (Face/Fingerprint) مع الحساب الحالي لرفع أمان الدخول في التطبيق.</p>
+          <div class="toolbar">
+            <button class="gold-btn" type="button" onclick="registerEnterpriseBiometric()">تفعيل البصمة للجهاز</button>
+            <button class="ghost" type="button" onclick="verifyEnterpriseBiometric()">اختبار التحقق</button>
+            <button class="ghost" type="button" onclick="clearEnterpriseBiometric()">فك الربط</button>
+          </div>
+          <div id="biometricHubStatus" class="status-line" style="margin-top:10px"></div>
+        </div>
+        <div class="card"><div id="usersTable"></div></div>
+      </section>
+
+      <section id="sec-backup" class="section">
+        <div class="card"><h3>مركز التخزين والنسخ الاحتياطي</h3><div id="backupStatus" class="status-line"></div><div class="toolbar" style="margin-top:16px"><button class="gold-btn" onclick="downloadBackup()">تنزيل Backup JSON</button><button class="gold-btn" onclick="downloadBackupFile('json')">تنزيل آخر نسخة JSON</button><button class="gold-btn" onclick="downloadBackupFile('sqlite')">تنزيل آخر نسخة SQLite</button><button class="ghost" onclick="runAutoBackup()">نسخ احتياطي تلقائي الآن</button><button class="ghost" onclick="exportCsv('properties')">عقارات CSV</button><button class="ghost" onclick="exportCsv('clients')">عملاء CSV</button><button class="ghost" onclick="exportCsv('contracts')">عقود CSV</button><button class="ghost" onclick="exportCsv('invoices')">فواتير CSV</button><button class="ghost" onclick="exportCsv('accounts')">حسابات CSV</button></div><p class="mini" style="margin-top:12px">للنسخ خارج Railway: نزّل JSON + SQLite واحفظهما في OneDrive شهرياً، أو شغّل <code>scripts\download_offsite_backup.ps1</code>.</p></div>
+        <div class="card"><h3>مركز التصدير — نتائج الفلاتر</h3><p class="mini">تصدير سريع للبيانات الظاهرة حسب الفلاتر الحالية بكل قسم.</p><div id="exportHubButtons" class="toolbar" style="margin-top:12px"></div></div>
+      </section>
+
+
+      <section id="sec-production" class="section">
+        <div class="card production-hero"><h3>جاهزية التشغيل المؤسسي</h3><p class="mini">مركز مراجعة داخلي للتأكد من سلامة العقود، التقارير المالية، المستخدمين، والبيانات قبل التشغيل الفعلي.</p><div class="toolbar"><button class="gold-btn" onclick="loadProductionStatus()">تشغيل فحص الجاهزية</button><button class="ghost" onclick="loadWorkflowPolicies()">Workflow Rules</button><button class="ghost" onclick="loadModuleIntegrity()">فحص تكامل الوحدات</button><button class="ghost" onclick="loadModuleFixHistory()">سجل موافقات الإصلاح</button></div><div id="productionStatusBox" style="margin-top:16px"></div><div id="workflowPoliciesBox" style="margin-top:16px"></div><div id="moduleIntegrityBox" style="margin-top:16px"></div><div id="moduleFixKpiBox" style="margin-top:16px"></div><div id="moduleFixHistoryBox" style="margin-top:16px"></div></div>
+        <div class="layout">
+          <div class="card"><h3>مراجعة العقود القانونية</h3><p>العقود التشغيلية جاهزة داخل النظام، وتعتمد رسمياً بعد مراجعة مستشار قانوني عماني للبنود النهائية.</p><ul class="check-list"><li>بيانات المؤجر والمستأجر والوحدة.</li><li>الإيجار، الغرامات، التجديد، الإخلاء (بدون تأمين إيجار في قسم الإيجارات).</li><li>التوقيع والختم وطباعة العقد.</li></ul></div>
+          <div class="card"><h3>مراجعة التقارير المالية</h3><p>القوائم المالية تولد تلقائياً من الحسابات والفواتير والمشتريات والرواتب والمخزون والبنك.</p><ul class="check-list"><li>قائمة دخل.</li><li>ميزانية.</li><li>كشف بنك.</li><li>ذمم مدينة ودائنة.</li></ul></div>
+        </div>
+        <div class="layout">
+          <div class="card"><h3>اختبار المستخدمين</h3><div id="productionUsersBox"></div></div>
+          <div class="card"><h3>البيانات الحقيقية المطلوبة</h3><ul class="check-list"><li>العقارات والوحدات.</li><li>المستأجرون.</li><li>العقود.</li><li>الحسابات البنكية.</li></ul></div>
+        </div>
+      </section>
+
+      <section id="sec-qa" class="section">
+        <div class="card">
+          <h3>اختبار التشغيل</h3>
+          <div class="toolbar">
+            <button class="gold-btn" onclick="runQA()">تشغيل الاختبار العام</button>
+            <button class="ghost" onclick="runEstateQaScenario()">تشغيل QA العقار خطوة بخطوة</button>
+          </div>
+          <div id="qaBox" style="margin-top:15px"></div>
+        </div>
+      </section>
+      </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="paymentModal" class="modal"><div class="modal-box"><h2>تحصيل فاتورة</h2><p id="payInfo"></p><input id="payInvoiceId" type="hidden"><div class="form"><input id="payAmount" placeholder="المبلغ"><select id="payMethod"><option>Cash</option><option>Bank Transfer</option><option>Card</option></select><input id="payNote" placeholder="ملاحظة"><label class="mini">صورة التحويل/الوصل<input id="payProofFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label><img id="payProofPreview" class="hidden lq-prop-upload-preview" alt="معاينة الوصل"></div><button class="gold-btn" onclick="submitPayment()">تأكيد التحصيل</button> <button class="ghost" onclick="closeModal('paymentModal')">إغلاق</button></div></div>
+  <div id="invoiceModal" class="modal"><div class="modal-box"><div id="invoicePreview"></div><div class="toolbar"><button class="gold-btn" onclick="printInvoiceDocument()">طباعة A4</button><button class="gold-btn" onclick="downloadInvoicePdf()">حفظ PDF</button><button class="ghost" onclick="downloadInvoice()">تنزيل HTML</button><button class="ghost" onclick="openInvoiceInNewWindow()">فتح بنافذة مستقلة</button><button class="ghost" onclick="copyInvoiceSummary()">نسخ ملخص الفاتورة</button><button class="ghost" onclick="closeModal('invoiceModal')">إغلاق</button></div></div></div>
+  <div id="contractModal" class="modal"><div class="modal-box"><div id="contractPreview"></div><div class="toolbar"><button class="gold-btn" onclick="printContractDocument()">طباعة A4</button><button class="gold-btn" onclick="downloadContractPdf()">حفظ PDF</button><button class="ghost" onclick="downloadContractHtml()">تنزيل HTML</button><button class="ghost" onclick="copyContractTerms()">نسخ الشروط</button><button class="ghost" onclick="openContractInNewWindow()">فتح بنافذة مستقلة</button><button class="ghost" onclick="closeModal('contractModal')">إغلاق</button></div></div></div>
+  <div id="genericModal" class="modal"><div class="modal-box"><div id="genericModalBody"></div><button class="ghost" onclick="closeModal('genericModal')">إغلاق</button></div></div>
+
+  <div id="kpiInsightPanel" class="kpi-insight-panel" aria-hidden="true"></div>
+  </div>
+
+  <script src="lq-print-templates.js?v=lq2" defer></script>
+  <script src="lq-accountant-reports.js?v=ar1" defer></script>
+  <script src="lq-bank-close.js?v=bc1" defer></script>
+  <script src="lq-approvals.js?v=ap1" defer></script>
+  <script src="lq-staff-field.js?v=sf2" defer></script>
+  <script src="lq-field-app.js?v=field1" defer></script>
+  <script src="lq-security.js?v=sec3-v59" defer></script>
+  <script src="lq-alert-center.js?v=ac2-role" defer></script>
+  <script src="lq-role-board.js?v=rb1" defer></script>
+  <script src="lq-payroll-import.js?v=pi4" defer></script>
+  <script src="lq-walid-intel.js?v=wi2" defer></script>
+  <script src="lq-enterprise.js?v=ent6-v59" defer></script>
+  <script src="lq-business-catalog.js?v=biz1-v64" defer></script>
+  <script src="lq-cosmic-bg.js?v=cosmic2" defer></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="lq-i18n.js?v=day9" defer></script>
+  <script src="app.js?v=no-old-rail-v84" defer></script>
+  <script src="lq-estate-nizwa-ux.js?v=nx2-copy" defer></script>
+  <script src="lq-exec-app.js?v=day4" defer></script>
+  <script src="lq-edition-terrifying.js?v=finish72" defer></script>
+  <script src="enterprise-vision.js?v=ev12-v56" defer></script>
+  <script src="historic-upgrade.js?v=historic21" defer></script>
+  <script src="lq-hub-dashboard.js?v=hub13" defer></script>
+  <script src="lq-card-views.js?v=cards3-staff" defer></script>
+  <script src="lq-login-remember.js?v=lr2" defer></script>
+  <script src="lq-global-loader.js?v=gl1" defer></script>
+  <script src="lq-workspace-quadrant.js?v=ws12" defer></script>
+  <script src="lq-property-photos.js?v=photo1" defer></script>
+  <script src="lq-flow-animate.js?v=flow2" defer></script>
+    <script src="lq-role-ui.js?v=role1" defer></script>
+  <script src="lq-owner-staff.js?v=own2" defer></script>
+    <script src="lq-ui-unify.js?v=ui2" defer></script>
+  <script src="lq-layout-v2.js?v=lay10" defer></script>
+    <script src="pwa-install.js?v=pwa10" defer></script>
+  <script>
+    (function(){
+      var boot=document.getElementById('lqBootMsg');
+      function hideBoot(){ if(boot) boot.classList.remove('show'); }
+      function showBoot(t){ if(boot){ boot.textContent=t||'جاري تحميل النظام…'; boot.classList.add('show'); } }
+      window.__lqHideBoot=hideBoot;
+      window.__lqShowBoot=showBoot;
+      setTimeout(function(){
+        var login=document.getElementById('loginScreen');
+        var app=document.getElementById('app');
+        if(login&&app&&login.classList.contains('hidden')&&app.classList.contains('hidden')){
+          localStorage.removeItem('jawdah_cloud_token');
+          login.classList.remove('hidden');
+          app.classList.add('hidden');
+          document.body.classList.add('login-ultra','saas-login');
+          document.body.classList.remove('saas-luxury','app-ready');
+          hideBoot();
+        }
+        if(app&&!app.classList.contains('hidden')&&!document.querySelector('.section.active')){
+          var dash=document.getElementById('sec-dashboard');
+          if(dash) dash.classList.add('active');
+        }
+        var kpiRow=document.getElementById('saasKpiRow');
+        var hasContent=kpiRow&&(kpiRow.querySelector('.saas-kpi-pro')||kpiRow.querySelector('.saas-skeleton'));
+        if(hasContent||(login&& !login.classList.contains('hidden'))) hideBoot();
+      },8000);
+    })();
+  </script>
+</body>
+</html>
+
+
+
+
+

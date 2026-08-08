@@ -1,0 +1,142 @@
+/* Launch Quality — one type system for the whole product
+   Same family everywhere, bold default, language-aware numerals */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@600;700&family=Cairo:wght@700;800&family=Noto+Sans+Bengali:wght@600;700&family=Noto+Sans+Devanagari:wght@600;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap");
+
+:root{
+  /* Unified stacks */
+  --lq-font:"IBM Plex Sans Arabic","Cairo","Segoe UI",Tahoma,sans-serif;
+  --lq-font-ar:var(--lq-font);
+  --lq-font-display:var(--lq-font);
+  --lq-font-num:"IBM Plex Sans Arabic","Cairo","Segoe UI",ui-monospace,monospace;
+  --lq-fw:700;
+  --lq-fw-strong:800;
+}
+
+/* Per-language text + number faces */
+html[lang="ar"],
+body[data-lq-lang="ar"]{
+  --lq-font:"IBM Plex Sans Arabic","Cairo",sans-serif;
+  --lq-font-num:"IBM Plex Sans Arabic","Cairo",ui-monospace,monospace;
+}
+html[lang="en"],
+body[data-lq-lang="en"]{
+  --lq-font:"IBM Plex Sans Arabic","Cairo","Segoe UI",sans-serif;
+  --lq-font-num:"IBM Plex Sans Arabic","Segoe UI",ui-monospace,monospace;
+}
+html[lang="hi"],
+body[data-lq-lang="hi"]{
+  --lq-font:"Noto Sans Devanagari","IBM Plex Sans Arabic","Cairo",sans-serif;
+  --lq-font-num:"Noto Sans Devanagari","IBM Plex Sans Arabic",ui-monospace,monospace;
+}
+html[lang="bn"],
+body[data-lq-lang="bn"]{
+  --lq-font:"Noto Sans Bengali","IBM Plex Sans Arabic","Cairo",sans-serif;
+  --lq-font-num:"Noto Sans Bengali","IBM Plex Sans Arabic",ui-monospace,monospace;
+}
+html[lang="ur"],
+body[data-lq-lang="ur"]{
+  --lq-font:"IBM Plex Sans Arabic","Noto Nastaliq Urdu","Cairo",sans-serif;
+  --lq-font-num:"IBM Plex Sans Arabic","Cairo",ui-monospace,monospace;
+}
+
+html,body,
+button,input,select,textarea,label,option,
+table,th,td,a,p,h1,h2,h3,h4,h5,h6,span,div,li,
+.login,.app,.content,.sidebar-ultra,.nav-ultra,
+.lq-exec,.lq-official-portal,.lq-atm,
+body.app-ultra,body.saas-luxury,body.app-ready{
+  font-family:var(--lq-font) !important;
+  font-weight:var(--lq-fw) !important;
+}
+
+/* Keep strong headings/actions heavier where Cairo allows */
+h1,h2,h3,.op-brand-name,.op-brand-ar,.op-choice h2,.op-enter,
+.lq-kpi .value,button.primary,.btn-primary,.login-submit,
+.lq-brand-name,.nav-item,.topbar .brand{
+  font-weight:var(--lq-fw-strong) !important;
+}
+
+/* Numbers: language-appropriate face + tabular alignment */
+.lq-num,
+[data-lq-num],
+.num,.amount,.money,.price,.qty,.value,
+.lq-kpi .value,
+td.num,th.num,
+input[type="number"],
+input[inputmode="decimal"],
+input[inputmode="numeric"]{
+  font-family:var(--lq-font-num) !important;
+  font-weight:var(--lq-fw) !important;
+  font-variant-numeric:tabular-nums lining-nums;
+  font-feature-settings:"tnum" 1, "lnum" 1;
+  letter-spacing:.01em;
+}
+
+/* Kill legacy Inter / Tajawal overrides across the app */
+body.app-ultra,
+body.app-ultra .nav-ultra .nav-ar,
+.login-line-en,.login-line-ar,.login-desc-ar p,
+.login-card-brand-ar,.login-card-brand-en,.login-owner-item,
+.dash-welcome-copy h2,.panel-sub,.login-secure-badge{
+  font-family:var(--lq-font) !important;
+  font-weight:var(--lq-fw) !important;
+}
+
+/* Crisp rendering */
+html,body{
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:optimizeLegibility;
+}
+
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select{
+  text-align:right;
+}
+[dir="ltr"] input,
+[dir="ltr"] textarea,
+[dir="ltr"] select{
+  text-align:left;
+}
+
+/* Owner lock: official black 12 bold across app */
+body.app-ready,
+body.app-ready #app,
+body.app-ready #app p,
+body.app-ready #app span,
+body.app-ready #app label,
+body.app-ready #app td,
+body.app-ready #app th,
+body.app-ready #app li,
+body.app-ready #app a,
+body.app-ready #app button,
+body.app-ready #app input,
+body.app-ready #app select,
+body.app-ready #app textarea{
+  font-family:"IBM Plex Sans Arabic","Cairo",sans-serif !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  color:#000000 !important;
+}
+body.app-ready #app h1,
+body.app-ready #app h2,
+body.app-ready #app h3,
+body.app-ready #app h4,
+body.app-ready #app strong,
+body.app-ready #app b{
+  font-size:12px !important;
+  font-weight:800 !important;
+  color:#000000 !important;
+}
+
+
+/* OFFICIAL TYPE LOCK 12 BLACK */
+html,body,body.app-ready,body.lq-exec,
+button,input,select,textarea,label,
+table,th,td,a,p,h1,h2,h3,h4,h5,h6,span,div,li,small{
+  font-family:"IBM Plex Sans Arabic",sans-serif !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  color:#000000 !important;
+}

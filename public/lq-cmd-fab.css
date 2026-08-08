@@ -1,0 +1,181 @@
+/* ============================================================
+   Command FAB popout — matches owner mock exactly
+   Bottom-left teal circle → navy glass command pills fan upward
+   White labels + icon tiles · no turquoise elsewhere
+   ============================================================ */
+
+#lqCmdFab,
+.lq-cmd-fab{
+  position:fixed !important;
+  left:22px !important;
+  bottom:22px !important;
+  z-index:1200 !important;
+  display:flex !important;
+  flex-direction:column-reverse !important;
+  align-items:flex-start !important;
+  gap:10px !important;
+  pointer-events:none;
+  width:auto !important;
+  height:auto !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  overflow:visible !important;
+}
+
+body:not(.app-ready) #lqCmdFab{
+  display:none !important;
+}
+
+.lq-cmd-fab-toggle{
+  pointer-events:auto !important;
+  width:58px !important;
+  height:58px !important;
+  border-radius:50% !important;
+  border:0 !important;
+  cursor:pointer !important;
+  display:grid !important;
+  place-items:center !important;
+  background:radial-gradient(circle at 30% 25%, #3dd6c8, #0f7f78 55%, #0a5c58) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.35) inset,
+    0 14px 28px rgba(10,70,66,.35),
+    0 4px 10px rgba(15,39,68,.18) !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  transform:translateZ(0);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.lq-cmd-fab-toggle:hover{
+  transform:translateY(-2px) scale(1.04);
+}
+.lq-cmd-fab.open .lq-cmd-fab-toggle{
+  background:radial-gradient(circle at 30% 25%, #c9a96e, #8a6b2e 60%, #5c4518) !important;
+}
+.lq-cmd-fab-toggle .lq-cmd-fab-diamond{
+  width:14px;
+  height:14px;
+  border:2px solid #fff;
+  transform:rotate(45deg);
+  border-radius:2px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.2);
+}
+
+.lq-cmd-fab-stack{
+  pointer-events:none;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:8px;
+  max-height:0;
+  opacity:0;
+  overflow:hidden;
+  transform:translateY(12px);
+  transition:max-height .32s ease, opacity .22s ease, transform .28s ease;
+}
+.lq-cmd-fab.open .lq-cmd-fab-stack{
+  pointer-events:auto;
+  max-height:640px;
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* Navy command pills — white text (readable on dark) */
+.lq-cmd-fab-item{
+  pointer-events:auto !important;
+  min-width:210px;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:14px !important;
+  padding:12px 14px !important;
+  margin:0 !important;
+  border-radius:16px !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+  background:rgba(12, 22, 40, .88) !important;
+  background-image:linear-gradient(145deg,rgba(22,34,56,.92),rgba(10,18,34,.9)) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.1) inset,
+    0 12px 26px rgba(8,16,28,.28) !important;
+  backdrop-filter:blur(16px) saturate(1.15) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(1.15) !important;
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  font-family:"IBM Plex Sans Arabic",sans-serif !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  text-align:right !important;
+  cursor:pointer !important;
+  animation:lqCmdFabIn .28s ease both;
+  transition:transform .15s ease, border-color .15s ease, background .15s ease;
+}
+.lq-cmd-fab-item:hover{
+  transform:translateX(4px);
+  border-color:rgba(201,169,110,.55) !important;
+  background-image:linear-gradient(145deg,rgba(30,46,72,.95),rgba(14,24,42,.92)) !important;
+}
+.lq-cmd-fab-item .lq-cmd-fab-label{
+  flex:1;
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+}
+.lq-cmd-fab-item .lq-cmd-fab-ico{
+  width:36px !important;
+  height:36px !important;
+  flex:0 0 36px;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:12px !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.05)) !important;
+  border:1px solid rgba(255,255,255,.16) !important;
+  outline:1px solid rgba(201,169,110,.28) !important;
+  outline-offset:-3px !important;
+  box-shadow:0 1px 0 rgba(255,255,255,.18) inset, 0 8px 14px rgba(0,0,0,.2) !important;
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+}
+.lq-cmd-fab-item .lq-cmd-fab-ico .lq-ico,
+.lq-cmd-fab-item .lq-cmd-fab-ico .lq-ico svg{
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  stroke:#ffffff !important;
+}
+.lq-cmd-fab-item.lq-cmd-fab-accent .lq-cmd-fab-ico{
+  background:linear-gradient(145deg,rgba(180,190,70,.55),rgba(90,110,40,.4)) !important;
+  outline-color:rgba(201,169,110,.45) !important;
+}
+
+/* Stagger pop */
+.lq-cmd-fab.open .lq-cmd-fab-item:nth-child(1){animation-delay:.02s}
+.lq-cmd-fab.open .lq-cmd-fab-item:nth-child(2){animation-delay:.05s}
+.lq-cmd-fab.open .lq-cmd-fab-item:nth-child(3){animation-delay:.08s}
+.lq-cmd-fab.open .lq-cmd-fab-item:nth-child(4){animation-delay:.11s}
+.lq-cmd-fab.open .lq-cmd-fab-item:nth-child(5){animation-delay:.14s}
+.lq-cmd-fab.open .lq-cmd-fab-item:nth-child(6){animation-delay:.17s}
+.lq-cmd-fab.open .lq-cmd-fab-item:nth-child(7){animation-delay:.20s}
+.lq-cmd-fab.open .lq-cmd-fab-item:nth-child(8){animation-delay:.23s}
+
+@keyframes lqCmdFabIn{
+  from{opacity:0; transform:translateY(10px) scale(.96)}
+  to{opacity:1; transform:translateY(0) scale(1)}
+}
+
+/* Hide old sidebar accordion smart rail — replaced by FAB */
+body.app-ready #lqSmartRail,
+body.app-ready .lq-smart-rail{
+  display:none !important;
+}
+
+/* Header ops dropdowns optional soft hide — FAB is primary */
+body.app-ready #opsQuickBar.lq-ops-dd-host{
+  display:none !important;
+}
+
+@media (max-width:720px){
+  #lqCmdFab{
+    left:14px !important;
+    bottom:14px !important;
+  }
+  .lq-cmd-fab-item{min-width:190px}
+}

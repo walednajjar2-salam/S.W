@@ -1,0 +1,130 @@
+/* ============================================================
+   FINAL contrast lock — kill navy washes on commands / sidebar
+   Light glass + black text so every command is readable
+   Loads LAST
+   ============================================================ */
+
+body.app-ready,
+body.lq-exec.app-ready,
+body.saas-luxury.app-ready{
+  background:
+    radial-gradient(circle at 12% 0%, rgba(201,169,110,.10), transparent 34%),
+    radial-gradient(circle at 88% 8%, rgba(30,79,140,.06), transparent 32%),
+    linear-gradient(170deg,#eef3f8 0%, #e7eef6 100%) !important;
+}
+
+body.app-ready .sidebar,
+body.app-ready .sidebar-ultra,
+body.lq-exec .sidebar-ultra,
+body.saas-luxury .sidebar-ultra,
+body.app-ultra .sidebar-ultra{
+  background:linear-gradient(180deg,#f7fafc,#eef3f8) !important;
+  background-image:linear-gradient(180deg,#f7fafc,#eef3f8) !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  border-color:rgba(15,42,74,.10) !important;
+  box-shadow:none !important;
+}
+
+/* Commands / dropdowns — never navy panels */
+body.app-ready #lqSmartRail,
+body.app-ready #lqSmartRail *,
+body.app-ready #nav.nav-ultra .lq-nav-dd,
+body.app-ready #nav.nav-ultra .lq-dd-toggle,
+body.app-ready #nav.nav-ultra .lq-dd-item,
+body.app-ready #opsQuickBar .lq-dd,
+body.app-ready #opsQuickBar .lq-dd-toggle,
+body.app-ready #opsQuickBar .lq-dd-item{
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+}
+
+body.app-ready .lq-dd,
+body.app-ready .lq-nav-dd,
+body.app-ready #opsQuickBar .lq-ops-dd > .lq-dd-toggle,
+body.app-ready #opsQuickBar .lq-ops-dd .lq-dd-panel{
+  background:#ffffff !important;
+  background-image:linear-gradient(145deg,#ffffff,rgba(247,250,252,.92)) !important;
+  border-color:rgba(15,42,74,.14) !important;
+}
+
+body.app-ready .lq-dd-item{
+  background:#ffffff !important;
+  border-color:rgba(15,42,74,.12) !important;
+}
+
+body.app-ready .lq-dd-item .lq-dd-label,
+body.app-ready .lq-dd-toggle .lq-dd-title,
+body.app-ready .lq-dd-toggle .lq-dd-title span{
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+}
+
+body.app-ready .lq-dd-item .lq-dd-ico,
+body.app-ready .lq-dd-toggle-ico,
+body.app-ready .nav-icon{
+  background:linear-gradient(145deg,#fff,rgba(236,242,250,.8)) !important;
+  border:1px solid rgba(15,42,74,.14) !important;
+  color:#0f2744 !important;
+  -webkit-text-fill-color:#0f2744 !important;
+}
+
+body.app-ready .lq-dd-item .lq-dd-ico .lq-ico,
+body.app-ready .lq-dd-item .lq-dd-ico .lq-ico svg,
+body.app-ready .nav-icon .lq-ico,
+body.app-ready .nav-icon .lq-ico svg,
+body.app-ready .lq-dd-toggle-ico .lq-ico,
+body.app-ready .lq-dd-toggle-ico .lq-ico svg,
+body.app-ready .lq-dd-chev .lq-ico,
+body.app-ready .lq-dd-chev .lq-ico svg{
+  color:#0f2744 !important;
+  -webkit-text-fill-color:#0f2744 !important;
+  stroke:#0f2744 !important;
+}
+
+/* Estate platform shell — light, not navy board */
+body.app-ready #sec-estate-platform,
+body.app-ready #sec-estate-platform .lq-estate-nx,
+body.app-ready .lq-estate-nx{
+  background:transparent !important;
+  color:#000000 !important;
+}
+body.app-ready .lq-estate-nx-head,
+body.app-ready .lq-estate-nx-stat,
+body.app-ready .lq-estate-nx-bld,
+body.app-ready .lq-estate-nx-table-wrap,
+body.app-ready .lq-estate-nx-modules button{
+  background:linear-gradient(145deg,rgba(255,255,255,.92),rgba(255,255,255,.7)) !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  border:1px solid rgba(15,42,74,.12) !important;
+  box-shadow:0 8px 18px rgba(15,39,68,.06) !important;
+}
+
+/* Kill dark dash panels / cosmic navy leftovers inside app chrome */
+body.app-ready .dash-panel-dark,
+body.app-ready .content .dash-panel-dark{
+  background:linear-gradient(145deg,#fff,#f3f7fc) !important;
+  color:#000000 !important;
+  border:1px solid rgba(15,42,74,.12) !important;
+}
+
+/* FAB navy pills keep white text (intentional contrast on dark) */
+body.app-ready #lqCmdFab .lq-cmd-fab-item,
+body.app-ready #lqCmdFab .lq-cmd-fab-item .lq-cmd-fab-label{
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+}
+body.app-ready #lqCmdFab .lq-cmd-fab-item{
+  background:rgba(12, 22, 40, .9) !important;
+  background-image:linear-gradient(145deg,rgba(22,34,56,.94),rgba(10,18,34,.92)) !important;
+}
+body.app-ready #lqCmdFab .lq-cmd-fab-ico .lq-ico svg{
+  stroke:#ffffff !important;
+  color:#ffffff !important;
+}
+body.app-ready #lqCmdFab{
+  display:flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}

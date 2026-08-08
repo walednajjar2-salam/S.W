@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>تحميل ويندوز — NAJJAR Trading</title>
+  <style>
+    :root{--gold:#e8c96a;--cyan:#2fdcc4;--text:#f5ead8;--muted:rgba(245,234,216,.65);--line:rgba(202,161,74,.35);--warn:#ffb347;--warn-bg:rgba(255,140,0,.12);--ok-bg:rgba(47,220,196,.1)}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Tahoma,"Segoe UI",Arial,sans-serif;background:linear-gradient(165deg,#0a0806,#12100c 55%,#0a0806);color:var(--text);display:grid;place-items:center;padding:20px}
+    main{width:min(820px,100%);border:1px solid var(--line);border-radius:22px;padding:28px;background:rgba(16,12,8,.88);box-shadow:0 28px 70px rgba(0,0,0,.45)}
+    h1{margin:0 0 8px;color:var(--gold);font-size:28px}
+    h2{margin:0 0 10px;color:var(--gold);font-size:18px}
+    p{color:var(--muted);line-height:1.8;margin:8px 0}
+    .btn{display:flex;align-items:center;justify-content:center;gap:12px;text-align:center;text-decoration:none;font-weight:800;border-radius:16px;padding:18px;margin-top:14px;border:0;cursor:pointer;width:100%;font-size:1.05rem;font-family:inherit}
+    .primary{background:linear-gradient(135deg,#0078D4,#005A9E);color:#fff}
+    .secondary{background:linear-gradient(135deg,#7a5518,#caa14a,#f0d98a);color:#1a1208}
+    .ghost{border:1px solid var(--line);color:var(--text);background:rgba(0,0,0,.25)}
+    .box{margin-top:16px;border:1px solid rgba(202,161,74,.22);border-radius:16px;padding:14px 16px;background:rgba(0,0,0,.22)}
+    .warn{border-color:rgba(255,140,0,.45);background:var(--warn-bg)}
+    .okbox{border-color:rgba(47,220,196,.35);background:var(--ok-bg)}
+    .warn strong{color:var(--warn)}
+    .okbox strong{color:var(--cyan)}
+    ol,ul{line-height:1.9;color:#e8dcc4;margin:8px 0;padding-right:22px}
+    .ok{color:#9dffc3;font-weight:700}
+    .icon{width:56px;height:56px;border-radius:14px;border:2px solid rgba(202,161,74,.55)}
+    .row{display:flex;gap:14px;align-items:center;margin:12px 0 4px}
+    #status{min-height:24px;color:#9dffc3;font-weight:700;margin-top:10px}
+    code{display:block;direction:ltr;text-align:left;background:rgba(0,0,0,.45);border:1px solid rgba(202,161,74,.25);border-radius:12px;padding:12px 14px;color:#f5ead8;word-break:break-all;font-size:.85rem;line-height:1.6;margin:10px 0;white-space:pre-wrap}
+    .copy{margin-top:8px;padding:10px 14px;font-size:.95rem;width:auto;display:inline-flex}
+    .tag{display:inline-block;background:rgba(47,220,196,.15);color:var(--cyan);border:1px solid rgba(47,220,196,.35);border-radius:999px;padding:2px 10px;font-size:.85rem;margin-bottom:8px}
+    .steps{counter-reset:step}.steps li{list-style:none;position:relative;padding-right:36px;margin:10px 0}.steps li::before{counter-increment:step;content:counter(step);position:absolute;right:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#1a1208;font-weight:800;display:grid;place-items:center;font-size:.85rem}
+  </style>
+</head>
+<body>
+  <main>
+    <div class="row">
+      <img class="icon" src="/releases/windows/portable/AppIcon-192.png" alt="NAJJAR">
+      <div>
+        <h1>NAJJAR Trading · Windows</h1>
+        <p class="ok">اختصار سطح المكتب — يفتح منصة نجار &amp; سموم</p>
+      </div>
+    </div>
+
+    <div class="box okbox">
+      <span class="tag">✅ بدون تحذير</span>
+      <strong>الطريقة الأسرع — بدون تنزيل EXE (لا يظهر «غير آمن»)</strong>
+      <ol class="steps">
+        <li>اضغط <b>نسخ الأمر</b> أدناه</li>
+        <li>كليك يمين على <b>قائمة ابدأ</b> → <b>Terminal (Admin)</b> أو <b>Windows PowerShell</b></li>
+        <li>الصق → Enter — ستظهر أيقونة <b>NAJJAR Trading</b> على سطح المكتب</li>
+      </ol>
+      <code id="psInline"></code>
+      <button class="btn ghost copy" id="btnCopyInline" type="button">📋 نسخ الأمر (بدون تنزيل)</button>
+    </div>
+
+    <a class="btn primary" id="btnUrl" href="/NAJJAR-Trading.url" download="NAJJAR Trading.url">🔗 تحميل اختصار .url (آمن — بدون EXE)</a>
+    <button class="btn secondary" id="btnShortcutZip" type="button">📦 ZIP خفيف (اختصار فقط — بدون EXE)</button>
+    <a class="btn ghost" href="/najjar-al-samoom-used-imported-cars/login.html">🌐 فتح في المتصفح مباشرة</a>
+
+    <p id="status">الطريقة الأولى لا تحتاج أي تنزيل — فقط نسخ ولصق في PowerShell.</p>
+
+    <div class="box warn">
+      <strong>إذا أردت EXE/ZIP وظهر «التنزيل غير آمن»:</strong>
+      <ol>
+        <li><b>Chrome:</b> السهم ▾ → <b>Keep anyway / الاحتفاظ على أي حال</b></li>
+        <li><b>Edge:</b> ⋯ → <b>Keep / احتفاظ</b></li>
+        <li><b>SmartScreen:</b> <b>More info → Run anyway</b></li>
+      </ol>
+      <button class="btn ghost" id="btnExe" type="button" style="margin-top:8px">⬇ EXE (قد يُحظر)</button>
+      <button class="btn ghost" id="btnZip" type="button">⬇ ZIP كامل (قد يُحظر)</button>
+    </div>
+
+    <div class="box">
+      <strong>بعد تحميل .url:</strong>
+      <ol>
+        <li>انقل الملف إلى <b>سطح المكتب</b></li>
+        <li>اضغط مرتين — يفتح NAJJAR في المتصفح</li>
+        <li>يمكنك تغيير الاسم إلى <b>NAJJAR Trading</b></li>
+      </ol>
+    </div>
+
+    <a class="btn ghost" href="/get-android">📱 تحميل تطبيق أندرويد</a>
+  </main>
+  <script>
+    const APP = 'https://web-production-08d73.up.railway.app/najjar-al-samoom-used-imported-cars/login.html';
+    const PS_INLINE = "$d=[Environment]::GetFolderPath('Desktop');$u='" + APP + "';$b=@(\"$env:ProgramFiles\\Microsoft\\Edge\\Application\\msedge.exe\",\"${env:ProgramFiles(x86)}\\Microsoft\\Edge\\Application\\msedge.exe\",\"$env:ProgramFiles\\Google\\Chrome\\Application\\chrome.exe\",\"$env:LOCALAPPDATA\\Google\\Chrome\\Application\\chrome.exe\")|?{Test-Path $_}|Select -First 1;if($b){$s=(New-Object -ComObject WScript.Shell).CreateShortcut(\"$d\\NAJJAR Trading.lnk\");$s.TargetPath=$b;$s.Arguments='--new-window --start-maximized \"'+$u+'\"';$s.Description='NAJJAR Trading';$s.Save();Start-Process $b -ArgumentList $s.Arguments}else{@('[InternetShortcut]','URL='+$u)|Set-Content \"$d\\NAJJAR Trading.url\" -Encoding ASCII;Start-Process \"$d\\NAJJAR Trading.url\"};Write-Host 'تم — NAJJAR Trading على سطح المكتب' -ForegroundColor Green";
+    const PS_WRAP = 'powershell -NoProfile -ExecutionPolicy Bypass -Command "' + PS_INLINE.replace(/"/g, '\\"') + '"';
+
+    document.getElementById('psInline').textContent = PS_WRAP;
+
+    async function copyText(text, msg) {
+      const status = document.getElementById('status');
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+      status.textContent = msg;
+    }
+
+    document.getElementById('btnCopyInline').onclick = () =>
+      copyText(PS_WRAP, 'تم النسخ — افتح PowerShell والصق ثم Enter');
+
+    function directDownload(url, filename) {
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      document.getElementById('status').textContent = 'إذا ظهر تحذير: Keep / احتفاظ';
+    }
+
+    document.getElementById('btnShortcutZip').onclick = () =>
+      directDownload('/NAJJAR-Desktop-Shortcut.zip', 'NAJJAR-Desktop-Shortcut.zip');
+    document.getElementById('btnExe').onclick = () =>
+      directDownload('/NAJJAR-Trading.exe', 'NAJJAR-Trading.exe');
+    document.getElementById('btnZip').onclick = () =>
+      directDownload('/NAJJAR-Trading-Windows.zip', 'NAJJAR-Trading-Windows.zip');
+
+    const qs = new URLSearchParams(location.search);
+    if (qs.get('desktop') === '1' || qs.get('auto') === '1') {
+      document.getElementById('status').textContent = 'انسخ أمر PowerShell أعلاه — لا يحتاج تنزيل ولا يظهر تحذير «غير آمن»';
+      document.getElementById('btnCopyInline').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  </script>
+</body>
+</html>

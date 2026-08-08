@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ar" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Launch Quality API Docs</title>
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css">
+  <style>
+    body{margin:0;background:#071426}
+    .top{padding:16px 24px;color:#fff1b8;font-family:Tajawal,Segoe UI,Arial,sans-serif}
+    .top a{color:#f5d76e}
+  </style>
+</head>
+<body>
+  <div class="top">
+    <h1>Launch Quality ERP · API</h1>
+    <p>OpenAPI 3 · استخدم Bearer token من <code>POST /api/login</code></p>
+    <p><a href="/app.html">← العودة للنظام</a></p>
+  </div>
+  <div id="swagger-ui"></div>
+  <script src="https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js"></script>
+  <script>
+    window.onload = function () {
+      fetch('/api/openapi.json')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var spec = data.openapi || data;
+          SwaggerUIBundle({
+            spec: spec,
+            dom_id: '#swagger-ui',
+            deepLinking: true,
+            presets: [SwaggerUIBundle.presets.apis],
+            layout: 'BaseLayout'
+          });
+        });
+    };
+  </script>
+</body>
+</html>

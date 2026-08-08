@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>تنظيف النسخة القديمة من الجهاز</title>
+  <link rel="icon" href="/assets/app-icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{ --gold:#caa14a; --ink:#0a0a0a; --panel:#121212; --line:rgba(202,161,74,.26); --text:#f4ecd8; --muted:#b9ad92; }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:radial-gradient(1200px 600px at 50% -10%,#1a1508,var(--ink) 60%);color:var(--text);
+      font:600 15px/1.85 Cairo,Segoe UI,Tahoma,sans-serif;padding:26px 16px 60px}
+    .wrap{max-width:760px;margin:0 auto}
+    header{text-align:center;margin-bottom:22px}
+    header img{height:66px;width:auto;margin-bottom:10px}
+    h1{margin:0 0 6px;font-size:25px;color:var(--gold);letter-spacing:.2px}
+    .sub{margin:0;color:var(--muted);font-weight:600}
+    .card{background:linear-gradient(160deg,var(--panel),#0d0d0d);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-top:18px;
+      box-shadow:0 20px 50px rgba(0,0,0,.45)}
+    .card h2{margin:0 0 12px;font-size:18px;color:var(--gold);display:flex;align-items:center;gap:9px}
+    .step{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:1px solid rgba(202,161,74,.12)}
+    .step:first-of-type{border-top:0}
+    .num{flex:0 0 26px;height:26px;border-radius:50%;background:rgba(202,161,74,.16);border:1px solid var(--line);
+      color:var(--gold);font:800 13px Cairo,sans-serif;display:grid;place-items:center;margin-top:3px}
+    .step p{margin:0}
+    kbd{background:#000;border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-family:inherit;font-weight:700;color:var(--gold);
+      display:inline-block;direction:ltr}
+    .state{display:flex;align-items:center;gap:10px;font-weight:800;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#000}
+    .dot{width:11px;height:11px;border-radius:50%;background:var(--gold);flex:0 0 auto;animation:pulse 1.1s infinite}
+    @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+    .done .dot{background:#5fd08a;animation:none}
+    .done{color:#a8e6bf;border-color:rgba(95,208,138,.4)}
+    .warn{border-color:rgba(230,168,74,.45);color:#f0cf94}
+    ul.plain{margin:8px 0 0;padding-inline-start:20px;color:var(--muted);font-weight:600}
+    ul.plain li{margin:5px 0}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    a.btn,button.btn{appearance:none;cursor:pointer;text-decoration:none;border-radius:12px;padding:12px 18px;
+      font:800 14px Cairo,sans-serif;border:1px solid var(--line);background:#000;color:var(--text)}
+    a.btn.primary{background:linear-gradient(135deg,#4a3208,var(--gold));border-color:transparent;color:#fff}
+    .hint{margin-top:16px;color:var(--muted);font-size:13.5px;text-align:center}
+    .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+    .tab{cursor:pointer;border:1px solid var(--line);background:#000;color:var(--muted);border-radius:999px;padding:8px 15px;
+      font:800 13px Cairo,sans-serif}
+    .tab[aria-selected="true"]{background:rgba(202,161,74,.16);color:var(--gold);border-color:var(--gold)}
+    .panel[hidden]{display:none}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>إزالة التطبيق القديم من هذا الجهاز</h1>
+    <p class="sub">النسخة القديمة كانت تُخزّن نفسها داخل الجهاز. هذه الصفحة تمسحها الآن.</p>
+  </header>
+
+  <section class="card">
+    <h2>١ · التنظيف التلقائي</h2>
+    <div id="state" class="state"><span class="dot"></span><span id="stateText">جاري مسح النسخة المخزّنة…</span></div>
+    <ul class="plain" id="report"></ul>
+  </section>
+
+  <section class="card" id="iconCard">
+    <h2>٢ · حذف الأيقونة المثبّتة</h2>
+    <p id="iconIntro" class="sub" style="margin-bottom:12px">
+      التنظيف يمنع النسخة القديمة من الظهور، لكن أيقونة التطبيق المثبّتة تبقى على الجهاز حتى يحذفها المستخدم —
+      لا يستطيع أي موقع حذفها عن بُعد. اختر نظام جهازك:
+    </p>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div id="panels"></div>
+  </section>
+
+  <div class="actions">
+    <a class="btn primary" href="/najjar-al-samoom-used-imported-cars/login.html">تم — NAJJAR Trading</a>
+  </div>
+  <p class="hint">إن عاد التطبيق القديم للظهور على أي جهاز، افتح هذه الصفحة على ذلك الجهاز مرة واحدة.</p>
+</div>
+
+<script>
+(function(){
+  var stateBox = document.getElementById('state');
+  var stateText = document.getElementById('stateText');
+  var report = document.getElementById('report');
+
+  function note(text){
+    var li = document.createElement('li');
+    li.textContent = text;
+    report.appendChild(li);
+  }
+
+  /* Each step is reported separately: a device that cannot clear one of them is
+     the device that keeps showing the old build, and the person standing in
+     front of it needs to know which one refused. */
+  async function purge(){
+    var workers = 0, caches_ = 0;
+    try {
+      if (navigator.serviceWorker) {
+        var regs = await navigator.serviceWorker.getRegistrations();
+        workers = (regs || []).length;
+        await Promise.all((regs || []).map(function(r){ return r.unregister(); }));
+      }
+      note(workers ? ('تم إلغاء ' + workers + ' نسخة مخزّنة (Service Worker).') : 'لا توجد نسخة مخزّنة على هذا الجهاز.');
+    } catch (e) { note('تعذّر إلغاء النسخة المخزّنة على هذا المتصفح.'); }
+
+    try {
+      if (window.caches && caches.keys) {
+        var keys = await caches.keys();
+        caches_ = (keys || []).length;
+        await Promise.all((keys || []).map(function(k){ return caches.delete(k); }));
+      }
+      note(caches_ ? ('تم حذف ' + caches_ + ' مخزن ملفات قديم.') : 'لا توجد ملفات قديمة مخزّنة.');
+    } catch (e) { note('تعذّر حذف الملفات المخزّنة على هذا المتصفح.'); }
+
+    try {
+      if (window.NajjarAuth) NajjarAuth.purgeLegacyBrandStorage();
+      else {
+        localStorage.removeItem('jawdah_portal_choice');
+        localStorage.removeItem('jawdah_cloud_token');
+        localStorage.removeItem('najjar_auth_token');
+        localStorage.removeItem('najjar_portal');
+      }
+      document.cookie = 'lq_token=; Path=/; Max-Age=0; SameSite=Lax';
+      document.cookie = 'najjar_token=; Path=/; Max-Age=0; SameSite=Lax';
+      note('تم مسح بيانات Launch Quality / جودة الانطلاقة من المتصفح.');
+    } catch (e) {}
+
+    stateBox.className = 'state done';
+    stateText.textContent = 'تم تنظيف هذا الجهاز — لا توجد نسخة قديمة تفتح بعد الآن.';
+  }
+
+  var GUIDES = {
+    android: ['أندرويد', [
+      'اضغط مطولاً على أيقونة التطبيق في الشاشة الرئيسية أو قائمة التطبيقات.',
+      'اختر «إلغاء التثبيت» أو اسحب الأيقونة إلى «إزالة».',
+        'إن لم تختفِ: الإعدادات ← التطبيقات ← ابحث عن «Launch Quality» أو «جودة الانطلاقة» أو «NAJJAR Trading» ← إلغاء التثبيت.'
+    ]],
+    ios: ['آيفون / آيباد', [
+      'اضغط مطولاً على أيقونة التطبيق في الشاشة الرئيسية.',
+      'اختر «حذف الشاشة الرئيسية» أو «Remove Bookmark».',
+      'ثم من Safari: الإعدادات ← Safari ← محو المحفوظات وبيانات المواقع.'
+    ]],
+    windows: ['ويندوز', [
+      'افتح Chrome أو Edge واكتب في شريط العنوان chrome://apps أو edge://apps ثم Enter.',
+      'اضغط بزر الفأرة الأيمن على أيقونة التطبيق واختر «إلغاء التثبيت» / Uninstall.',
+      'أو: الإعدادات ← التطبيقات ← التطبيقات المثبتة ← ابحث عن اسم التطبيق ← إلغاء التثبيت.'
+    ]],
+    mac: ['ماك', [
+      'افتح Chrome واكتب في شريط العنوان chrome://apps ثم Enter.',
+      'اضغط Control مع النقر على الأيقونة واختر «إلغاء التثبيت».',
+      'أو احذف التطبيق من مجلد Applications إلى سلة المهملات.'
+    ]]
+  };
+
+  function detect(){
+    var ua = navigator.userAgent || '';
+    if (/Android/i.test(ua)) return 'android';
+    if (/iPhone|iPad|iPod/i.test(ua)) return 'ios';
+    if (/Macintosh|Mac OS X/i.test(ua)) return 'mac';
+    return 'windows';
+  }
+
+  var tabs = document.getElementById('tabs');
+  var panels = document.getElementById('panels');
+  var active = detect();
+
+  Object.keys(GUIDES).forEach(function(key){
+    var label = GUIDES[key][0], steps = GUIDES[key][1];
+
+    var tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'tab';
+    tab.textContent = label;
+    tab.setAttribute('role', 'tab');
+    tab.setAttribute('aria-selected', String(key === active));
+    tab.setAttribute('aria-controls', 'panel-' + key);
+    tabs.appendChild(tab);
+
+    var panel = document.createElement('div');
+    panel.className = 'panel';
+    panel.id = 'panel-' + key;
+    panel.hidden = key !== active;
+    steps.forEach(function(step, i){
+      var row = document.createElement('div');
+      row.className = 'step';
+      var num = document.createElement('span');
+      num.className = 'num';
+      num.textContent = String(i + 1);
+      var p = document.createElement('p');
+      p.textContent = step;
+      row.appendChild(num);
+      row.appendChild(p);
+      panel.appendChild(row);
+    });
+    panels.appendChild(panel);
+
+    tab.addEventListener('click', function(){
+      active = key;
+      Array.prototype.forEach.call(tabs.children, function(t){
+        t.setAttribute('aria-selected', String(t === tab));
+      });
+      Array.prototype.forEach.call(panels.children, function(p){
+        p.hidden = p.id !== 'panel-' + key;
+      });
+    });
+  });
+
+  /* Opened from the installed icon, the instructions below are about the very
+     window being read — worth saying, because the app chrome hides the address
+     bar and it is not obvious this is the old app talking. */
+  if (window.matchMedia('(display-mode: standalone)').matches ||
+      window.matchMedia('(display-mode: window-controls-overlay)').matches ||
+      navigator.standalone === true) {
+    var intro = document.getElementById('iconIntro');
+    intro.className = 'state warn';
+    intro.textContent = 'أنت تقرأ هذه الصفحة من داخل التطبيق المثبّت نفسه — الخطوات التالية تحذف هذا التطبيق الذي تنظر إليه الآن.';
+  }
+
+  purge();
+})();
+</script>
+</body>
+</html>

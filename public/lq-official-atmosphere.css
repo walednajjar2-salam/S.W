@@ -1,0 +1,67 @@
+/* Official Daylight Estate — user-specified patio background
+   Fonts come from lq-arabic-type.css (single source of truth) */
+:root{
+  --lq-atm-ink:#0f2a4a;
+  --lq-atm-sky:#dceaf7;
+  --lq-atm-panel:rgba(255,255,255,.88);
+  --lq-atm-text:#12263f;
+  --lq-atm-muted:#5a6d82;
+  --lq-atm-gold:#c5a56a;
+  --lq-atm-gold-bright:#d4b57a;
+  --lq-atm-gold-deep:#9a7a3f;
+  --lq-atm-line:rgba(15,42,74,.12);
+  /* Light wash so the patio 3D scene stays visible like the reference */
+  --lq-atm-overlay:linear-gradient(105deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,.18) 42%,rgba(220,234,247,.12) 100%);
+  --lq-atm-gold-wash:radial-gradient(ellipse 55% 45% at 70% 30%,rgba(197,165,106,.12),transparent 60%);
+  --lq-atm-photo:url("/assets/login-daylight-3d.jpg");
+  --lq-atm-bottom:linear-gradient(180deg,transparent 62%,rgba(15,42,74,.18) 100%);
+  --lq-atm-shadow:0 18px 44px rgba(15,42,74,.14);
+}
+
+html,body{
+  font-family:var(--lq-font, var(--lq-font-ar)) !important;
+  font-weight:var(--lq-fw, 700) !important;
+}
+
+.lq-atm,
+body.lq-official-portal,
+body.login-ultra #loginScreen{
+  background:var(--lq-atm-sky) !important;
+  font-family:var(--lq-font, var(--lq-font-ar)) !important;
+  font-weight:var(--lq-fw, 700) !important;
+}
+
+.lq-atm-bg,
+body.lq-official-portal .op-bg,
+body.login-ultra #loginScreen .login-cinema-photo-layer{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:0 !important;
+  pointer-events:none !important;
+  background:
+    var(--lq-atm-overlay),
+    var(--lq-atm-gold-wash),
+    var(--lq-atm-photo) center/cover no-repeat !important;
+  transform:scale(1.01);
+  animation:lqAtmDrift 22s ease-in-out infinite alternate;
+}
+.lq-atm-bg::after,
+body.lq-official-portal .op-bg::after,
+body.login-ultra #loginScreen .login-cinema-photo-layer::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  background:var(--lq-atm-bottom) !important;
+  pointer-events:none !important;
+}
+
+@keyframes lqAtmDrift{
+  from{transform:scale(1.01) translate3d(0,0,0)}
+  to{transform:scale(1.035) translate3d(-.6%,.35%,0)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .lq-atm-bg,
+  body.lq-official-portal .op-bg,
+  body.login-ultra #loginScreen .login-cinema-photo-layer{animation:none!important}
+}

@@ -1,0 +1,203 @@
+/* ============================================================
+   NUCLEAR: DELETE dark teal/navy washes from the whole app
+   Light daylight only · black text · readable forever
+   MUST load LAST
+   ============================================================ */
+
+html body.app-ready,
+html body.lq-exec.app-ready,
+html body.saas-luxury.app-ready,
+html body.va-theme.app-ready,
+html body.lq-edition-terrifying.app-ready,
+html body.app-ready.va-theme,
+html body.app-ready.enterprise-vision{
+  background:#eef3f8 !important;
+  background-image:
+    radial-gradient(circle at 12% 0%, rgba(201,169,110,.08), transparent 34%),
+    linear-gradient(170deg,#f4f7fb 0%, #e8eef5 100%) !important;
+  color:#000000 !important;
+}
+
+/* Kill cosmic / VA dark canvas layers */
+html body.app-ready #lqCosmicBg,
+html body.app-ready .lq-cosmic-bg,
+html body.app-ready .lq-app-bg-parity,
+html body.app-ready canvas.lq-cosmic,
+html body.app-ready #cosmicCanvas,
+html body.app-ready .va-bg,
+html body.app-ready .va-stars{
+  display:none !important;
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+
+/* Content shell — NO dark teal board */
+html body.app-ready #app,
+html body.app-ready #app.app,
+html body.app-ready .content,
+html body.app-ready .app-shell,
+html body.app-ready .app-body,
+html body.app-ready .section,
+html body.app-ready .section.active,
+html body.app-ready #sec-dashboard,
+html body.app-ready .lq-cockpit-wrap,
+html body.app-ready .lq-cockpit-grid,
+html body.app-ready .lq-hub-board,
+html body.app-ready .lq-cockpit-v30,
+html body.app-ready .saas-dash,
+html body.app-ready .dash-mega-cockpit,
+html body.app-ready .saas-exec-hero,
+html body.app-ready .dash-live-ticker,
+html body.app-ready .va-dash-banner,
+html body.app-ready .lq-role-board-host,
+html body.app-ready .page-head{
+  background:#eef3f8 !important;
+  background-image:none !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  box-shadow:none !important;
+}
+
+/* Cards / widgets — white glass, never dark */
+html body.app-ready .card,
+html body.app-ready .section .card,
+html body.app-ready .saas-glass,
+html body.app-ready .saas-kpi,
+html body.app-ready .saas-kpi-pro,
+html body.app-ready .saas-section,
+html body.app-ready .saas-cmd,
+html body.app-ready .saas-decision-panel,
+html body.app-ready .lq-estate-nx,
+html body.app-ready .lq-estate-nx-head,
+html body.app-ready .lq-estate-nx-stat,
+html body.app-ready .lq-estate-nx-bld,
+html body.app-ready .lq-estate-nx-table-wrap,
+html body.app-ready .table-wrap,
+html body.app-ready .dash-panel-dark,
+html body.app-ready .kpi,
+html body.app-ready .hero,
+html body.app-ready .executive-chip,
+html body.app-ready .quick button,
+html body.app-ready .modal-box,
+html body.app-ready .app-header{
+  background:#ffffff !important;
+  background-image:linear-gradient(145deg,#ffffff,rgba(247,250,252,.95)) !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  border:1px solid rgba(15,42,74,.12) !important;
+  box-shadow:0 8px 18px rgba(15,39,68,.06) !important;
+}
+
+html body.app-ready .card *,
+html body.app-ready .saas-glass *,
+html body.app-ready .saas-kpi *,
+html body.app-ready .saas-section *,
+html body.app-ready .lq-estate-nx *,
+html body.app-ready .kpi *,
+html body.app-ready .section h2,
+html body.app-ready .section h3,
+html body.app-ready .section p,
+html body.app-ready .section span,
+html body.app-ready .section strong,
+html body.app-ready .section small,
+html body.app-ready #sectionTitle,
+html body.app-ready .page-head h2{
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  text-shadow:none !important;
+}
+
+/* Sidebar — light, white nav pills (delete navy wash) */
+html body.app-ready .sidebar,
+html body.app-ready .sidebar-ultra{
+  background:#f7fafc !important;
+  background-image:none !important;
+  color:#000 !important;
+}
+html body.app-ready #nav.nav-ultra .lq-nav-dd,
+html body.app-ready #nav.nav-ultra .lq-dd,
+html body.app-ready #nav.nav-ultra .lq-nav-dd > .lq-dd-toggle,
+html body.app-ready #nav.nav-ultra button[data-section],
+html body.app-ready #nav.nav-ultra .lq-dd-panel > button{
+  background:#ffffff !important;
+  background-image:none !important;
+  border:1px solid rgba(15,42,74,.12) !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  box-shadow:0 4px 12px rgba(15,39,68,.05) !important;
+  border-radius:14px !important;
+}
+html body.app-ready #nav.nav-ultra button[data-section] .nav-text,
+html body.app-ready #nav.nav-ultra button[data-section] .nav-ar,
+html body.app-ready #nav.nav-ultra button[data-section] span,
+html body.app-ready #nav.nav-ultra .lq-dd-toggle,
+html body.app-ready #nav.nav-ultra .lq-dd-toggle span,
+html body.app-ready #nav.nav-ultra .lq-dd-toggle .lq-ico svg{
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  stroke:#0f2744 !important;
+}
+html body.app-ready #nav.nav-ultra button[data-section] .nav-icon{
+  background:linear-gradient(145deg,#fff,#eef3f8) !important;
+  border:1px solid rgba(15,42,74,.14) !important;
+  color:#0f2744 !important;
+  -webkit-text-fill-color:#0f2744 !important;
+}
+html body.app-ready #nav.nav-ultra button[data-section] .nav-icon .lq-ico svg{
+  stroke:#0f2744 !important;
+  color:#0f2744 !important;
+}
+html body.app-ready #nav.nav-ultra button[data-section].active,
+html body.app-ready #nav.nav-ultra button[data-section]:hover{
+  background:#fff !important;
+  border-color:rgba(201,169,110,.5) !important;
+}
+
+/* Hide leftover name boxes */
+html body.app-ready .userbox,
+html body.app-ready #sidebarUser{
+  display:none !important;
+}
+
+/* FAB stack navy pills stay readable white-on-navy ONLY on the popout */
+html body.app-ready #lqCmdFab .lq-cmd-fab-item{
+  background:#12192c !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
+html body.app-ready #lqCmdFab .lq-cmd-fab-item .lq-cmd-fab-label,
+html body.app-ready #lqCmdFab .lq-cmd-fab-item span{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
+html body.app-ready #lqCmdFab .lq-cmd-fab-ico .lq-ico svg{
+  stroke:#fff !important;
+  color:#fff !important;
+}
+
+/* Forms/fields: force readable white fields */
+html body.app-ready input,
+html body.app-ready select,
+html body.app-ready textarea,
+html body.app-ready .toolbar input,
+html body.app-ready .toolbar select,
+html body.app-ready .form input,
+html body.app-ready .form select,
+html body.app-ready .form textarea{
+  background:#ffffff !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  border:1px solid rgba(15,42,74,.18) !important;
+}
+html body.app-ready input::placeholder,
+html body.app-ready textarea::placeholder{
+  color:#475569 !important;
+  -webkit-text-fill-color:#475569 !important;
+  opacity:1 !important;
+}
+/* Hide empty nav wrappers/rows if any */
+html body.app-ready #nav .lq-dd:has(.lq-dd-panel:empty),
+html body.app-ready #nav button[data-section]:empty{
+  display:none !important;
+}

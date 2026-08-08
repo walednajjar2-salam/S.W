@@ -1,0 +1,204 @@
+/* Launch Quality — site-wide 3D glass icons (navy/gold, no turquoise) */
+:root{
+  --lq-glass-face:linear-gradient(145deg,rgba(255,255,255,.72),rgba(236,242,250,.42) 42%,rgba(210,222,236,.55));
+  --lq-glass-edge:rgba(255,255,255,.78);
+  --lq-glass-line:rgba(15,42,74,.16);
+  --lq-glass-ink:#0f2744;
+  --lq-glass-gold:#c9a96e;
+  --lq-glass-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 -1px 0 rgba(15,42,74,.08) inset,
+    0 10px 22px rgba(15,42,74,.14),
+    0 2px 6px rgba(15,42,74,.08);
+}
+
+/* Nav / sidebar icons */
+body.app-ready .nav-icon,
+body.saas-luxury .nav-icon,
+body.lq-exec .nav-icon,
+body.app-ready .nav button .nav-icon,
+.sidebar .nav-icon,
+.nav-ultra .nav-icon{
+  width:34px !important;
+  height:34px !important;
+  border-radius:12px !important;
+  display:grid !important;
+  place-items:center !important;
+  background:var(--lq-glass-face) !important;
+  border:1px solid var(--lq-glass-line) !important;
+  outline:1px solid rgba(201,169,110,.28) !important;
+  outline-offset:-3px !important;
+  color:var(--lq-glass-ink) !important;
+  box-shadow:var(--lq-glass-shadow) !important;
+  backdrop-filter:blur(14px) saturate(1.25) !important;
+  -webkit-backdrop-filter:blur(14px) saturate(1.25) !important;
+  transform:perspective(600px) rotateX(8deg) translateZ(0) !important;
+  transform-style:preserve-3d !important;
+  text-shadow:0 1px 0 rgba(255,255,255,.55) !important;
+}
+
+body.app-ready .nav button.active .nav-icon,
+body.saas-luxury .nav button.active .nav-icon,
+body.lq-exec .nav button.active .nav-icon{
+  background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(232,240,250,.7) 40%,rgba(201,169,110,.28)) !important;
+  border-color:rgba(201,169,110,.45) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 12px 26px rgba(15,42,74,.16),
+    0 0 0 1px rgba(201,169,110,.2) !important;
+  transform:perspective(600px) rotateX(4deg) translateY(-1px) !important;
+}
+
+/* Header / toolbar icon buttons */
+body.app-ready .tb-icon,
+body.saas-luxury .tb-icon,
+body.lq-exec .tb-icon,
+body.app-ready .lq-header-settings,
+.ops-quick-bar button,
+.lq-estate-nx-modules button{
+  background:var(--lq-glass-face) !important;
+  border:1px solid var(--lq-glass-line) !important;
+  box-shadow:var(--lq-glass-shadow) !important;
+  backdrop-filter:blur(12px) saturate(1.2) !important;
+  -webkit-backdrop-filter:blur(12px) saturate(1.2) !important;
+  color:var(--lq-glass-ink) !important;
+  transform:perspective(700px) rotateX(6deg) !important;
+}
+
+body.app-ready .tb-icon:hover,
+body.app-ready .lq-header-settings:hover,
+.lq-estate-nx-modules button:hover,
+.lq-estate-nx-modules button.active{
+  border-color:rgba(201,169,110,.55) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 14px 28px rgba(15,42,74,.16) !important;
+  transform:perspective(700px) rotateX(2deg) translateY(-1px) !important;
+}
+
+/* Avatars */
+body.app-ready .avatar,
+body.app-ready .avatar-pro,
+body.saas-luxury .avatar,
+body.lq-exec .avatar,
+.sidebar-user .su-avatar,
+.su-avatar{
+  background:linear-gradient(145deg,rgba(255,255,255,.85),rgba(226,236,248,.65) 45%,rgba(201,169,110,.35)) !important;
+  border:1px solid rgba(201,169,110,.4) !important;
+  color:var(--lq-glass-ink) !important;
+  box-shadow:var(--lq-glass-shadow) !important;
+  backdrop-filter:blur(10px) !important;
+  -webkit-backdrop-filter:blur(10px) !important;
+}
+
+/* Building chips / module tiles */
+.lq-estate-nx-bld,
+.lq-estate-nx-stat,
+.lq-hub-tile-icon,
+.login-feature-chip{
+  background:var(--lq-glass-face) !important;
+  border:1px solid var(--lq-glass-line) !important;
+  box-shadow:var(--lq-glass-shadow) !important;
+  backdrop-filter:blur(12px) saturate(1.15) !important;
+  -webkit-backdrop-filter:blur(12px) saturate(1.15) !important;
+}
+
+.lq-estate-nx-bld.active,
+.lq-estate-nx-stat:hover{
+  border-color:rgba(201,169,110,.5) !important;
+  outline:1px solid rgba(201,169,110,.28);
+  outline-offset:-3px;
+}
+
+/* Kill turquoise accents on icon surfaces */
+body.app-ready .nav-icon,
+body.saas-luxury .nav-icon,
+body.lq-exec .nav-icon,
+body.app-ready .avatar,
+body.saas-luxury .avatar,
+body.lq-exec .avatar{
+  background-image:var(--lq-glass-face) !important;
+}
+
+/* Login glass submit (size owned by login-locked; look only here) */
+body.login-ultra #loginScreen .login-submit.gold-btn,
+body.login-ultra #loginScreen #loginBtn{
+  background:linear-gradient(145deg,rgba(255,248,230,.95),rgba(212,177,93,.92) 48%,rgba(141,109,44,.95)) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.45) inset,
+    0 8px 18px rgba(141,109,44,.22) !important;
+}
+
+@media (prefers-reduced-motion:reduce){
+  body.app-ready .nav-icon,
+  body.app-ready .tb-icon,
+  body.app-ready .lq-header-settings,
+  .lq-estate-nx-modules button{
+    transform:none !important;
+  }
+}
+
+/* SVG line icons inside glass pills (emoji replacement) */
+.lq-ico{
+  display:inline-grid !important;
+  place-items:center !important;
+  line-height:0 !important;
+  color:inherit !important;
+  -webkit-text-fill-color:currentColor !important;
+}
+.lq-ico svg{
+  display:block !important;
+  width:1em !important;
+  height:1em !important;
+  min-width:14px;
+  min-height:14px;
+  color:inherit !important;
+  stroke:currentColor !important;
+}
+body.app-ready .nav-icon .lq-ico,
+body.app-ready .nav button .nav-icon .lq-ico,
+body.lq-exec .nav-icon .lq-ico{
+  font-size:16px !important;
+  color:#0f2744 !important;
+  -webkit-text-fill-color:#0f2744 !important;
+}
+body.app-ready .lq-dd-ico .lq-ico,
+body.app-ready .lq-dd-item .lq-dd-ico,
+body.app-ready .lq-dd-item .lq-dd-ico .lq-ico,
+body.app-ready .lq-dd-toggle .lq-dd-ico .lq-ico,
+body.app-ready .lq-dd-toggle-ico .lq-ico{
+  font-size:15px !important;
+  color:#0f2744 !important;
+  -webkit-text-fill-color:#0f2744 !important;
+}
+body.app-ready .lq-dd-ico{
+  display:grid !important;
+  place-items:center !important;
+}
+body.app-ready .lq-dd-chev .lq-ico{
+  font-size:13px !important;
+  color:#0f2744 !important;
+  -webkit-text-fill-color:#0f2744 !important;
+}
+body.app-ready .saas-cmd-icon .lq-ico,
+body.app-ready .saas-dash-menu-ico .lq-ico{
+  font-size:18px !important;
+  color:#0f2744 !important;
+  -webkit-text-fill-color:#0f2744 !important;
+}
+body.app-ready .tb-icon .lq-ico,
+body.app-ready .lq-header-settings .lq-ico{
+  font-size:16px !important;
+  color:#0f2744 !important;
+  -webkit-text-fill-color:#0f2744 !important;
+}
+body.app-ready .lq-dd-toggle-ico{
+  display:inline-grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  border-radius:9px;
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.14);
+  color:#f4f7fb !important;
+}

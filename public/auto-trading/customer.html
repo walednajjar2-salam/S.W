@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>NAJJAR &amp; AL SAMOOM TRADING</title>
+  <link rel="icon" href="/assets/app-icon-192.png">
+  <link rel="stylesheet" href="/auto-trading/auto-trading.css?v=at49">
+  <link rel="stylesheet" href="/auto-trading/cinema-lux.css?v=cl2">
+  <link rel="stylesheet" href="/auto-trading/car-3d.css?v=at16">
+</head>
+<body class="nt-customer nt-cinema-lux">
+  <div class="nt-cinema-vignette" aria-hidden="true"></div>
+  <div class="nt-cinema-grid" aria-hidden="true"></div>
+  <div class="nt-cinema-beams" aria-hidden="true"></div>
+  <div class="nt-watermark" aria-hidden="true"></div>
+  <div class="nt-lux-bg" aria-hidden="true"></div>
+  <header class="nt-cust-hero">
+    <div id="custBrandWrap" class="nt-cust-brand-wrap"></div>
+    <div>
+      <h1>Featured Selection</h1>
+      <p class="nt-sub">صور · أسعار · مواصفات · واتساب مباشر</p>
+    </div>
+    <div class="nt-hub-actions">
+      <a class="nt-btn primary" href="https://wa.me/96871924089" target="_blank" rel="noopener">واتساب المعرض</a>
+      <a class="nt-btn ghost" href="/najjar-al-samoom-used-imported-cars/login.html">تسجيل الدخول</a>
+    </div>
+  </header>
+
+  <main class="nt-cust-main">
+    <div id="custRoot" aria-live="polite">جاري التحميل…</div>
+  </main>
+
+  <!-- Each number is its own left-to-right run; otherwise the leading "+" is
+       reordered past the digits in this right-to-left footer. -->
+  <footer class="nt-hub-foot">
+    واتساب <span dir="ltr">+968 71924089</span> · <span dir="ltr">+968 93391994</span> ·
+    حمد <span dir="ltr">+968 77548482</span> · مكتب <span dir="ltr">95551994</span><br>
+    بنك صحار الدولي · رقم الحساب الدولي <span dir="ltr">OM070300000234020022484</span> ·
+    NAJJAR &amp; AL SAMOOM TRADING — Nizwa · Al Falaj<br>
+    <span class="nt-team-foot">Walid Najjar &amp; Hamad Al Samoom</span>
+  </footer>
+
+  <script src="/auto-trading/car-3d.js?v=at17"></script>
+  <script>
+    document.getElementById('custBrandWrap').innerHTML = NajjarCar3D.renderGlassLogo({ size: 'compact' });
+
+    const root = document.getElementById('custRoot');
+    let vehicles = [];
+    let filter = 'all';
+    let sort = 'showroom';
+
+    function paint() {
+      root.innerHTML = NajjarCar3D.renderShowroom(vehicles, { filter, sort, hero: true, whatsapp: true });
+      NajjarCar3D.bindShowroom(root, vehicles, {
+        onFilter: (id) => {
+          filter = id || 'all';
+          paint();
+          root.querySelector('[data-showroom]')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        },
+        onSort: (id) => {
+          sort = id || 'showroom';
+          paint();
+        },
+      });
+    }
+
+    (async () => {
+      try {
+        const data = await fetch('/api/auto-trading/showroom', { cache: 'no-store' }).then((r) => r.json());
+        if (!data || data.ok === false) throw new Error(data && data.error);
+        vehicles = (data.vehicles || []).map((v, i) => ({ ...v, id: v.id != null ? v.id : i + 1 }));
+        if (!vehicles.length) {
+          root.innerHTML = '<p class="empty-state">لا توجد سيارات معروضة حالياً — تواصل معنا عبر واتساب</p>';
+          return;
+        }
+        paint();
+      } catch (_) {
+        root.innerHTML = '<p class="empty-state">تعذر تحميل القائمة — حاول لاحقاً أو تواصل عبر واتساب</p>';
+      }
+    })();
+  </script>
+</body>
+</html>

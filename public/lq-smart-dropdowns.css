@@ -1,0 +1,374 @@
+/* ============================================================
+   Smart glass dropdowns — LIGHT glass (no navy wash)
+   Black text + dark icons on white/glass so commands are readable
+   ============================================================ */
+
+:root{
+  --lq-dd-glass:rgba(255,255,255,.78);
+  --lq-dd-glass-item:rgba(255,255,255,.92);
+  --lq-dd-glass-hover:rgba(247,241,228,.95);
+  --lq-dd-line:rgba(15,42,74,.14);
+  --lq-dd-gold:rgba(201,169,110,.55);
+  --lq-dd-ink:#000000;
+  --lq-dd-muted:rgba(15,39,68,.72);
+  --lq-dd-radius:14px;
+  --lq-dd-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 10px 24px rgba(15,39,68,.08);
+}
+
+body.app-ready #lqSmartRail,
+body.lq-exec #lqSmartRail,
+#lqSmartRail,
+.lq-smart-rail{
+  display:flex !important;
+  flex-direction:column;
+  gap:10px;
+  margin:0 0 14px;
+  padding:0 2px 12px;
+  border-bottom:1px solid rgba(15,42,74,.10);
+  background:transparent !important;
+}
+
+body.app-ready .lq-dd,
+body.lq-exec .lq-dd,
+.lq-dd{
+  position:relative;
+  border-radius:var(--lq-dd-radius);
+  background:var(--lq-dd-glass) !important;
+  background-image:linear-gradient(145deg,rgba(255,255,255,.92),rgba(255,255,255,.62)) !important;
+  border:1px solid var(--lq-dd-line) !important;
+  box-shadow:var(--lq-dd-shadow) !important;
+  backdrop-filter:blur(18px) saturate(1.2) !important;
+  -webkit-backdrop-filter:blur(18px) saturate(1.2) !important;
+  overflow:hidden;
+}
+
+body.app-ready .lq-dd-toggle,
+body.lq-exec .lq-dd-toggle,
+.lq-dd-toggle{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:12px 12px 12px 14px;
+  margin:0;
+  border:0 !important;
+  border-radius:var(--lq-dd-radius) !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  font-family:"IBM Plex Sans Arabic",sans-serif !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+  text-align:right;
+  cursor:pointer;
+}
+
+body.app-ready .lq-dd-toggle .lq-dd-title,
+body.app-ready .lq-dd-toggle .lq-dd-title span,
+body.lq-exec .lq-dd-toggle .lq-dd-title,
+body.lq-exec .lq-dd-toggle .lq-dd-title span{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+}
+
+body.app-ready .lq-dd-toggle .lq-dd-chev,
+body.lq-exec .lq-dd-toggle .lq-dd-chev,
+.lq-dd-chev{
+  width:22px;
+  height:22px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:rgba(15,42,74,.06) !important;
+  border:1px solid rgba(15,42,74,.12) !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  transition:transform .22s ease;
+  font-size:11px !important;
+}
+
+body.app-ready .lq-dd-toggle .lq-dd-chev .lq-ico,
+body.app-ready .lq-dd-toggle-ico .lq-ico{
+  color:#0f2744 !important;
+  -webkit-text-fill-color:#0f2744 !important;
+}
+
+.lq-dd.open .lq-dd-toggle .lq-dd-chev{
+  transform:rotate(180deg);
+}
+
+.lq-dd-panel{
+  display:none;
+  flex-direction:column;
+  gap:6px;
+  padding:0 8px 10px;
+  max-height:0;
+  overflow:hidden;
+  opacity:0;
+  transition:max-height .28s ease, opacity .2s ease;
+}
+
+.lq-dd.open .lq-dd-panel{
+  display:flex;
+  max-height:640px;
+  opacity:1;
+}
+
+/* Command rows — light glass, black label, readable SVG */
+body.app-ready .lq-dd-item,
+body.lq-exec .lq-dd-item,
+.lq-dd-item{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:11px 12px;
+  margin:0;
+  border-radius:12px !important;
+  border:1px solid rgba(15,42,74,.12) !important;
+  background:#ffffff !important;
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 6px 14px rgba(15,39,68,.05) !important;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  font-family:"IBM Plex Sans Arabic",sans-serif !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  text-align:right;
+  cursor:pointer;
+  transition:background .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+body.app-ready .lq-dd-item:hover,
+body.app-ready .lq-dd-item:focus-visible,
+body.lq-exec .lq-dd-item:hover{
+  background:linear-gradient(145deg,#fff,#f7f1e4) !important;
+  border-color:var(--lq-dd-gold) !important;
+  transform:translateY(-1px);
+  outline:none;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+}
+
+body.app-ready .lq-dd-item.active{
+  border-color:rgba(201,169,110,.65) !important;
+  background:linear-gradient(145deg,#fff,#f3f7fc) !important;
+}
+
+body.app-ready .lq-dd-item .lq-dd-label,
+body.lq-exec .lq-dd-item .lq-dd-label{
+  flex:1;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+}
+
+body.app-ready .lq-dd-item .lq-dd-ico,
+body.lq-exec .lq-dd-item .lq-dd-ico,
+.lq-dd-item .lq-dd-ico{
+  width:34px !important;
+  height:34px !important;
+  flex:0 0 34px;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:11px !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(236,242,250,.75)) !important;
+  border:1px solid rgba(15,42,74,.14) !important;
+  outline:1px solid rgba(201,169,110,.28) !important;
+  outline-offset:-3px !important;
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 8px 14px rgba(15,39,68,.08) !important;
+  color:#0f2744 !important;
+  -webkit-text-fill-color:#0f2744 !important;
+  font-size:15px !important;
+  transform:perspective(600px) rotateX(6deg);
+}
+
+body.app-ready .lq-dd-item .lq-dd-ico .lq-ico,
+body.app-ready .lq-dd-item .lq-dd-ico .lq-ico svg{
+  color:#0f2744 !important;
+  -webkit-text-fill-color:#0f2744 !important;
+  stroke:#0f2744 !important;
+}
+
+body.app-ready .lq-dd-item.lq-dd-accent .lq-dd-ico{
+  background:linear-gradient(145deg,rgba(201,169,110,.35),rgba(255,255,255,.85)) !important;
+  outline-color:rgba(201,169,110,.5) !important;
+}
+
+body.app-ready .lq-dd-toggle-ico{
+  display:inline-grid !important;
+  place-items:center !important;
+  width:28px !important;
+  height:28px !important;
+  border-radius:9px !important;
+  background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(236,242,250,.7)) !important;
+  border:1px solid rgba(15,42,74,.14) !important;
+  color:#0f2744 !important;
+}
+
+/* Nav accordion groups — same light glass */
+body.app-ready #nav.nav-ultra .lq-nav-dd,
+body.lq-exec #nav.nav-ultra .lq-nav-dd{
+  margin:0 0 8px;
+  border-radius:var(--lq-dd-radius);
+  background:rgba(255,255,255,.72) !important;
+  background-image:linear-gradient(145deg,rgba(255,255,255,.9),rgba(255,255,255,.55)) !important;
+  border:1px solid rgba(15,42,74,.12) !important;
+  box-shadow:0 8px 18px rgba(15,39,68,.06) !important;
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  overflow:hidden;
+}
+
+body.app-ready #nav.nav-ultra .lq-nav-dd > .lq-dd-toggle,
+body.lq-exec #nav.nav-ultra .lq-nav-dd > .lq-dd-toggle{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+}
+
+body.app-ready #nav.nav-ultra .lq-nav-dd .lq-dd-panel{
+  gap:5px;
+  padding:0 8px 8px;
+}
+
+body.app-ready #nav.nav-ultra .lq-nav-dd.open .lq-dd-panel{
+  max-height:1200px;
+}
+
+body.app-ready #nav.nav-ultra .lq-nav-dd button[data-section],
+body.app-ready #nav.nav-ultra .lq-nav-dd > .lq-dd-panel > button,
+body.lq-exec #nav.nav-ultra .lq-nav-dd button[data-section]{
+  background:#ffffff !important;
+  border:1px solid rgba(15,42,74,.12) !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+  box-shadow:0 4px 12px rgba(15,39,68,.05) !important;
+}
+
+body.app-ready #nav.nav-ultra .lq-nav-dd button[data-section] .nav-ar,
+body.app-ready #nav.nav-ultra .lq-nav-dd button[data-section] .nav-text,
+body.app-ready #nav.nav-ultra .lq-nav-dd button[data-section] span,
+body.lq-exec #nav.nav-ultra .lq-nav-dd button[data-section] .nav-ar{
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+}
+
+body.app-ready #nav.nav-ultra .lq-nav-dd button[data-section].active,
+body.app-ready #nav.nav-ultra .lq-nav-dd button[data-section]:hover{
+  background:linear-gradient(145deg,#fff,#f7f1e4) !important;
+  border-color:rgba(201,169,110,.45) !important;
+}
+
+body.app-ready #nav.nav-ultra .lq-nav-dd button[data-section] .nav-icon{
+  background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(236,242,250,.7)) !important;
+  border-color:rgba(15,42,74,.14) !important;
+  color:#0f2744 !important;
+  -webkit-text-fill-color:#0f2744 !important;
+}
+
+body.app-ready #nav.nav-ultra .lq-nav-dd button[data-section] .nav-icon .lq-ico,
+body.app-ready #nav.nav-ultra .lq-nav-dd button[data-section] .nav-icon .lq-ico svg{
+  color:#0f2744 !important;
+  stroke:#0f2744 !important;
+}
+
+body.app-ready #nav.nav-ultra .nav-group-label{display:none !important;}
+
+/* Header ops dropdowns — light glass */
+body.app-ready #opsQuickBar.ops-quick-bar.lq-ops-dd-host,
+#opsQuickBar.ops-quick-bar.lq-ops-dd-host{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  padding:8px 0 4px;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+
+#opsQuickBar .lq-ops-dd{
+  position:relative;
+  z-index:40;
+}
+
+body.app-ready #opsQuickBar .lq-ops-dd > .lq-dd-toggle,
+body.lq-exec #opsQuickBar .lq-ops-dd > .lq-dd-toggle{
+  min-width:148px;
+  padding:9px 12px;
+  border-radius:12px !important;
+  background:#ffffff !important;
+  border:1px solid rgba(15,42,74,.14) !important;
+  box-shadow:var(--lq-dd-shadow) !important;
+  color:#000000 !important;
+  -webkit-text-fill-color:#000000 !important;
+}
+
+#opsQuickBar .lq-ops-dd .lq-dd-panel{
+  position:absolute;
+  top:calc(100% + 6px);
+  right:0;
+  left:auto;
+  min-width:220px;
+  max-height:none;
+  padding:8px;
+  display:none;
+  background:#ffffff !important;
+  border:1px solid rgba(15,42,74,.14) !important;
+  border-radius:14px;
+  box-shadow:0 18px 40px rgba(15,39,68,.14);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  opacity:1;
+  z-index:50;
+}
+
+#opsQuickBar .lq-ops-dd.open .lq-dd-panel{
+  display:flex;
+  max-height:none;
+}
+
+#opsQuickBar .ops-label{display:none !important;}
+
+/* Hard kill leftover navy washes on command UI */
+body.app-ready #lqSmartRail .lq-dd,
+body.app-ready #nav .lq-nav-dd,
+body.app-ready #opsQuickBar .lq-dd,
+body.app-ready .sidebar-ultra .lq-dd,
+body.app-ready .sidebar-ultra .lq-nav-dd{
+  background:#fff !important;
+  background-image:linear-gradient(145deg,#fff,rgba(247,250,252,.9)) !important;
+}
+
+@keyframes lqDdIn{
+  from{opacity:0; transform:translateY(-6px)}
+  to{opacity:1; transform:translateY(0)}
+}
+.lq-dd.open .lq-dd-panel,
+#opsQuickBar .lq-ops-dd.open .lq-dd-panel{
+  animation:lqDdIn .22s ease;
+}
+
+@media (max-width:900px){
+  #opsQuickBar .lq-ops-dd .lq-dd-panel{
+    right:0;
+    left:0;
+    min-width:0;
+    width:min(280px, 86vw);
+  }
+}

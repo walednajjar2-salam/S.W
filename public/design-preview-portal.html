@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>معاينة تصميم المنصات | جودة الانطلاقة</title>
+  <link rel="stylesheet" href="lq-exec-theme.css?v=day2">
+  <link rel="stylesheet" href="lq-official-atmosphere.css?v=day3">
+  <link rel="stylesheet" href="lq-brand-mark.css?v=day6">
+  <link rel="stylesheet" href="lq-official-portal.css?v=day9">
+  <link rel="stylesheet" href="lq-arabic-type.css?v=day6">
+  <style>
+    .preview-note{
+      position:fixed;top:10px;inset-inline-start:10px;z-index:30;
+      background:rgba(15,39,64,.78);color:#fff;border:1px solid rgba(184,146,63,.45);
+      border-radius:10px;padding:8px 12px;font:700 12px var(--lq-font);
+    }
+  </style>
+  <link rel="stylesheet" href="lq-glass-official.css?v=go1">
+</head>
+<body class="lq-exec lq-official-portal show-finance">
+  <div class="preview-note">معاينة المنصات · لا تحتاج دخول</div>
+  <div class="op-bg lq-atm-bg" aria-hidden="true"></div>
+  <main class="op-stage">
+    <div class="op-top" id="langMount"></div>
+    <header class="op-brand">
+      <div class="lq-brand-mark lq-brand-mark--portal">
+        <img src="/assets/brand-mark-gold.png?v=day6" alt="جودة الانطلاقة" width="655" height="411" fetchpriority="high">
+      </div>
+      <h1 class="op-brand-name">Launch Quality</h1>
+      <p class="op-brand-ar">جودة الانطلاقة</p>
+      <p class="op-support" data-i18n="choosePlatformSub">سبع منصات متكاملة — اختر مسار عملك</p>
+    </header>
+    <section class="op-choices" aria-label="أقسام العمل">
+      <button class="op-choice" type="button"><div class="op-mark op-mark-photo"><img src="/assets/portals/nizwa.jpg?v=day7" alt=""></div><h2 data-i18n="nizwaestate">عقارات نزوى</h2><p data-i18n="nizwaestateDesc">وحدات وعقود نزوى — منصة مستقلة بعد الدخول</p><span class="op-enter" data-i18n="enter">دخول</span></button>
+      <button class="op-choice" type="button"><div class="op-mark op-mark-photo"><img src="/assets/portals/realestate.jpg?v=day7" alt=""></div><h2 data-i18n="realestate">العقارات</h2><p data-i18n="realestateDesc">الوحدات، العملاء، العقود، الفواتير، والصيانة</p><span class="op-enter" data-i18n="enter">دخول</span></button>
+      <button class="op-choice" type="button"><div class="op-mark op-mark-photo"><img src="/assets/portals/hospitality.jpg?v=day7" alt=""></div><h2 data-i18n="hospitality">الضيافة</h2><p data-i18n="hospitalityDesc">المجالس، الحجوزات، الخدمات، والمخزن</p><span class="op-enter" data-i18n="enter">دخول</span></button>
+      <button class="op-choice" type="button"><div class="op-mark op-mark-photo"><img src="/auto-trading/assets/logo-mark.png?v=at13" alt=""></div><h2 data-i18n="autotrading">NAJJAR & AL SAMOOM TRADING</h2><p data-i18n="autotradingDesc">USED &amp; IMPORTED CARS — نزوى الفلج</p><span class="op-enter" data-i18n="enter">دخول</span></button>
+      <button class="op-choice" type="button"><div class="op-mark op-mark-photo"><img src="/assets/portals/products.jpg?v=day7" alt=""></div><h2 data-i18n="products">منتجاتنا</h2><p data-i18n="productsDesc">المنتجات، الأسعار، المخزون، والمبيعات</p><span class="op-enter" data-i18n="enter">دخول</span></button>
+      <button class="op-choice" type="button"><div class="op-mark op-mark-photo"><img src="/assets/portals/overview.jpg?v=day7" alt=""></div><h2 data-i18n="overview">نظرة شاملة</h2><p data-i18n="overviewDesc">مؤشرات العقارات والضيافة للإدارة</p><span class="op-enter" data-i18n="enter">دخول</span></button>
+      <button class="op-choice" type="button"><div class="op-mark op-mark-photo"><img src="/assets/portals/accounting.jpg?v=day7" alt=""></div><h2 data-i18n="accounting">المحاسبة</h2><p data-i18n="accountingDesc">الفواتير، التحصيل، القيود، والتقارير المالية</p><span class="op-enter" data-i18n="enter">دخول</span></button>
+    </section>
+    <footer class="op-foot">Launch Quality LLC · مشاريع جودة الانطلاقة للخدمات</footer>
+  </main>
+  <script src="lq-i18n.js?v=day9"></script>
+  <script>
+    document.getElementById("langMount").innerHTML = window.LQ_I18N.langSwitcherHtml("portalLang");
+    window.LQ_I18N.bindSwitcher("portalLang");
+    window.LQ_I18N.applyDocument();
+    document.addEventListener("lq:langchange", () => window.LQ_I18N.applyDocument());
+  </script>
+</body>
+</html>

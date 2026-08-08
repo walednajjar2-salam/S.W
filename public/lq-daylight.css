@@ -1,0 +1,65 @@
+:root{
+  --bg:#f4f8ff;
+  --navy:#f7fbff;
+  --navy2:#eef4ff;
+  --navy3:#e6efff;
+  --panel:rgba(255,255,255,.96);
+  --panel2:rgba(246,250,255,.95);
+  --glass:rgba(255,255,255,.92);
+  --text:#112033;
+  --muted:#5e6f86;
+  --gold:#3b82f6;
+  --gold2:#0f2a55;
+  --line:rgba(20,39,70,.12);
+  --line-gold:rgba(59,130,246,.28);
+}
+body, body.login-ultra, body.saas-luxury{
+  background:linear-gradient(180deg,#f8fbff 0%,#eef4ff 100%) !important;
+  color:var(--text) !important;
+}
+.login-bg,.login-bg-glow,.login-mesh,.lq-cosmos,.ev-cinema-lights,.ev-holo-orbs,.ev-neural-canvas{display:none !important}
+.sidebar{
+  background:linear-gradient(180deg,#ffffff,#f4f8ff) !important;
+  border-left:1px solid rgba(28,58,110,.12) !important;
+}
+.sidebar .nav button{
+  background:#f7faff !important;
+  color:#1b355c !important;
+  border-color:#d5e2ff !important;
+}
+.sidebar .nav button.active,.sidebar .nav button:hover{
+  background:#e9f1ff !important;
+  border-color:#8ab3ff !important;
+}
+.card,.saas-glass,.login-glass-card,.ev-auth-card,.modal-box{
+  background:#ffffff !important;
+  border:1px solid #dce8ff !important;
+  box-shadow:0 10px 30px rgba(25,55,105,.08) !important;
+}
+.app-header,.topbar{background:#ffffff !important;border:1px solid #dce8ff !important}
+input,select,textarea{
+  background:#f8fbff !important;
+  color:#132544 !important;
+  border:1px solid #cfe0ff !important;
+}
+input::placeholder,textarea::placeholder{color:#6580a4 !important}
+.login-card-title,.hero h2,.saas-section-head h3,.card h3,#sectionTitle{color:#143768 !important}
+.gold-btn,.primary{
+  background:linear-gradient(135deg,#2563eb,#3b82f6) !important;
+  color:#fff !important;
+  box-shadow:0 8px 20px rgba(37,99,235,.25) !important;
+}
+.ghost{
+  background:#f5f9ff !important;
+  color:#1d3c66 !important;
+  border-color:#c9ddff !important;
+}
+.badge,.top-pill{
+  background:#eef5ff !important;
+  border-color:#c8dbff !important;
+  color:#1b4f9a !important;
+}
+.table-wrap{background:#fff !important;border-color:#dce8ff !important}
+th{background:#edf4ff !important;color:#163a6f !important}
+td{color:#203754 !important}
+.login-submit{background:linear-gradient(135deg,#1d4ed8,#3b82f6)!important;color:#fff!important}

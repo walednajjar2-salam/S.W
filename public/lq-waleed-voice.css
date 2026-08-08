@@ -1,0 +1,46 @@
+/* Phase 8 — WALEED voice (optional TTS + mic) */
+.vision-ai-compose {
+  align-items: center;
+}
+
+.lq-voice-btn {
+  padding: 8px 10px;
+  min-height: auto;
+  line-height: 1;
+  font-size: 15px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.lq-voice-btn.active {
+  border-color: rgba(61, 154, 158, 0.65);
+  background: rgba(26, 107, 111, 0.35);
+  box-shadow: 0 0 16px rgba(61, 154, 158, 0.25);
+}
+
+.lq-voice-btn.listening {
+  border-color: rgba(255, 120, 120, 0.7);
+  background: rgba(180, 40, 40, 0.35);
+  animation: lq-voice-pulse 1s ease infinite;
+}
+
+.lq-voice-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.lq-voice-hint {
+  padding: 0 12px 8px;
+  font-size: 11px;
+  color: rgba(200, 230, 235, 0.65);
+}
+
+@keyframes lq-voice-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}

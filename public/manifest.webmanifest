@@ -1,0 +1,50 @@
+{
+  "id": "/najjar-al-samoom-used-imported-cars/login.html",
+  "name": "NAJJAR & AL SAMOOM TRADING",
+  "short_name": "NAJJAR Trading",
+  "description": "Used & imported cars — staff showroom and inventory",
+  "start_url": "/najjar-al-samoom-used-imported-cars/login.html?source=pwa",
+  "scope": "/najjar-al-samoom-used-imported-cars/",
+  "display": "standalone",
+  "display_override": ["standalone", "browser"],
+  "background_color": "#0a0806",
+  "theme_color": "#caa14a",
+  "lang": "ar",
+  "dir": "rtl",
+  "orientation": "any",
+  "categories": ["business", "shopping"],
+  "icons": [
+    {
+      "src": "/assets/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "تشكيلة NAJJAR",
+      "short_name": "Showroom",
+      "url": "/najjar-al-samoom-used-imported-cars/customer.html",
+      "icons": [{"src": "/assets/app-icon-192.png", "sizes": "192x192"}]
+    },
+    {
+      "name": "منصات السيارات",
+      "short_name": "Platforms",
+      "url": "/najjar-al-samoom-used-imported-cars/platforms.html",
+      "icons": [{"src": "/assets/app-icon-192.png", "sizes": "192x192"}]
+    }
+  ]
+}

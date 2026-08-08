@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>النشر متوقف</title>
+  <style>
+    :root{--ink:#0a0a0a;--panel:#121212;--line:rgba(160,160,160,.22);--text:#ececec;--muted:#9a9a9a}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--ink);color:var(--text);
+      font:600 16px/1.85 Cairo,Segoe UI,Tahoma,sans-serif;padding:28px 16px}
+    .box{max-width:640px;width:100%;background:linear-gradient(160deg,var(--panel),#0d0d0d);
+      border:1px solid var(--line);border-radius:16px;padding:28px 26px;text-align:center;
+      box-shadow:0 24px 60px rgba(0,0,0,.45)}
+    h1{margin:0 0 10px;font-size:26px;font-weight:800}
+    p{margin:8px 0;color:var(--muted)}
+    a{display:inline-block;margin-top:18px;padding:11px 18px;border-radius:10px;border:1px solid var(--line);
+      color:var(--text);text-decoration:none;font-weight:800}
+    a:hover{border-color:#888}
+    .note{margin-top:22px;font-size:13.5px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>النشر متوقف</h1>
+    <p>لا يوجد موقع أو تطبيق منشور للجمهور أو للموظفين في الوقت الحالي.</p>
+    <p>إن كان على جهازك أيقونة أو نسخة قديمة مخزّنة، افتح رابط التنظيف أدناه مرة واحدة ثم احذف الأيقونة.</p>
+    <a href="/remove">تنظيف الجهاز من النسخة القديمة</a>
+    <p class="note">هذه الصفحة هي كل ما يُعرض حتى يُفعَّل النشر من جديد.</p>
+  </div>
+  <script>
+    (async function(){
+      try{
+        if(navigator.serviceWorker){
+          var regs=await navigator.serviceWorker.getRegistrations();
+          await Promise.all((regs||[]).map(function(r){return r.unregister();}));
+        }
+      }catch(e){}
+      try{
+        if(window.caches&&caches.keys){
+          var keys=await caches.keys();
+          await Promise.all((keys||[]).map(function(k){return caches.delete(k);}));
+        }
+      }catch(e){}
+    })();
+  </script>
+</body>
+</html>

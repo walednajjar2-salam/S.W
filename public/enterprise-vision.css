@@ -1,0 +1,267 @@
+/* ═══ Launch Quality · Enterprise Vision Pro ═══ */
+:root{
+  --ev-navy:#040814;
+  --ev-navy2:#0a1628;
+  --ev-navy3:#0f2344;
+  --ev-gold:#d4af37;
+  --ev-gold2:#f5d76e;
+  --ev-gold-dim:rgba(212,175,55,.18);
+  --ev-glass:rgba(255,255,255,.055);
+  --ev-glass2:rgba(255,255,255,.085);
+  --ev-border:rgba(255,255,255,.11);
+  --ev-glow:0 0 80px rgba(212,175,55,.12),0 32px 100px rgba(0,0,0,.55);
+  --ev-blur:blur(28px) saturate(1.35);
+}
+
+body.enterprise-vision.login-ultra,
+body.enterprise-vision.saas-luxury{
+  background:radial-gradient(ellipse 120% 80% at 50% -20%,#122040 0%,var(--ev-navy) 42%,#020408 100%)!important;
+}
+
+/* Neural canvas */
+.ev-neural-canvas{
+  position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.55
+}
+.ev-neural-canvas.hidden{display:none!important}
+body.saas-luxury .ev-neural-canvas{opacity:.28}
+
+.ev-cinema-lights{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 50% 35% at 18% 12%,rgba(212,175,55,.14),transparent 60%),
+    radial-gradient(ellipse 45% 30% at 82% 8%,rgba(109,93,252,.1),transparent 55%),
+    radial-gradient(ellipse 60% 40% at 50% 100%,rgba(15,35,68,.8),transparent 70%);
+}
+
+.ev-holo-orbs{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.ev-holo-orbs i{
+  position:absolute;border-radius:50%;filter:blur(40px);opacity:.35;
+  animation:evOrbFloat 18s ease-in-out infinite alternate
+}
+.ev-holo-orbs i:nth-child(1){width:280px;height:280px;left:8%;top:18%;background:rgba(212,175,55,.25)}
+.ev-holo-orbs i:nth-child(2){width:220px;height:220px;right:12%;top:28%;background:rgba(109,93,252,.2);animation-delay:-6s}
+.ev-holo-orbs i:nth-child(3){width:180px;height:180px;left:42%;bottom:22%;background:rgba(0,212,255,.12);animation-delay:-12s}
+@keyframes evOrbFloat{from{transform:translate(0,0) scale(1)}to{transform:translate(12px,-18px) scale(1.06)}}
+
+/* Login grid — centered mode */
+body.enterprise-vision.login-ultra .login-shell{position:relative;z-index:2;min-height:100dvh;display:flex!important;flex-direction:column!important}
+body.enterprise-vision.login-ultra .login-stage{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  grid-template-columns:1fr!important;
+  min-height:0!important;
+  flex:1!important;
+}
+body.enterprise-vision.login-ultra .login-stage--center .login-auth{
+  border-inline-start:none!important;
+  background:transparent!important;
+}
+
+.ev-showcase-viz{
+  position:relative;width:100%;max-width:520px;margin:24px auto 0;
+  border-radius:24px;overflow:hidden;
+  border:1px solid var(--ev-border);
+  background:linear-gradient(165deg,rgba(255,255,255,.06),rgba(255,255,255,.015));
+  box-shadow:var(--ev-glow);backdrop-filter:var(--ev-blur);
+  aspect-ratio:16/10;
+}
+.ev-showcase-viz canvas{width:100%!important;height:100%!important;display:block}
+.ev-viz-badge{
+  position:absolute;top:14px;inset-inline-start:14px;z-index:2;
+  padding:6px 12px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ev-gold2);background:rgba(4,8,20,.65);border:1px solid rgba(212,175,55,.3);
+  backdrop-filter:blur(12px)
+}
+.ev-holo-stats{
+  position:absolute;bottom:12px;inset-inline:12px;z-index:2;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px
+}
+.ev-holo-stat{
+  padding:10px 8px;border-radius:14px;text-align:center;
+  background:rgba(4,8,20,.72);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(14px)
+}
+.ev-holo-stat b{display:block;font-size:15px;font-weight:800;color:#fff}
+.ev-holo-stat span{font-size:9px;color:rgba(226,232,240,.7);font-weight:700}
+
+.ev-ai-teaser{
+  margin-top:18px;padding:16px 18px;border-radius:20px;max-width:520px;
+  border:1px solid rgba(124,77,255,.25);
+  background:linear-gradient(135deg,rgba(109,93,252,.12),rgba(212,175,55,.06));
+  box-shadow:0 20px 50px rgba(0,0,0,.35);backdrop-filter:var(--ev-blur);
+  display:flex;align-items:flex-start;gap:14px
+}
+.ev-ai-orb{
+  width:44px;height:44px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle at 35% 30%,#fff,rgba(109,93,252,.9) 40%,rgba(4,8,20,1) 72%);
+  box-shadow:0 0 32px rgba(124,77,255,.45);animation:evAiPulse 3s ease-in-out infinite
+}
+@keyframes evAiPulse{0%,100%{box-shadow:0 0 24px rgba(124,77,255,.35)}50%{box-shadow:0 0 48px rgba(212,175,55,.35)}}
+.ev-ai-teaser h4{margin:0 0 4px;font-size:13px;color:#fff;font-weight:800}
+.ev-ai-teaser p{margin:0;font-size:11px;line-height:1.55;color:rgba(226,232,240,.82)}
+
+/* Auth card — Vision Pro glass, floating inside stage */
+body.enterprise-vision .login-glass-stage{
+  border-color:rgba(212,175,55,.12)!important;
+  box-shadow:0 52px 140px rgba(0,0,0,.58),0 0 100px rgba(212,175,55,.1),inset 0 1px 0 rgba(255,255,255,.2)!important;
+}
+body.enterprise-vision .ev-auth-card,
+body.enterprise-vision .login-card--floating{
+  border:1px solid rgba(255,255,255,.2)!important;
+  background:linear-gradient(165deg,rgba(255,255,255,.12),rgba(255,255,255,.03))!important;
+  box-shadow:0 44px 110px rgba(0,0,0,.58),0 18px 50px rgba(212,175,55,.1),inset 0 1px 0 rgba(255,255,255,.26)!important;
+  backdrop-filter:blur(44px) saturate(1.55)!important;
+  -webkit-backdrop-filter:blur(44px) saturate(1.55)!important;
+  border-radius:28px!important;
+}
+.ev-auth-tabs{
+  display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;padding:6px;
+  border-radius:16px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.08)
+}
+.ev-auth-tab{
+  flex:1 1 auto;min-width:72px;padding:8px 10px;border-radius:12px;border:1px solid transparent;
+  background:transparent;color:rgba(226,232,240,.75);font-size:10px;font-weight:700;cursor:pointer;
+  transition:.2s;font-family:Inter,Tajawal,sans-serif
+}
+.ev-auth-tab:hover{background:rgba(255,255,255,.06);color:#fff}
+.ev-auth-tab.active{
+  background:linear-gradient(135deg,rgba(212,175,55,.22),rgba(212,175,55,.08));
+  border-color:rgba(212,175,55,.35);color:var(--ev-gold2);
+  box-shadow:0 8px 24px rgba(212,175,55,.15)
+}
+.ev-auth-pane.hidden{display:none!important}
+.ev-auth-alt{
+  text-align:center;padding:28px 16px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px
+}
+.ev-bio-ring{
+  width:96px;height:96px;border-radius:50%;position:relative;
+  border:2px solid rgba(212,175,55,.4);
+  background:radial-gradient(circle,rgba(212,175,55,.08),transparent 70%);
+  animation:evBioScan 2.8s ease-in-out infinite
+}
+.ev-bio-ring:after{
+  content:"";position:absolute;inset:8px;border-radius:50%;
+  border:1px dashed rgba(212,175,55,.35);animation:evBioSpin 6s linear infinite
+}
+@keyframes evBioScan{0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,.3)}50%{box-shadow:0 0 0 12px rgba(212,175,55,0)}}
+@keyframes evBioSpin{to{transform:rotate(360deg)}}
+.ev-auth-alt p{margin:0;font-size:12px;color:rgba(226,232,240,.8);max-width:260px;line-height:1.6}
+.ev-otp-inputs{display:flex;gap:8px;justify-content:center}
+.ev-otp-inputs input{
+  width:42px;height:48px;text-align:center;font-size:18px;font-weight:800;
+  border-radius:12px;border:1px solid var(--ev-border);background:rgba(255,255,255,.06);color:#fff
+}
+.ev-sso-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:320px}
+.ev-sso-btn{
+  padding:14px 12px;border-radius:14px;border:1px solid var(--ev-border);
+  background:rgba(255,255,255,.04);color:#fff;font-size:11px;font-weight:700;cursor:pointer;
+  transition:.2s
+}
+.ev-sso-btn:hover{border-color:rgba(212,175,55,.4);background:rgba(212,175,55,.08)}
+
+body.enterprise-vision .login-secure-badge{
+  background:rgba(212,175,55,.12)!important;border-color:rgba(212,175,55,.35)!important;color:var(--ev-gold2)!important
+}
+body.enterprise-vision .login-submit{
+  background:linear-gradient(135deg,#b8860b,#d4af37 40%,#f5d76e)!important;
+  color:#1a1208!important;font-weight:800!important;
+  box-shadow:0 16px 40px rgba(212,175,55,.32)!important
+}
+
+/* Dashboard AI Dock */
+.vision-ai-dock.hidden{display:none!important}
+.vision-ai-dock{
+  position:fixed;bottom:max(18px,var(--saas-float-gap,14px));
+  inset-inline-start:max(18px,var(--saas-float-gap,14px));
+  inset-inline-end:auto;left:auto;right:auto;
+  width:min(320px,calc(100vw - var(--saas-side,244px) - var(--saas-float-gap,14px) * 5));z-index:130;
+  border-radius:22px;border:1px solid rgba(124,77,255,.28);
+  background:linear-gradient(165deg,rgba(14,20,38,.94),rgba(6,10,22,.96));
+  box-shadow:0 28px 80px rgba(0,0,0,.5),0 0 40px rgba(109,93,252,.12);
+  backdrop-filter:var(--ev-blur);overflow:hidden;
+  transition:transform .3s ease,width .3s ease
+}
+.vision-ai-dock.collapsed .vision-ai-body{display:none}
+.vision-ai-dock.collapsed{width:min(280px,calc(100vw - 36px))}
+.vision-ai-head{
+  display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(90deg,rgba(109,93,252,.15),transparent)
+}
+.vision-ai-head .ev-ai-orb{width:36px;height:36px}
+.vision-ai-head h4{margin:0;flex:1;font-size:14px;color:#fff;font-weight:800}
+.vision-ai-head span{font-size:11px;color:var(--ev-gold2);font-weight:700}
+.vision-ai-body{padding:12px 14px 14px;max-height:300px;overflow:auto}
+.vision-ai-msg{
+  padding:10px 12px;border-radius:14px;margin-bottom:8px;font-size:12px;line-height:1.55;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);color:rgba(226,232,240,.92)
+}
+.vision-ai-msg.pred{border-color:rgba(212,175,55,.25);background:rgba(212,175,55,.06)}
+.vision-ai-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.vision-ai-actions button{
+  padding:8px 12px;border-radius:999px;border:1px solid var(--ev-border);
+  background:rgba(255,255,255,.04);color:#fff;font-size:11px;font-weight:700;cursor:pointer
+}
+.vision-ai-actions button:hover{border-color:rgba(212,175,55,.4)}
+
+/* 3D City overlay on dashboard map */
+.ev-city-overlay{
+  position:absolute;inset:0;width:100%!important;height:100%!important;z-index:2;pointer-events:none;opacity:.85
+}
+.saas-map-panel .gis-pro{position:relative}
+.saas-map-panel .gis-pins-layer{position:relative;z-index:3}
+.saas-map-panel .map-popup{z-index:4}
+.ev-map-grid-lines{
+  position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.25;
+  background:
+    linear-gradient(90deg,rgba(212,175,55,.15) 1px,transparent 1px),
+    linear-gradient(rgba(212,175,55,.1) 1px,transparent 1px);
+  background-size:48px 48px;
+  transform:perspective(400px) rotateX(58deg) scale(1.2);transform-origin:center bottom
+}
+
+/* Vision dashboard polish */
+body.enterprise-vision.saas-luxury .saas-exec-hero{
+  border:1px solid rgba(212,175,55,.15)!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(212,175,55,.04))!important
+}
+body.enterprise-vision.saas-luxury .saas-glass{
+  border-color:rgba(255,255,255,.12)!important;
+  box-shadow:0 20px 60px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.06)!important
+}
+body.enterprise-vision.saas-luxury .app-header{
+  border-bottom-color:rgba(212,175,55,.12)!important;
+  background:linear-gradient(180deg,rgba(4,8,20,.94),rgba(4,8,20,.78))!important
+}
+body.enterprise-vision.saas-luxury .app-shell{
+  border-color:rgba(212,175,55,.1)!important;
+  box-shadow:0 32px 100px rgba(0,0,0,.45),0 0 60px rgba(212,175,55,.06)!important
+}
+
+.ev-trust-strip{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px
+}
+.ev-trust-pill{
+  font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  padding:5px 10px;border-radius:999px;color:rgba(226,232,240,.7);
+  border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.3)
+}
+
+body.enterprise-vision.saas-luxury #sec-dashboard.active{padding-bottom:min(340px,42vh)}
+
+@media(max-width:960px){
+  body.enterprise-vision.login-ultra .login-stage{grid-template-columns:1fr!important;min-height:auto!important}
+  body.enterprise-vision.saas-luxury #sec-dashboard.active{padding-bottom:min(300px,38vh)}
+  body.enterprise-vision.saas-luxury .app-header-row{flex-wrap:wrap;gap:8px}
+  body.enterprise-vision.saas-luxury .app-header-actions{flex-wrap:wrap;max-width:100%}
+  body.enterprise-vision.saas-luxury .search-pro{min-width:0;flex:1 1 100%;order:3}
+  body.enterprise-vision.saas-luxury .content{padding-bottom:env(safe-area-inset-bottom,0)}
+  .ev-showcase-viz,.ev-ai-teaser{max-width:100%}
+  .vision-ai-dock{width:calc(100vw - 24px);inset-inline-start:12px;bottom:max(12px,env(safe-area-inset-bottom));max-height:min(42vh,320px)}
+  .footer-dev{display:block;margin-top:6px;opacity:.85;font-size:11px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .ev-holo-orbs i,.ev-ai-orb,.ev-bio-ring{animation:none!important}
+}

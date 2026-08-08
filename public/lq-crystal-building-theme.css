@@ -1,0 +1,410 @@
+/* ============================================================
+   Launch Quality unified crystal building theme
+   Fixed estate background · 3D crystal glass · gold edges
+   Black text only · desktop/Windows/mobile
+   ============================================================ */
+
+:root{
+  --lq-crystal-image:url("/assets/login-daylight-3d.jpg");
+  --lq-crystal-face:rgba(255,255,255,.62);
+  --lq-crystal-face-strong:rgba(255,255,255,.78);
+  --lq-crystal-line:rgba(174,128,30,.62);
+  --lq-crystal-line-soft:rgba(201,169,110,.44);
+  --lq-crystal-ink:#000000;
+  --lq-crystal-shadow:
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 1px 0 0 rgba(255,255,255,.72),
+    inset 0 -1px 0 rgba(174,128,30,.16),
+    0 14px 30px rgba(58,42,14,.14),
+    0 3px 8px rgba(15,39,68,.08);
+  --lq-crystal-button-shadow:
+    inset 0 1px 0 rgba(255,255,255,1),
+    inset 0 -2px 0 rgba(174,128,30,.18),
+    0 9px 18px rgba(58,42,14,.14);
+}
+
+/* Fixed building background across every product surface */
+html,
+html body,
+html body.app-ready,
+html body.app-body,
+html body.lq-official-portal,
+html body.login-ultra{
+  min-height:100%;
+  color:var(--lq-crystal-ink)!important;
+  background:
+    linear-gradient(rgba(255,255,255,.48),rgba(255,255,255,.58)),
+    var(--lq-crystal-image) center center / cover fixed no-repeat!important;
+  background-color:#eef2f6!important;
+}
+
+html body::before{
+  content:""!important;
+  position:fixed!important;
+  inset:0!important;
+  z-index:-2!important;
+  display:block!important;
+  pointer-events:none!important;
+  background:
+    linear-gradient(120deg,rgba(255,255,255,.34),rgba(255,255,255,.12)),
+    var(--lq-crystal-image) center center / cover no-repeat!important;
+  opacity:1!important;
+}
+
+html body::after{
+  content:""!important;
+  position:fixed!important;
+  inset:0!important;
+  z-index:-1!important;
+  display:block!important;
+  pointer-events:none!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.38))!important;
+}
+
+/* Retire competing photo/cosmic backgrounds */
+html body.app-ready .lq-cosmos,
+html body.app-ready #lqCosmicStars,
+html body.app-ready .lq-app-bg-parity,
+html body.lq-official-portal .op-bg,
+html body.app-body .content::before,
+html body.app-body .content.brand-realestate::before{
+  display:none!important;
+  opacity:0!important;
+  background:none!important;
+}
+
+/* All visible text is black; no inherited colored labels */
+html body,
+html body button,
+html body input,
+html body select,
+html body textarea,
+html body option,
+html body label,
+html body a,
+html body p,
+html body span,
+html body small,
+html body strong,
+html body b,
+html body h1,
+html body h2,
+html body h3,
+html body h4,
+html body h5,
+html body h6,
+html body th,
+html body td,
+html body li,
+html body code{
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  text-shadow:none!important;
+}
+
+html body input::placeholder,
+html body textarea::placeholder{
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  opacity:.66!important;
+}
+
+/* Transparent product shells reveal the single fixed background */
+html body.app-ready #app,
+html body.app-ready #app.app,
+html body.app-ready .content,
+html body.app-ready .app-shell,
+html body.app-ready .app-body,
+html body.app-ready .section,
+html body.app-ready .section.active,
+html body.app-ready #sec-dashboard,
+html body.app-ready .lq-cockpit-wrap,
+html body.app-ready .lq-cockpit-grid,
+html body.app-ready .lq-cockpit-v30,
+html body.app-body .app-shell,
+html body.app-body .content,
+html body.app-body .content.dashboard-page,
+html body.lq-official-portal .op-stage{
+  background:transparent!important;
+  background-image:none!important;
+  box-shadow:none!important;
+}
+
+/* Main crystal panels */
+html body.app-ready .app-header,
+html body.app-ready .sidebar,
+html body.app-ready .sidebar-ultra,
+html body.app-ready .card,
+html body.app-ready .section .card,
+html body.app-ready .saas-glass,
+html body.app-ready .saas-kpi,
+html body.app-ready .saas-section,
+html body.app-ready .table-wrap,
+html body.app-ready .modal-box,
+html body.app-ready .lq-estate-nx-head,
+html body.app-ready .lq-estate-nx-stat,
+html body.app-ready .lq-estate-nx-bld,
+html body.app-ready .lq-estate-nx-table-wrap,
+html body.app-ready .lq-staff-map-wrap,
+html body.app-body .sidebar,
+html body.app-body .topbar,
+html body.app-body .page-head,
+html body.app-body .card,
+html body.app-body .stat-card,
+html body.app-body .table-wrap,
+html body.app-body .drawer-panel,
+html body.app-body .modal-card,
+html body.lq-official-portal .op-choice{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.82),rgba(255,255,255,.48))!important;
+  border:1.5px solid var(--lq-crystal-line-soft)!important;
+  box-shadow:var(--lq-crystal-shadow)!important;
+  backdrop-filter:blur(19px) saturate(1.22)!important;
+  -webkit-backdrop-filter:blur(19px) saturate(1.22)!important;
+}
+
+html body.app-ready .app-header,
+html body.app-ready .sidebar-ultra,
+html body.app-body .sidebar{
+  background:linear-gradient(160deg,rgba(255,255,255,.78),rgba(255,255,255,.42))!important;
+}
+
+/* Every command/button becomes a full crystal 3D tile */
+html body.app-ready button,
+html body.app-ready .gold-btn,
+html body.app-ready .ghost,
+html body.app-ready .add-new-btn,
+html body.app-ready .tb-icon,
+html body.app-ready .nav button,
+html body.app-ready #nav button,
+html body.app-ready .lq-dd-item,
+html body.app-ready .lq-dd-toggle,
+html body.app-ready .saas-cmd,
+html body.app-ready .saas-dash-menu-btn,
+html body.app-ready .lq-estate-nx-modules button,
+html body.app-body button,
+html body.app-body .btn,
+html body.app-body .nav-item,
+html body.app-body .building-tab,
+html body.app-body .module-tab,
+html body.lq-official-portal button,
+html body.lq-official-portal .op-enter{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.90),rgba(255,255,255,.54))!important;
+  border:1.5px solid var(--lq-crystal-line)!important;
+  border-radius:14px!important;
+  box-shadow:var(--lq-crystal-button-shadow)!important;
+  backdrop-filter:blur(16px) saturate(1.2)!important;
+  -webkit-backdrop-filter:blur(16px) saturate(1.2)!important;
+  color:#000000!important;
+  -webkit-text-fill-color:#000000!important;
+  filter:none!important;
+  text-shadow:none!important;
+  transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease!important;
+}
+
+html body.app-ready button:hover,
+html body.app-ready .nav button:hover,
+html body.app-ready .nav button.active,
+html body.app-body button:hover,
+html body.app-body .nav-item:hover,
+html body.app-body .nav-item.active,
+html body.lq-official-portal button:hover{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.98),rgba(244,231,195,.68))!important;
+  border-color:rgba(154,108,15,.82)!important;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -2px 0 rgba(154,108,15,.22),
+    0 13px 24px rgba(58,42,14,.18)!important;
+  transform:translateY(-2px)!important;
+}
+
+html body.app-ready button:active,
+html body.app-body button:active,
+html body.lq-official-portal button:active{
+  transform:translateY(1px) scale(.99)!important;
+  box-shadow:inset 0 2px 4px rgba(58,42,14,.14),0 4px 9px rgba(58,42,14,.10)!important;
+}
+
+/* Navigation tiles and their SVG icon crystals */
+html body.app-ready #nav.nav-ultra .lq-nav-dd,
+html body.app-ready #nav.nav-ultra .lq-dd,
+html body.app-ready #nav.nav-ultra .lq-dd-panel{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+html body.app-ready .nav-icon,
+html body.app-ready .lq-dd-ico,
+html body.app-ready .lq-dd-toggle-ico,
+html body.app-ready .saas-cmd-icon,
+html body.app-body .nav-icon{
+  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(236,224,190,.58))!important;
+  border:1.5px solid var(--lq-crystal-line)!important;
+  outline:1px solid rgba(255,255,255,.72)!important;
+  outline-offset:-3px!important;
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -2px 0 rgba(154,108,15,.16),
+    0 8px 16px rgba(58,42,14,.14)!important;
+}
+
+html body .lq-ico,
+html body .lq-ico svg,
+html body.app-ready .nav-icon .lq-ico,
+html body.app-ready .nav-icon .lq-ico svg{
+  color:#000!important;
+  stroke:#000!important;
+  -webkit-text-fill-color:#000!important;
+}
+
+/* Inputs and table rows are crystal, too */
+html body.app-ready input,
+html body.app-ready select,
+html body.app-ready textarea,
+html body.app-ready .search-pro,
+html body.app-ready .search-pro input,
+html body.app-body input,
+html body.app-body select,
+html body.app-body textarea{
+  background:rgba(255,255,255,.70)!important;
+  border:1.5px solid var(--lq-crystal-line-soft)!important;
+  border-radius:12px!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 2px 6px rgba(58,42,14,.05),
+    0 5px 12px rgba(58,42,14,.07)!important;
+  backdrop-filter:blur(14px)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+}
+
+html body.app-ready table,
+html body.app-body table{
+  background:rgba(255,255,255,.42)!important;
+}
+html body.app-ready th,
+html body.app-body th{
+  background:rgba(244,231,195,.62)!important;
+  border-bottom:1.5px solid var(--lq-crystal-line)!important;
+}
+html body.app-ready td,
+html body.app-body td{
+  background:rgba(255,255,255,.34)!important;
+  border-bottom:1px solid rgba(201,169,110,.32)!important;
+}
+
+/* Badges/status labels retain crystal only, with black copy */
+html body .badge,
+html body .saas-status,
+html body .status-chip{
+  background:rgba(255,255,255,.70)!important;
+  border:1px solid var(--lq-crystal-line-soft)!important;
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+  box-shadow:inset 0 1px 0 #fff,0 4px 10px rgba(58,42,14,.08)!important;
+}
+
+/* Portal package photos remain photographs; labels/buttons are crystal */
+html body.lq-official-portal .op-mark,
+html body.lq-official-portal .op-mark img{
+  border-radius:12px 12px 0 0!important;
+}
+html body.lq-official-portal .op-foot{
+  padding:6px 12px!important;
+  border:1px solid var(--lq-crystal-line-soft)!important;
+  border-radius:12px!important;
+  background:rgba(255,255,255,.56)!important;
+  backdrop-filter:blur(12px)!important;
+}
+
+/* Keep the logo unboxed */
+html body .lq-brand-mark,
+html body .lq-brand-crest,
+html body .lq-header-logo,
+html body .brand-logo-pro,
+html body .sidebar-section-logo{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+/* Mobile: fixed pseudo background, lighter crystals, no horizontal overflow */
+@media(max-width:900px){
+  html body,
+  html body.app-ready,
+  html body.app-body,
+  html body.lq-official-portal{
+    background-attachment:scroll!important;
+    background-position:62% center!important;
+  }
+  html body::before{
+    background-position:62% center!important;
+  }
+  html body.app-ready .card,
+  html body.app-ready .sidebar-ultra,
+  html body.app-body .card,
+  html body.lq-official-portal .op-choice{
+    background:linear-gradient(145deg,rgba(255,255,255,.86),rgba(255,255,255,.62))!important;
+    backdrop-filter:blur(15px) saturate(1.16)!important;
+    -webkit-backdrop-filter:blur(15px) saturate(1.16)!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  html body button{transition:none!important}
+}
+
+/* Final login crystal lock: visibly gold edges + black support copy */
+html body.login-ultra .login-glass-card,
+html body.login-ultra .ev-auth-card,
+html body.login-ultra .login-card--floating,
+html body.login-ultra .login-auth,
+html body.login-ultra .login-glass-stage{
+  border:2px solid rgba(174,128,30,.78)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,1),
+    inset 0 0 0 1px rgba(255,255,255,.48),
+    0 16px 34px rgba(58,42,14,.18),
+    0 0 0 1px rgba(201,169,110,.22)!important;
+}
+html body.login-ultra .login-help-btn,
+html body.login-ultra .login-help-btn *,
+html body.login-ultra a{
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+}
+
+/* Persistent, explicit return to platform selector */
+html body .lq-back-platforms,
+html body .qe-back{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  width:auto!important;
+  min-width:max-content!important;
+  text-decoration:none!important;
+  white-space:nowrap!important;
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+}
+html body .lq-back-platforms .lq-ico svg{
+  stroke:#000!important;
+}
+@media(max-width:720px){
+  html body .lq-back-platforms{
+    min-width:42px!important;
+    padding:9px!important;
+  }
+  html body .lq-back-platforms > span:last-child{
+    display:none!important;
+  }
+  html body.app-body .qe-back-top{
+    padding:8px 10px!important;
+    font-size:11px!important;
+  }
+}

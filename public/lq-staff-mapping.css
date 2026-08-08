@@ -1,0 +1,49 @@
+/* Staff identity and permission reference table */
+.lq-staff-map-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:14px;
+}
+.lq-staff-map-head h3{margin:0 0 4px!important}
+.lq-staff-map-head p{margin:0}
+.lq-staff-map-wrap{
+  overflow:auto;
+  border:1px solid rgba(15,42,74,.12);
+  border-radius:14px;
+  background:#fff;
+}
+.lq-staff-map-table{
+  width:100%;
+  min-width:760px;
+  border-collapse:collapse;
+}
+.lq-staff-map-table th,
+.lq-staff-map-table td{
+  padding:12px 14px;
+  text-align:right;
+  border-bottom:1px solid rgba(15,42,74,.09);
+  color:#000!important;
+  -webkit-text-fill-color:#000!important;
+}
+.lq-staff-map-table th{
+  background:#f3f7fc!important;
+  font-weight:800!important;
+  position:sticky;
+  top:0;
+}
+.lq-staff-map-table tbody tr:last-child td{border-bottom:0}
+.lq-staff-map-table tbody tr:hover{background:#fbf8f0}
+.lq-staff-map-table code{
+  display:inline-block;
+  padding:5px 8px;
+  border-radius:8px;
+  background:#eef3f8;
+  color:#0f2744!important;
+  -webkit-text-fill-color:#0f2744!important;
+  white-space:nowrap;
+}
+@media(max-width:720px){
+  .lq-staff-map-head{align-items:center}
+}

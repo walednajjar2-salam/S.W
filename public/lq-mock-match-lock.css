@@ -1,0 +1,247 @@
+/* ============================================================
+   Owner mock lock — exact match
+   1) Remove header name box
+   2) Teal FAB bottom-left + navy command pills
+   3) Right sidebar nav = navy rounded pills + icon tiles
+   Loads LAST
+   ============================================================ */
+
+/* 1) Delete header identity box */
+body.app-ready .userbox,
+body.app-ready .userbox-pro,
+body.app-ready #userName,
+body.app-ready #userRole,
+body.lq-exec .userbox,
+body.saas-luxury .userbox{
+  display:none !important;
+  width:0 !important;
+  height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  visibility:hidden !important;
+}
+
+/* Keep logout only */
+body.app-ready #logoutBtn.tb-logout{
+  display:inline-flex !important;
+  visibility:visible !important;
+}
+
+/* 2) FAB — always visible when app ready, exact teal circle */
+body.app-ready #lqCmdFab,
+body.app-ready .lq-cmd-fab{
+  display:flex !important;
+  flex-direction:column-reverse !important;
+  align-items:flex-start !important;
+  position:fixed !important;
+  left:24px !important;
+  bottom:24px !important;
+  z-index:1400 !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  pointer-events:none !important;
+  width:auto !important;
+  height:auto !important;
+  overflow:visible !important;
+}
+body.app-ready #lqCmdFab[hidden]{
+  display:flex !important;
+}
+body.app-ready #lqCmdFab .lq-cmd-fab-toggle{
+  pointer-events:auto !important;
+  width:62px !important;
+  height:62px !important;
+  border-radius:50% !important;
+  border:0 !important;
+  background:radial-gradient(circle at 32% 28%, #4ee0d4 0%, #1aa89c 42%, #0d6f69 78%) !important;
+  box-shadow:
+    0 2px 0 rgba(255,255,255,.4) inset,
+    0 16px 32px rgba(10,90,84,.38),
+    0 4px 12px rgba(15,39,68,.2) !important;
+  color:#fff !important;
+}
+body.app-ready #lqCmdFab .lq-cmd-fab-diamond{
+  width:15px !important;
+  height:15px !important;
+  border:2.5px solid #fff !important;
+  transform:rotate(45deg) !important;
+  background:transparent !important;
+  border-radius:3px !important;
+}
+body.app-ready #lqCmdFab.open .lq-cmd-fab-stack{
+  pointer-events:auto !important;
+  display:flex !important;
+  max-height:720px !important;
+  opacity:1 !important;
+  transform:none !important;
+  overflow:visible !important;
+}
+body.app-ready #lqCmdFab .lq-cmd-fab-item{
+  pointer-events:auto !important;
+  min-width:228px !important;
+  border-radius:18px !important;
+  background:#12192c !important;
+  background-image:linear-gradient(145deg,#1a2438,#101827) !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  box-shadow:0 12px 28px rgba(8,16,28,.32) !important;
+}
+body.app-ready #lqCmdFab .lq-cmd-fab-item .lq-cmd-fab-label,
+body.app-ready #lqCmdFab .lq-cmd-fab-item span{
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+}
+body.app-ready #lqCmdFab .lq-cmd-fab-ico{
+  background:rgba(255,255,255,.12) !important;
+  border:1px solid rgba(255,255,255,.16) !important;
+  color:#fff !important;
+}
+body.app-ready #lqCmdFab .lq-cmd-fab-ico .lq-ico,
+body.app-ready #lqCmdFab .lq-cmd-fab-ico .lq-ico svg{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  stroke:#fff !important;
+}
+body.app-ready #lqCmdFab .lq-cmd-fab-item.lq-cmd-fab-accent .lq-cmd-fab-ico{
+  background:radial-gradient(circle at 35% 30%, #d6e05a, #7a8a2a) !important;
+  border-radius:50% !important;
+  outline:0 !important;
+}
+
+/* 3) Right sidebar nav — navy pills like mock */
+body.app-ready .sidebar-ultra,
+body.lq-exec .sidebar-ultra{
+  background:linear-gradient(180deg,#f4f7fb,#eef2f7) !important;
+}
+body.app-ready #nav.nav-ultra,
+body.app-ready #nav.nav-ultra .lq-dd-panel{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:8px !important;
+  background:transparent !important;
+  padding:0 !important;
+  max-height:none !important;
+  opacity:1 !important;
+  overflow:visible !important;
+}
+/* Flatten accordion chrome — show items like mock stack */
+body.app-ready #nav.nav-ultra .lq-nav-dd,
+body.app-ready #nav.nav-ultra .lq-dd{
+  background:transparent !important;
+  background-image:none !important;
+  border:0 !important;
+  box-shadow:none !important;
+  margin:0 0 6px !important;
+  overflow:visible !important;
+}
+body.app-ready #nav.nav-ultra .lq-nav-dd > .lq-dd-toggle{
+  background:#12192c !important;
+  background-image:linear-gradient(145deg,#1a2438,#101827) !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  border-radius:16px !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  margin-bottom:6px !important;
+  padding:11px 12px !important;
+  box-shadow:0 10px 22px rgba(8,16,28,.18) !important;
+}
+body.app-ready #nav.nav-ultra .lq-nav-dd > .lq-dd-toggle .lq-dd-title,
+body.app-ready #nav.nav-ultra .lq-nav-dd > .lq-dd-toggle .lq-dd-title span,
+body.app-ready #nav.nav-ultra .lq-nav-dd > .lq-dd-toggle .lq-dd-chev,
+body.app-ready #nav.nav-ultra .lq-nav-dd > .lq-dd-toggle .lq-dd-chev .lq-ico,
+body.app-ready #nav.nav-ultra .lq-nav-dd > .lq-dd-toggle .lq-dd-chev .lq-ico svg{
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  stroke:#ffffff !important;
+}
+body.app-ready #nav.nav-ultra .lq-nav-dd > .lq-dd-toggle .lq-dd-toggle-ico{
+  background:rgba(255,255,255,.12) !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+  color:#fff !important;
+}
+body.app-ready #nav.nav-ultra .lq-nav-dd > .lq-dd-toggle .lq-dd-toggle-ico .lq-ico svg{
+  stroke:#ffffff !important;
+  color:#ffffff !important;
+}
+body.app-ready #nav.nav-ultra .lq-nav-dd.open .lq-dd-panel,
+body.app-ready #nav.nav-ultra .lq-nav-dd .lq-dd-panel{
+  display:flex !important;
+  max-height:none !important;
+  opacity:1 !important;
+  gap:8px !important;
+  padding:0 !important;
+}
+
+/* Nav item buttons = mock navy pills */
+body.app-ready #nav.nav-ultra button[data-section],
+body.app-ready #nav.nav-ultra .lq-dd-panel > button,
+body.lq-exec #nav.nav-ultra button[data-section]{
+  width:100% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  flex-direction:row-reverse !important;
+  gap:12px !important;
+  padding:12px 14px !important;
+  margin:0 !important;
+  border-radius:16px !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  background:#12192c !important;
+  background-image:linear-gradient(145deg,#1a2438,#101827) !important;
+  box-shadow:0 10px 22px rgba(8,16,28,.18) !important;
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+}
+body.app-ready #nav.nav-ultra button[data-section] .nav-text,
+body.app-ready #nav.nav-ultra button[data-section] .nav-ar,
+body.app-ready #nav.nav-ultra button[data-section] span{
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  outline:0 !important;
+  transform:none !important;
+}
+body.app-ready #nav.nav-ultra button[data-section] .nav-text{
+  flex:1 !important;
+  text-align:right !important;
+}
+body.app-ready #nav.nav-ultra button[data-section] .nav-icon{
+  width:36px !important;
+  height:36px !important;
+  flex:0 0 36px !important;
+  border-radius:12px !important;
+  background:rgba(255,255,255,.12) !important;
+  border:1px solid rgba(255,255,255,.16) !important;
+  outline:0 !important;
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  box-shadow:0 1px 0 rgba(255,255,255,.12) inset !important;
+  transform:none !important;
+}
+body.app-ready #nav.nav-ultra button[data-section] .nav-icon .lq-ico,
+body.app-ready #nav.nav-ultra button[data-section] .nav-icon .lq-ico svg{
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
+  stroke:#ffffff !important;
+}
+body.app-ready #nav.nav-ultra button[data-section].active,
+body.app-ready #nav.nav-ultra button[data-section]:hover{
+  background-image:linear-gradient(145deg,#24324a,#152033) !important;
+  border-color:rgba(201,169,110,.45) !important;
+}
+
+/* Hide old smart rail accordion cards */
+body.app-ready #lqSmartRail{display:none !important}
+
+/* Sidebar user card — keep compact, not header clone */
+body.app-ready #sidebarUser.sidebar-user{
+  background:#fff !important;
+  border:1px solid rgba(15,42,74,.12) !important;
+  color:#000 !important;
+}

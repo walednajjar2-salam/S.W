@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-label="NAJJAR &amp; AL SAMOOM TRADING">
+  <defs>
+    <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#241a08"/>
+      <stop offset="35%" stop-color="#caa14a"/>
+      <stop offset="65%" stop-color="#f0d98a"/>
+      <stop offset="100%" stop-color="#241a08"/>
+    </linearGradient>
+  </defs>
+  <g stroke="url(#wg)" stroke-linecap="round" fill="none">
+    <line x1="188" y1="56" x2="248" y2="56" stroke-width="3.6"/>
+    <line x1="176" y1="72" x2="246" y2="72" stroke-width="3.6"/>
+    <line x1="186" y1="88" x2="240" y2="88" stroke-width="3.6"/>
+  </g>
+  <g transform="translate(250,40)">
+    <path fill="url(#wg)" d="M4 78c6 0 18 0 28 0 1-10 10-16 22-16s21 6 22 16h90c1-10 10-16 22-16s21 6 22 16h20c7 0 12-2 13-7 1-6-2-11-9-15-9-5-17-13-25-20C196 24 178 16 156 14c-24-2-48 1-68 12-14 8-28 18-40 30-8 8-20 12-34 14-6 1-9 4-8 8 1 3 4 5 10 5z"/>
+    <path fill="url(#wg)" d="M210 36l24-9 4 6-20 11z"/>
+    <circle cx="54" cy="80" r="14.5" fill="none" stroke="url(#wg)" stroke-width="3.2"/>
+    <circle cx="54" cy="80" r="5.5" fill="url(#wg)"/>
+    <circle cx="190" cy="80" r="14.5" fill="none" stroke="url(#wg)" stroke-width="3.2"/>
+    <circle cx="190" cy="80" r="5.5" fill="url(#wg)"/>
+  </g>
+  <text x="360" y="176" text-anchor="middle" fill="url(#wg)" font-family="Georgia,'Times New Roman',Times,serif" font-size="30" font-weight="700" letter-spacing="1.8">NAJJAR &amp; AL SAMOOM TRADING</text>
+  <text x="360" y="210" text-anchor="middle" fill="url(#wg)" font-family="Arial,Helvetica,sans-serif" font-size="16" letter-spacing="3.8">USED &amp; IMPORTED CARS</text>
+  <path fill="url(#wg)" d="M168 234c70-8 130-10 192-10s122 2 192 10c-70 6-130 8-192 8s-122-2-192-8z"/>
+</svg>

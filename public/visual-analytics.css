@@ -1,0 +1,223 @@
+/* ═══ Visual Analytics · Data Insights Dashboard ═══ */
+:root{
+  --va-cyan:#00D4FF;
+  --va-cyan2:#22d3ee;
+  --va-green:#00C853;
+  --va-gold:#D4AF37;
+  --va-gold2:#F5D76E;
+  --va-violet:#6D5DFC;
+  --va-bg:#040814;
+  --va-glass:rgba(255,255,255,.06);
+  --va-border:rgba(255,255,255,.10);
+  --va-glow:0 0 40px rgba(0,212,255,.15),0 0 80px rgba(212,175,55,.08);
+}
+
+/* ── Login (index + app.html) ── */
+body.va-theme,
+body.login-ultra.va-theme{
+  --saas-cyan:var(--va-cyan);
+  --saas-primary:var(--va-gold);
+}
+
+body.va-theme{
+  background:radial-gradient(ellipse 80% 50% at 15% 0%,rgba(0,212,255,.12),transparent 55%),
+    radial-gradient(ellipse 60% 40% at 85% 20%,rgba(212,175,55,.10),transparent 50%),
+    linear-gradient(160deg,#020408 0%,#071426 45%,#0a1628 100%)!important;
+}
+
+body.login-ultra.va-theme #loginScreen .login-bg{
+  background:
+    linear-gradient(rgba(0,212,255,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,.04) 1px,transparent 1px),
+    radial-gradient(ellipse 70% 50% at 50% 0%,rgba(0,212,255,.14),transparent 60%),
+    linear-gradient(160deg,#020408,#0a1628)!important;
+  background-size:48px 48px,48px 48px,auto,auto!important;
+}
+
+body.va-theme .glass-panel,
+body.login-ultra.va-theme .login-glass-card,
+body.login-ultra.va-theme .ev-auth-card{
+  border:1px solid rgba(0,212,255,.18)!important;
+  box-shadow:var(--va-glow),0 24px 64px rgba(0,0,0,.45)!important;
+}
+
+body.va-theme .text-gold-light,
+body.login-ultra.va-theme .login-card-title{color:#fff!important}
+
+/* Login analytics rail */
+.va-login-analytics{
+  display:grid;
+  gap:12px;
+  margin:0 auto 18px;
+  max-width:min(680px,94vw);
+  padding:0 12px;
+}
+.va-login-analytics-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 14px;border-radius:16px;
+  background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(212,175,55,.08));
+  border:1px solid rgba(0,212,255,.22);
+}
+.va-login-analytics-head strong{
+  font-size:13px;font-weight:800;color:#fff;
+  display:flex;align-items:center;gap:8px;
+}
+.va-login-analytics-head span{
+  font-size:10px;font-weight:700;color:var(--va-cyan);
+  padding:4px 10px;border-radius:999px;
+  background:rgba(0,212,255,.12);border:1px solid rgba(0,212,255,.25);
+}
+.va-insight-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;
+}
+.va-insight-card{
+  padding:12px 10px;border-radius:14px;text-align:center;
+  background:var(--va-glass);border:1px solid var(--va-border);
+  backdrop-filter:blur(16px);transition:.2s;
+}
+.va-insight-card:hover{transform:translateY(-2px);border-color:rgba(0,212,255,.35)}
+.va-insight-card b{display:block;font-size:18px;font-weight:800;color:#fff;margin-bottom:4px}
+.va-insight-card span{font-size:9px;font-weight:700;color:#94a3b8;line-height:1.3}
+.va-mini-chart{
+  display:flex;align-items:flex-end;justify-content:center;gap:3px;
+  height:36px;margin-top:8px;
+}
+.va-mini-chart i{
+  display:block;width:6px;border-radius:4px 4px 2px 2px;
+  background:linear-gradient(180deg,var(--va-cyan),var(--va-violet));
+  animation:vaBarPulse 2.4s ease-in-out infinite alternate;
+}
+.va-mini-chart i:nth-child(2){height:55%;animation-delay:.2s;background:linear-gradient(180deg,var(--va-gold2),var(--va-gold))}
+.va-mini-chart i:nth-child(3){height:80%;animation-delay:.4s}
+.va-mini-chart i:nth-child(4){height:45%;animation-delay:.6s;background:linear-gradient(180deg,var(--va-green),#00E676)}
+.va-mini-chart i:nth-child(5){height:70%;animation-delay:.8s}
+.va-mini-chart i:nth-child(1){height:40%}
+@keyframes vaBarPulse{from{opacity:.65;transform:scaleY(.92)}to{opacity:1;transform:scaleY(1)}}
+
+.va-login-pill-row{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+}
+.va-login-pill{
+  font-size:10px;font-weight:700;padding:6px 12px;border-radius:999px;
+  border:1px solid var(--va-border);background:rgba(255,255,255,.04);color:#cbd5e1;
+}
+
+body.va-theme .logo-shell--float{
+  filter:drop-shadow(0 20px 48px rgba(212,175,55,.4));
+}
+
+@media(max-width:720px){
+  .va-insight-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ── Dashboard banner ── */
+.va-dash-banner{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;
+  padding:18px 20px;margin-bottom:16px;border-radius:20px;
+  background:linear-gradient(135deg,rgba(0,212,255,.10),rgba(109,93,252,.08) 45%,rgba(212,175,55,.06));
+  border:1px solid rgba(0,212,255,.22);
+  position:relative;overflow:hidden;
+}
+.va-dash-banner::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(0,212,255,.06),transparent);
+  animation:vaShine 4s ease-in-out infinite;
+}
+@keyframes vaShine{0%,100%{opacity:.4}50%{opacity:1}}
+.va-dash-banner-left{position:relative;z-index:1;flex:1;min-width:200px}
+.va-dash-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 12px;border-radius:999px;font-size:11px;font-weight:800;
+  background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.35);
+  color:var(--va-cyan);margin-bottom:8px;
+}
+.va-dash-banner h2{
+  margin:0 0 4px;font-size:clamp(20px,2.5vw,28px);font-weight:800;color:#fff;
+  background:linear-gradient(135deg,#fff,var(--va-cyan2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.va-dash-banner p{margin:0;color:#94a3b8;font-size:13px;font-weight:600}
+.va-dash-banner-stats{
+  position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:10px;
+}
+.va-dash-stat{
+  min-width:88px;padding:10px 14px;border-radius:14px;text-align:center;
+  background:rgba(0,0,0,.25);border:1px solid var(--va-border);
+}
+.va-dash-stat b{display:block;font-size:16px;font-weight:800;color:#fff}
+.va-dash-stat span{font-size:10px;color:#94a3b8;font-weight:700}
+
+/* Dashboard KPI + charts */
+body.va-theme.saas-luxury .saas-kpi-pro{
+  border:1px solid rgba(0,212,255,.12)!important;
+  transition:transform .2s,border-color .2s,box-shadow .2s!important;
+}
+body.va-theme.saas-luxury .saas-kpi-pro:hover{
+  transform:translateY(-3px)!important;
+  border-color:rgba(0,212,255,.35)!important;
+  box-shadow:0 12px 40px rgba(0,212,255,.12)!important;
+}
+body.va-theme.saas-luxury .saas-kpi-pro::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--va-cyan),var(--va-violet),var(--va-gold));
+  border-radius:20px 20px 0 0;
+}
+
+body.va-theme.saas-luxury .saas-chart-panel{
+  border:1px solid rgba(0,212,255,.14)!important;
+  position:relative;
+}
+body.va-theme.saas-luxury .saas-chart-panel h4{
+  color:var(--va-cyan2)!important;
+  font-size:14px!important;
+}
+body.va-theme.saas-luxury .saas-chart-panel .sub{color:#64748b!important}
+body.va-theme.saas-luxury .saas-chart-panel .canvas-wrap{
+  background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,212,255,.04))!important;
+  border-radius:12px!important;border:1px solid rgba(255,255,255,.04)!important;
+}
+
+body.va-theme.saas-luxury .saas-section-head h3{
+  font-size:16px!important;
+  background:linear-gradient(90deg,#fff,#cbd5e1)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+}
+
+body.va-theme.saas-luxury .saas-section-head{
+  display:flex!important;align-items:center!important;gap:10px!important;flex-wrap:wrap!important;
+}
+
+body.va-theme.saas-luxury .exec-badge-command{
+  background:rgba(0,212,255,.15)!important;border-color:rgba(0,212,255,.35)!important;color:var(--va-cyan)!important;
+}
+
+body.va-theme.saas-luxury .saas-exec-hero{
+  border:1px solid rgba(0,212,255,.18)!important;
+  background:linear-gradient(135deg,rgba(0,212,255,.08),rgba(109,93,252,.06))!important;
+}
+
+body.va-theme.saas-luxury .dash-live-ticker{
+  border-color:rgba(0,212,255,.2)!important;
+}
+
+body.va-theme.saas-luxury .lq-area-insights .saas-insights-panel,
+body.va-theme.saas-luxury .lq-area-insights .saas-cashflow-panel{
+  border:1px solid rgba(0,212,255,.12)!important;
+}
+
+/* Hide legacy clutter — focus analytics cockpit */
+body.va-theme.saas-luxury .lq-dash-legacy{display:none!important}
+body.va-theme.saas-luxury .lq-area-sim{order:2}
+body.va-theme.saas-luxury .lq-area-hero{order:1}
+body.va-theme.saas-luxury .lq-area-ticker{order:3}
+body.va-theme.saas-luxury .lq-area-kpi{order:4}
+body.va-theme.saas-luxury .lq-area-status{order:5}
+body.va-theme.saas-luxury .lq-area-renewal{order:6}
+body.va-theme.saas-luxury .lq-area-cockpit{order:7}
+body.va-theme.saas-luxury .lq-area-insights{order:8}
+body.va-theme.saas-luxury .lq-area-analytics{order:9}
+body.va-theme.saas-luxury .lq-area-projects{order:10}
+
+@media(prefers-reduced-motion:reduce){
+  .va-mini-chart i,.va-dash-banner::before{animation:none!important}
+}

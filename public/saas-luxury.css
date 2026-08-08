@@ -1,0 +1,1343 @@
+/* ═══ مشاريع الانطلاقة — Unified Dark SaaS Layout ═══ */
+:root{
+  --saas-bg:#050816;
+  --saas-bg2:#0B1020;
+  --saas-primary:#6D5DFC;
+  --saas-primary2:#7C4DFF;
+  --saas-cyan:#1e4f8c;
+  --saas-success:#00C853;
+  --saas-warning:#FFB300;
+  --saas-danger:#FF5252;
+  --saas-text:#E8ECF4;
+  --saas-muted:#8B95A8;
+  --saas-glass:rgba(255,255,255,.05);
+  --saas-border:rgba(255,255,255,.10);
+  --saas-glow:0 0 40px rgba(124,77,255,.15);
+  --saas-radius:20px;
+  --saas-side:244px;
+  --saas-pad:22px;
+  --saas-max:100%;
+  --saas-float-gap:14px;
+  --saas-fs-base:15px;
+  --saas-fs-sm:13px;
+  --saas-fs-lg:17px;
+  --saas-float-radius:26px;
+  --saas-float-shadow:0 20px 64px rgba(0,0,0,.38),0 0 0 1px rgba(255,255,255,.04) inset;
+  --saas-float-lift:0 28px 72px rgba(0,0,0,.46),0 0 36px rgba(124,77,255,.10);
+}
+
+/* Kill conflicting light theme from app-ultra */
+body.saas-luxury{background:linear-gradient(165deg,var(--saas-bg) 0%,var(--saas-bg2) 45%,#0d1528 100%)!important;color:var(--saas-text)!important;font-family:'Tajawal',Inter,sans-serif!important;min-height:100vh;overflow-x:hidden}
+body.saas-luxury:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 15% -10%,rgba(109,93,252,.16),transparent),radial-gradient(ellipse 60% 40% at 85% 0%,rgba(15,39,68,.07),transparent);z-index:0}
+body.saas-luxury:after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(circle 280px at 8% 72%,rgba(109,93,252,.11),transparent 70%),
+    radial-gradient(circle 220px at 92% 28%,rgba(15,39,68,.08),transparent 68%);
+  animation:saasAmbient 14s ease-in-out infinite alternate
+}
+@keyframes saasAmbient{from{opacity:.85;transform:scale(1)}to{opacity:1;transform:scale(1.03)}}
+body.saas-luxury.app-ultra .content{background:transparent!important;padding:0!important}
+body.saas-luxury.app-ultra:not(.dash-pro-active) .card,
+body.saas-luxury.app-ultra .card{backdrop-filter:blur(24px)!important;background:var(--saas-glass)!important;border:1px solid var(--saas-border)!important;border-radius:var(--saas-radius)!important;box-shadow:var(--saas-glow)!important;color:var(--saas-text)!important;margin-bottom:16px}
+body.saas-luxury.app-ultra .card h3{color:#fff!important}
+body.saas-luxury.app-ultra input,body.saas-luxury.app-ultra select,body.saas-luxury.app-ultra textarea{background:rgba(255,255,255,.05)!important;border:1px solid var(--saas-border)!important;color:var(--saas-text)!important;border-radius:12px!important}
+body.saas-luxury.app-ultra th{background:rgba(109,93,252,.12)!important;color:#000000!important}
+body.saas-luxury.app-ultra td{color:var(--saas-text)!important;border-color:rgba(255,255,255,.06)!important}
+body.saas-luxury.app-ultra .gold-btn{background:linear-gradient(135deg,var(--saas-primary),var(--saas-primary2))!important;color:#fff!important}
+body.saas-luxury.app-ultra .ghost{border-color:var(--saas-border)!important;background:var(--saas-glass)!important;color:var(--saas-text)!important}
+body.saas-luxury.app-ultra .form{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))!important;gap:12px!important}
+body.saas-luxury #app {
+  position: relative;
+  z-index: 1;
+}
+
+body.saas-luxury #app > .sidebar-ultra,
+body.saas-luxury #app > .content {
+  position: relative;
+  z-index: 2;
+}
+
+/* App grid shell */
+body.saas-luxury .app{grid-template-columns:1fr!important}
+body.saas-luxury .sidebar-ultra{
+  position:fixed!important;
+  top:var(--saas-float-gap)!important;right:var(--saas-float-gap)!important;
+  width:var(--saas-side)!important;height:calc(100vh - var(--saas-float-gap) * 2)!important;
+  display:flex!important;flex-direction:column!important;
+  background:linear-gradient(180deg,rgba(14,20,38,.94),rgba(7,10,24,.96))!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  border-radius:var(--saas-float-radius)!important;
+  box-shadow:var(--saas-float-shadow)!important;
+  backdrop-filter:blur(28px) saturate(1.2)!important;
+  z-index:100!important;padding:0!important;overflow:hidden;
+  transition:transform .32s cubic-bezier(.4,0,.2,1),box-shadow .32s ease
+}
+body.saas-luxury .sidebar-ultra:hover{box-shadow:var(--saas-float-lift)!important}
+body.saas-luxury .content{
+  margin-right:0!important;min-height:100vh;width:auto!important;max-width:none!important;
+  padding:var(--saas-float-gap)!important;
+  padding-inline-end:calc(var(--saas-side) + var(--saas-float-gap) * 2)!important;
+  box-sizing:border-box!important
+}
+
+/* Brand + HQ logo */
+body.saas-luxury .brand-pro{
+  display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;
+  padding:18px 14px 14px!important;margin:10px 10px 0!important;border-radius:18px!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  background:linear-gradient(180deg,rgba(109,93,252,.18),rgba(255,255,255,.02))!important;gap:10px!important;
+  box-shadow:0 12px 32px rgba(0,0,0,.22)
+}
+body.saas-luxury .brand-logo-pro{
+  width:min(100px,100%)!important;height:auto!important;max-height:88px!important;
+  object-fit:contain!important;background:transparent!important;
+  border:0!important;border-radius:0!important;padding:0!important;
+  filter:drop-shadow(0 8px 28px rgba(212,175,55,.45)) drop-shadow(0 2px 8px rgba(0,0,0,.4));
+  image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges
+}
+body.saas-luxury .brand-copy-pro h1{font-size:15px!important;font-weight:800!important;margin:0!important;line-height:1.3!important;background:linear-gradient(135deg,#fff,var(--saas-cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+body.saas-luxury .brand-copy-pro small{color:var(--saas-muted)!important;font-size:11px!important}
+
+/* Sidebar nav */
+body.saas-luxury #nav.nav-ultra{
+  flex:1 1 0!important;min-height:0!important;display:flex!important;flex-direction:column!important;
+  overflow-y:auto!important;overflow-x:hidden!important;padding:10px!important;gap:4px!important;scrollbar-width:thin
+}
+body.saas-luxury .nav-ultra button{
+  display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;
+  padding:11px 14px!important;border-radius:12px!important;border:1px solid rgba(255,255,255,.07)!important;
+  background:rgba(255,255,255,.04)!important;color:#E8ECF4!important;font-size:var(--saas-fs-sm)!important;font-weight:700!important
+}
+body.saas-luxury .nav-ultra .nav-ar{color:#E8ECF4!important}
+body.saas-luxury .nav-ultra button:hover{background:rgba(255,255,255,.06)!important;color:#fff!important}
+body.saas-luxury .nav-ultra button.active{background:linear-gradient(135deg,rgba(109,93,252,.28),rgba(124,77,255,.12))!important;border-color:rgba(124,77,255,.35)!important;color:#fff!important;box-shadow:var(--saas-glow)!important}
+body.saas-luxury .nav-ultra .nav-icon{width:34px!important;height:34px!important;border-radius:10px!important;font-size:15px!important;flex-shrink:0}
+body.saas-luxury .nav-ultra button.active .nav-icon{background:linear-gradient(135deg,var(--saas-primary),var(--saas-primary2))!important}
+body.saas-luxury .nav-finance-extra{opacity:.78;font-size:12px!important;padding:8px 10px!important}
+body.saas-luxury .sidebar-user{
+  margin:8px 10px 12px!important;flex-shrink:0;
+  border-radius:16px!important;border:1px solid rgba(255,255,255,.08)!important;
+  background:rgba(255,255,255,.04)!important;box-shadow:0 10px 28px rgba(0,0,0,.2)!important
+}
+
+/* Unified app shell — floating canvas */
+body.saas-luxury .app-shell{
+  display:flex;flex-direction:column;min-height:calc(100vh - var(--saas-float-gap) * 2);
+  max-width:var(--saas-max);width:100%;margin:0;
+  border-radius:var(--saas-float-radius);overflow:hidden;
+  border:1px solid rgba(255,255,255,.10);
+  background:linear-gradient(165deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+  box-shadow:var(--saas-float-shadow);
+  backdrop-filter:blur(24px) saturate(1.15);
+  animation:saasShellIn .55s cubic-bezier(.22,1,.36,1)
+}
+@keyframes saasShellIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+body.saas-luxury .app-header{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,rgba(8,12,28,.92),rgba(8,12,28,.78))!important;
+  backdrop-filter:blur(22px) saturate(1.2)!important;
+  border-bottom:1px solid rgba(255,255,255,.08)!important;
+  box-shadow:0 10px 40px rgba(0,0,0,.18)
+}
+.app-header-row{display:flex;align-items:center;gap:14px;padding:14px var(--saas-pad);flex-wrap:wrap}
+.app-header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-inline-start:auto}
+body.saas-luxury .search-pro{flex:1;min-width:220px;max-width:520px}
+body.saas-luxury .search-pro input{width:100%;padding:12px 16px!important;font-size:var(--saas-fs-base)!important}
+body.saas-luxury .tb-icon{width:46px;height:46px;border-radius:12px;border:1px solid var(--saas-border);background:var(--saas-glass);color:var(--saas-text);display:grid;place-items:center;font-size:18px;cursor:pointer;flex-shrink:0}
+body.saas-luxury .tb-icon:hover{background:rgba(255,255,255,.1);border-color:rgba(124,77,255,.4)}
+body.saas-luxury .add-new-btn,.saas-quick-btn{padding:11px 18px!important;font-size:var(--saas-fs-base)!important;white-space:nowrap;border-radius:12px!important}
+body.saas-luxury .userbox-pro{padding:6px 12px!important;white-space:nowrap}
+body.saas-luxury .top-pill-pro{font-size:var(--saas-fs-base)!important;padding:10px 14px!important;font-weight:700!important}
+body.saas-luxury .tb-logout{padding:10px 14px!important;font-size:var(--saas-fs-sm)!important;border-radius:12px!important}
+
+/* Ops bar — single row, scroll on mobile */
+.ops-quick-bar{display:flex;align-items:center;gap:10px;padding:10px var(--saas-pad) 12px;border-top:1px solid rgba(255,255,255,.06);overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.ops-quick-bar::-webkit-scrollbar{display:none}
+.ops-label{color:var(--saas-muted);font-size:var(--saas-fs-sm);font-weight:700;white-space:nowrap;flex-shrink:0}
+.ops-quick-bar button{border:1px solid var(--saas-border);background:var(--saas-glass);color:var(--saas-text);padding:10px 16px;border-radius:12px;font-size:var(--saas-fs-sm);font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:.2s;min-height:40px}
+.ops-quick-bar button:hover{background:rgba(124,77,255,.2);border-color:rgba(124,77,255,.4)}
+
+/* Page head */
+.page-head{padding:18px var(--saas-pad) 4px}
+.page-head h2{margin:0;font-size:clamp(24px,2.2vw,30px);font-weight:800;color:#fff;letter-spacing:-.02em}
+.app-body{padding:0 var(--saas-pad) var(--saas-pad);flex:1}
+
+/* Dashboard */
+.saas-dash{padding:16px 0 0!important;animation:saasFadeIn .4s ease}
+@keyframes saasFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.saas-page-head-compact{margin-bottom:16px}
+.saas-page-head h1{display:none}
+.saas-head-chips{display:flex;flex-wrap:wrap;gap:8px}
+.saas-chip{padding:7px 13px;border-radius:999px;background:var(--saas-glass);border:1px solid var(--saas-border);font-size:12px;font-weight:600;color:#000000}
+.saas-chip.danger{color:var(--saas-danger);border-color:rgba(255,82,82,.35)}
+
+/* Command center — full flash-drive command palette */
+.saas-command-center{margin-bottom:22px}
+.saas-sub{font-size:12px;color:var(--saas-muted);font-weight:600}
+.saas-hero-stats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.saas-quick-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.saas-command-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.saas-cmd{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:14px 12px;border-radius:14px;border:1px solid var(--saas-border);background:var(--saas-glass);color:#fff;cursor:pointer;text-align:start;transition:transform .18s,box-shadow .18s,border-color .18s;min-height:72px}
+.saas-cmd:hover{transform:translateY(-2px);border-color:rgba(124,77,255,.45);box-shadow:0 0 32px rgba(124,77,255,.18)}
+.saas-cmd-exec{min-height:88px;background:linear-gradient(135deg,rgba(124,77,255,.12),rgba(64,224,208,.06))}
+.saas-cmd-icon{font-size:20px;line-height:1}
+.saas-cmd b{font-size:13px;font-weight:800;line-height:1.35}
+.saas-cmd small{font-size:10px;color:var(--saas-muted);font-weight:600}
+.saas-decision-panel{padding:16px 18px;margin-top:4px}
+.saas-decision-panel h4{margin:0 0 12px;font-size:15px;color:#fff}
+.saas-ops-matrix{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.saas-ops-matrix div{padding:10px 12px;border-radius:12px;border:1px solid var(--saas-border);background:rgba(255,255,255,.03)}
+.saas-ops-matrix b{display:block;font-size:11px;color:var(--saas-muted);margin-bottom:4px}
+.saas-ops-matrix span{font-size:15px;font-weight:800;color:#000000}
+.saas-decision-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-top:1px solid rgba(255,255,255,.06)}
+.saas-decision-row p{margin:0;font-size:13px;line-height:1.5;color:var(--saas-text)}
+@media(max-width:1200px){.saas-quick-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.saas-command-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.saas-ops-matrix{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.saas-quick-grid,.saas-command-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.saas-ops-matrix{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Grids — consistent gaps */
+.saas-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.saas-dash-menu{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;padding:12px;border-radius:16px;border:1px solid var(--saas-border);background:rgba(255,255,255,.03)}
+.saas-dash-menu-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;border:1px solid var(--saas-border);background:var(--saas-glass);color:#E8ECF4;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.18s}
+.saas-dash-menu-btn:hover,.saas-dash-menu-btn.active{background:linear-gradient(135deg,rgba(124,77,255,.25),rgba(109,93,252,.12));border-color:rgba(124,77,255,.45);color:#fff}
+.saas-dash-menu-ico{font-size:14px;line-height:1}
+.saas-kpi{padding:18px;border-radius:var(--saas-radius);cursor:pointer;position:relative;overflow:hidden;backdrop-filter:blur(24px);background:var(--saas-glass);border:1px solid var(--saas-border);box-shadow:var(--saas-glow);transition:transform .2s,box-shadow .2s}
+.saas-kpi:before{content:"";position:absolute;top:0;inset-inline:0;height:3px;background:linear-gradient(90deg,var(--saas-primary),var(--saas-cyan))}
+.saas-kpi:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(124,77,255,.22)}
+.saas-kpi-icon{font-size:20px;margin-bottom:8px}
+.saas-kpi strong{display:block;font-size:24px;font-weight:800;color:#fff}
+.saas-kpi span{font-size:12px;color:var(--saas-muted);font-weight:600}
+
+.saas-section{margin-bottom:20px}
+.saas-section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px}
+.saas-section-head h3{margin:0;font-size:17px;font-weight:700;color:#fff}
+.saas-link-btn{background:none;border:none;color:#000000;font-weight:700;cursor:pointer;font-size:13px;padding:0}
+
+.saas-analytics-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.saas-chart-panel{padding:18px;min-height:260px}
+.saas-chart-panel .canvas-wrap{position:relative;height:200px;width:100%;margin-top:10px;overflow:hidden;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01))}
+.saas-chart-panel .canvas-wrap canvas{display:block;width:100%!important;height:100%!important;min-height:180px}
+.saas-chart-panel h4{margin:0;font-size:14px;color:#fff}
+.saas-chart-panel .sub{font-size:11px;color:var(--saas-muted);margin-top:3px}
+
+.saas-split-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;align-items:start}
+.saas-projects-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.saas-project-card{padding:16px}
+.saas-prog-bar{height:5px;border-radius:999px;background:rgba(255,255,255,.08);margin:10px 0;overflow:hidden}
+.saas-prog-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--saas-primary),var(--saas-cyan))}
+.saas-proj-meta{display:flex;flex-wrap:wrap;gap:6px;font-size:11px;color:var(--saas-muted)}
+.saas-status{display:inline-flex;padding:3px 9px;border-radius:999px;font-size:10px;font-weight:700}
+.saas-status.active{background:rgba(0,200,83,.15);color:var(--saas-success)}
+.saas-status.pending{background:rgba(255,179,0,.15);color:var(--saas-warning)}
+.saas-status.maint{background:rgba(255,82,82,.15);color:var(--saas-danger)}
+
+.saas-glass{
+  backdrop-filter:blur(24px) saturate(1.1);
+  background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:var(--saas-radius);
+  box-shadow:0 16px 48px rgba(0,0,0,.28),var(--saas-glow);
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease
+}
+body.saas-luxury .saas-glass:hover,
+body.saas-luxury.app-ultra .card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 18px 48px rgba(0,0,0,.32),0 0 32px rgba(124,77,255,.12);
+  border-color:rgba(124,77,255,.26)
+}
+
+/* Floating action dock */
+.saas-fab-dock{
+  position:fixed;z-index:120;
+  inset-inline-start:max(var(--saas-float-gap),env(safe-area-inset-left,0px));
+  bottom:max(var(--saas-float-gap),env(safe-area-inset-bottom,0px));
+  display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+  pointer-events:none
+}
+.saas-fab-dock:not(.hidden){pointer-events:auto}
+.saas-fab-main{
+  width:56px;height:56px;border-radius:18px;border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(135deg,var(--saas-primary),var(--saas-primary2));
+  color:#fff;font-size:22px;font-weight:800;cursor:pointer;
+  box-shadow:0 16px 40px rgba(109,93,252,.45),0 0 0 1px rgba(255,255,255,.08) inset;
+  transition:transform .22s ease,box-shadow .22s ease;
+  animation:saasFabPulse 3s ease-in-out infinite
+}
+@keyframes saasFabPulse{0%,100%{box-shadow:0 16px 40px rgba(109,93,252,.4),0 0 0 0 rgba(124,77,255,.35)}50%{box-shadow:0 18px 44px rgba(109,93,252,.52),0 0 0 8px rgba(124,77,255,0)}}
+.saas-fab-dock.open .saas-fab-main{transform:rotate(45deg);animation:none}
+.saas-fab-main:hover{transform:scale(1.04);box-shadow:0 20px 50px rgba(109,93,252,.55)}
+.saas-fab-dock.open .saas-fab-main:hover{transform:rotate(45deg) scale(1.04)}
+.saas-fab-menu{
+  display:flex;flex-direction:column;gap:8px;max-height:0;opacity:0;overflow:hidden;
+  transform:translateY(8px);transition:max-height .32s ease,opacity .24s ease,transform .28s ease
+}
+.saas-fab-dock.open .saas-fab-menu{max-height:420px;opacity:1;transform:none;overflow:visible}
+.saas-fab-item{
+  display:flex;align-items:center;gap:10px;padding:10px 14px 10px 12px;border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);background:linear-gradient(145deg,rgba(14,20,38,.94),rgba(8,12,26,.92));
+  color:#fff;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;
+  box-shadow:0 12px 32px rgba(0,0,0,.35);backdrop-filter:blur(18px);
+  transition:transform .18s ease,border-color .18s ease
+}
+.saas-fab-item:hover{transform:translateX(-4px);border-color:rgba(124,77,255,.45)}
+.saas-fab-item-ico{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:rgba(124,77,255,.22);font-size:16px;flex-shrink:0}
+.saas-scroll-top{
+  width:44px;height:44px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);color:#fff;font-size:18px;cursor:pointer;
+  box-shadow:0 10px 28px rgba(0,0,0,.28);backdrop-filter:blur(14px);
+  opacity:0;transform:translateY(8px);pointer-events:none;transition:.22s ease
+}
+.saas-scroll-top.visible{opacity:1;transform:none;pointer-events:auto}
+@media(max-width:900px){
+  .saas-fab-dock{bottom:max(14px,env(safe-area-inset-bottom,0px));inset-inline-start:14px}
+  .saas-fab-main{width:52px;height:52px;border-radius:16px}
+}
+@media(prefers-reduced-motion:reduce){
+  .saas-fab-main{animation:none}
+  body.saas-luxury .app-shell,.saas-fab-menu{animation:none!important;transition:none!important}
+}
+.saas-task-list{display:grid;gap:8px}
+.saas-task-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--saas-border)}
+.saas-timeline{padding-inline-start:18px;border-inline-start:2px solid rgba(124,77,255,.3)}
+.saas-timeline-item{position:relative;padding-bottom:14px;padding-inline-start:6px}
+.saas-timeline-item:before{content:"";position:absolute;inset-inline-start:-23px;top:4px;width:9px;height:9px;border-radius:50%;background:var(--saas-primary)}
+
+.saas-fin-grid,.saas-reports-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.saas-fin-card,.saas-report-card{padding:16px;text-align:center;cursor:pointer;transition:transform .2s}
+.saas-fin-card:hover,.saas-report-card:hover{transform:translateY(-2px)}
+.saas-fin-card strong,.saas-report-card b{display:block;font-size:18px;color:#fff;margin:6px 0 3px}
+.saas-fin-card span,.saas-report-card span{font-size:11px;color:var(--saas-muted)}
+.saas-report-card .icon{font-size:26px;margin-bottom:8px}
+
+.saas-map-panel{padding:0;overflow:hidden}
+.saas-map-panel .gis-pro{height:100%;min-height:300px;border-radius:var(--saas-radius);background:linear-gradient(160deg,#0B1020,#121a32);position:relative}
+
+/* Sections */
+body.saas-luxury .section{padding:16px 0 0!important;animation:saasFadeIn .35s ease}
+body.saas-luxury .section .card+.card{margin-top:0}
+body.saas-luxury .layout{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))!important;gap:16px!important}
+body.saas-luxury .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+body.saas-luxury .modal-box{background:var(--saas-bg2)!important;border-color:var(--saas-border)!important}
+body.saas-luxury .toast{background:var(--saas-bg2)!important;border-color:rgba(124,77,255,.4)!important;z-index:200}
+
+/* Login HQ logo */
+body.login-ultra.saas-login .login-glass-card{
+  background:linear-gradient(160deg,rgba(14,20,38,.94),rgba(8,12,26,.92))!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  box-shadow:var(--saas-float-shadow)!important;
+  color:#f8fafc!important;
+  transform:translateY(0);
+  animation:saasShellIn .6s cubic-bezier(.22,1,.36,1)
+}
+body.login-ultra.saas-login .login-card-title{color:#f8fafc!important}
+body.login-ultra.saas-login .login-form input{background:rgba(255,255,255,.08)!important;color:#f8fafc!important}
+body.login-ultra.saas-login .login-submit{background:linear-gradient(135deg,var(--saas-primary),var(--saas-primary2))!important}
+body.login-ultra.saas-login .login-showcase .login-logo-wrap{margin-bottom:20px;max-width:min(420px,90vw)}
+body.login-ultra.saas-login .login-showcase .login-logo-img{
+  width:100%!important;height:auto!important;max-height:clamp(240px,34vh,420px)!important;max-width:min(520px,92vw)!important;
+  object-fit:contain!important;filter:drop-shadow(0 16px 48px rgba(212,175,55,.4)) drop-shadow(0 4px 16px rgba(0,0,0,.45))!important;
+  image-rendering:-webkit-optimize-contrast;background:transparent!important
+}
+body.login-ultra.saas-login .login-stage{max-width:1280px}
+
+/* Professional split login — override legacy vertical cinema shell */
+body.login-ultra.saas-login .login-shell{
+  display:flex!important;
+  flex-direction:column!important;
+  max-width:none!important;
+  width:100%!important;
+  padding:0!important;
+  margin:0!important;
+  min-height:100dvh!important;
+  align-items:stretch!important;
+  gap:0!important;
+}
+body.login-ultra.saas-login .login-stage{
+  display:grid!important;
+  grid-template-columns:1.05fr .95fr!important;
+  width:100%!important;
+  flex:1!important;
+  min-height:0!important;
+  max-width:none!important;
+  margin:0!important;
+}
+body.login-ultra.saas-login .login-showcase{
+  align-items:center!important;
+  text-align:center!important;
+  justify-content:center!important;
+  padding:clamp(32px,4vw,56px)!important;
+}
+body.login-ultra.saas-login .login-showcase-title{margin:0 0 6px!important}
+body.login-ultra.saas-login .login-tagline{margin:0!important;color:var(--saas-muted)!important;font-size:13px!important}
+
+/* Bottom center band — about + chips */
+body.login-ultra.saas-login .login-bottom-center{
+  width:100%!important;
+  max-width:min(820px,94vw)!important;
+  margin:0 auto!important;
+  padding:clamp(16px,3vh,28px) clamp(16px,4vw,32px) clamp(10px,2vh,18px)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  gap:14px!important;
+  z-index:3!important;
+}
+body.login-ultra.saas-login .login-bottom-center .login-desc-grid{
+  width:100%!important;
+  max-width:760px!important;
+  margin:0 auto!important;
+}
+body.login-ultra.saas-login .login-bottom-center .login-features{
+  justify-content:center!important;
+  margin-top:0!important;
+}
+
+/* Logo — NEVER circular; rectangular crest only */
+body.login-ultra.saas-login .login-logo-wrap--circle,
+body.login-ultra.saas-login .login-logo-wrap--float,
+body.login-ultra.saas-login .lq-brand-mark{
+  width:min(420px,90vw)!important;
+  height:auto!important;
+  border-radius:0!important;
+  overflow:visible!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  display:block!important;
+  margin:0 auto 4px!important;
+  padding:0!important;
+  line-height:0!important;
+  clip-path:none!important;
+}
+body.login-ultra.saas-login .login-logo-img--circle,
+body.login-ultra.saas-login .login-logo-img--float,
+body.login-ultra.saas-login .login-logo-img{
+  width:100%!important;
+  height:auto!important;
+  max-height:clamp(220px,34vh,420px)!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:transparent!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  mix-blend-mode:normal!important;
+  filter:drop-shadow(0 10px 28px rgba(212,175,55,.38))!important;
+}
+
+body.saas-luxury .brand-logo-pro--circle,
+body.saas-luxury .brand-logo-pro,
+body.saas-luxury .brand-logo-pro--hd{
+  width:128px!important;
+  height:auto!important;
+  max-height:82px!important;
+  aspect-ratio:auto!important;
+  border-radius:0!important;
+  clip-path:none!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  mix-blend-mode:normal!important;
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+  padding:0!important;
+  filter:drop-shadow(0 8px 20px rgba(212,175,55,.35))!important;
+}
+body.login-ultra.saas-login .login-auth{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:center!important;
+  padding:clamp(28px,4vw,48px)!important;
+  border-inline-start:1px solid rgba(255,255,255,.08)!important;
+  background:rgba(255,255,255,.03)!important;
+}
+body.login-ultra.saas-login .login-glass-card{
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+}
+body.login-ultra.saas-login .login-glass-stage .login-glass-card{
+  width:100%!important;
+  max-width:100%!important;
+}
+body.login-ultra.saas-login .login-company-footer{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  border-radius:0!important;
+  border-inline:none!important;
+  border-block:1px solid rgba(255,255,255,.08)!important;
+  grid-template-columns:1fr auto 1fr!important;
+  padding:clamp(14px,2vh,20px) clamp(20px,4vw,40px)!important;
+}
+body.login-ultra.saas-login .login-owner-ticker{
+  width:100%!important;max-width:none!important;margin:0!important;
+  border-radius:0!important;border:none!important;
+  border-top:1px solid rgba(212,175,55,.22)!important;
+  background:linear-gradient(180deg,#050508,#0a0a0f)!important;
+  box-shadow:0 -4px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.04)!important
+}
+body.login-ultra.saas-login .login-owner-item em{
+  color:#f5d76e!important;text-shadow:0 0 18px rgba(245,215,110,.35)!important;font-weight:800!important
+}
+body.login-ultra.saas-login .login-owner-item strong{
+  color:#7dffb8!important;text-shadow:0 0 14px rgba(125,255,184,.2)!important
+}
+
+/* Top floating logo — large, no background, transparent gold calligraphy */
+body.login-ultra.saas-login .login-top-logo{
+  width:100%!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  padding:clamp(10px,2vh,22px) clamp(12px,3vw,24px) 0!important;
+  z-index:5!important;
+  pointer-events:none!important;
+  position:relative!important;
+}
+body.login-ultra.saas-login .login-logo-wrap--float{
+  position:relative!important;
+  width:clamp(220px,34vw,380px)!important;
+  max-width:min(88vw,380px)!important;
+  height:auto!important;
+  margin:0!important;
+  padding:0!important;
+  background:transparent!important;
+  border:none!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+  animation:loginLogoFloat 6s ease-in-out infinite alternate;
+}
+body.login-ultra.saas-login .login-logo-glow{
+  display:none!important;
+}
+body.login-ultra.saas-login .login-logo-img--float{
+  position:relative!important;
+  z-index:1!important;
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  background:transparent!important;
+  border:none!important;
+  border-radius:0!important;
+  mix-blend-mode:normal!important;
+  opacity:1!important;
+  filter:drop-shadow(0 20px 44px rgba(212,175,55,.42)) drop-shadow(0 8px 24px rgba(0,0,0,.25))!important;
+  animation:none!important;
+  transform:none!important;
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+  box-shadow:none!important;
+}
+@keyframes loginLogoFloat{
+  from{transform:translateY(0) scale(1)}
+  to{transform:translateY(-14px) scale(1.02)}
+}
+@keyframes loginLogoGlow{
+  from{opacity:.65;transform:scale(.96)}
+  to{opacity:1;transform:scale(1.04)}
+}
+
+/* Glass stage — large floating panel */
+body.login-ultra.saas-login .login-glass-stage{
+  position:relative!important;
+  width:min(580px,94vw)!important;
+  padding:clamp(22px,3.5vw,40px)!important;
+  border-radius:36px!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  background:linear-gradient(165deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 48%,rgba(4,8,20,.15))!important;
+  backdrop-filter:blur(40px) saturate(1.45)!important;
+  -webkit-backdrop-filter:blur(40px) saturate(1.45)!important;
+  box-shadow:
+    0 48px 120px rgba(0,0,0,.52),
+    0 0 80px rgba(212,175,55,.08),
+    inset 0 1px 0 rgba(255,255,255,.18)!important;
+  animation:glassStageFloat 7s ease-in-out infinite alternate;
+  overflow:visible!important;
+}
+body.login-ultra.saas-login .login-glass-stage-shine{
+  position:absolute!important;
+  inset:0!important;
+  border-radius:inherit!important;
+  pointer-events:none!important;
+  background:
+    linear-gradient(125deg,rgba(255,255,255,.14) 0%,transparent 38%),
+    radial-gradient(ellipse 80% 50% at 50% -10%,rgba(212,175,55,.12),transparent 55%)!important;
+  opacity:.85!important;
+}
+body.login-ultra.saas-login .login-auth--float{
+  position:relative!important;
+  z-index:2!important;
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  border:none!important;
+  background:transparent!important;
+}
+body.login-ultra.saas-login .login-card--floating{
+  position:relative!important;
+  z-index:3!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+  transform:translateY(-6px)!important;
+  animation:loginCardFloat 5.5s ease-in-out infinite alternate!important;
+  box-shadow:
+    0 36px 90px rgba(0,0,0,.55),
+    0 16px 48px rgba(212,175,55,.14),
+    inset 0 1px 0 rgba(255,255,255,.24)!important;
+}
+@keyframes glassStageFloat{
+  from{transform:translateY(0)}
+  to{transform:translateY(-10px)}
+}
+@keyframes loginCardFloat{
+  from{transform:translateY(-4px)}
+  to{transform:translateY(-14px)}
+}
+
+/* Centered login layout */
+body.login-ultra.saas-login .login-stage--center{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  grid-template-columns:1fr!important;
+  width:100%!important;
+  flex:1!important;
+  min-height:0!important;
+  padding:clamp(12px,2vh,24px) clamp(16px,4vw,32px)!important;
+}
+body.login-ultra.saas-login .login-stage--center .login-auth{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  border:none!important;
+  background:transparent!important;
+  padding:0!important;
+}
+body.login-ultra.saas-login .login-stage--center .login-glass-card{
+  max-width:100%!important;
+  margin:0!important;
+}
+
+@media(min-width:961px){
+  body.login-ultra.saas-login .login-stage:not(.login-stage--center){grid-template-columns:1.05fr .95fr!important}
+  body.login-ultra.saas-login .login-stage--center{grid-template-columns:1fr!important}
+  body.login-ultra.saas-login .login-desc-grid{display:grid!important}
+  body.login-ultra.saas-login .login-brand-lines{grid-template-columns:1fr 1fr!important}
+}
+@media(max-width:960px){
+  body.login-ultra.saas-login .login-stage:not(.login-stage--center){grid-template-columns:1fr!important}
+  body.login-ultra.saas-login .login-stage--center .login-auth{
+    border-top:none!important;
+    padding:16px!important;
+  }
+  body.login-ultra.saas-login .login-top-logo{padding-top:8px!important}
+  body.login-ultra.saas-login .login-logo-wrap--float{width:clamp(200px,52vw,300px)!important}
+  body.login-ultra.saas-login .login-glass-stage{width:min(94vw,520px)!important;padding:18px!important;border-radius:28px!important}
+  body.login-ultra.saas-login .login-showcase{align-items:center!important;text-align:center!important;padding:28px 20px 12px!important}
+  body.login-ultra.saas-login .login-stage:not(.login-stage--center) .login-auth{border-inline-start:none!important;border-top:1px solid rgba(255,255,255,.08)!important;padding:20px!important}
+  body.login-ultra.saas-login .login-bottom-center{padding:16px 16px 10px!important}
+  body.login-ultra.saas-login .login-company-footer{grid-template-columns:1fr!important;text-align:center!important}
+  body.login-ultra.saas-login .login-company-footer .footer-en,
+  body.login-ultra.saas-login .login-company-footer .footer-ar{justify-self:center!important;text-align:center!important}
+  body.login-ultra.saas-login .login-company-footer .footer-sep{width:min(160px,50%)!important;height:1px!important;margin:0 auto!important}
+}
+@media(prefers-reduced-motion:reduce){
+  body.login-ultra.saas-login .login-logo-wrap--float,
+  body.login-ultra.saas-login .login-logo-glow,
+  body.login-ultra.saas-login .login-glass-stage,
+  body.login-ultra.saas-login .login-card--floating{animation:none!important}
+}
+
+/* Executive dashboard — command center max */
+.saas-exec-hero{
+  display:flex;align-items:stretch;justify-content:space-between;gap:20px;
+  padding:22px 24px;margin-bottom:18px;position:relative;overflow:hidden
+}
+.saas-exec-hero:before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(120deg,rgba(109,93,252,.14),transparent 45%,rgba(15,39,68,.08))
+}
+.exec-hero-left{position:relative;z-index:1;flex:1;min-width:0}
+.exec-badge{display:inline-flex;padding:6px 12px;border-radius:999px;font-size:11px;font-weight:800;
+  background:rgba(124,77,255,.2);border:1px solid rgba(124,77,255,.35);color:#000000;margin-bottom:10px}
+.saas-exec-hero h2{margin:0 0 6px;font-size:clamp(20px,2.4vw,28px);font-weight:800;color:#fff;line-height:1.35}
+.saas-exec-hero p{margin:0 0 12px;color:var(--saas-muted);font-size:13px;font-weight:600}
+.exec-meta{display:flex;flex-wrap:wrap;gap:8px}
+.exec-meta span{padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--saas-border);font-size:11px;font-weight:700;color:#E8ECF4}
+.exec-hero-stats{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(72px,1fr)) auto;gap:10px;align-items:center}
+.exec-stat{padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);text-align:center;min-width:88px}
+.exec-stat b{display:block;font-size:18px;font-weight:800;color:#fff;line-height:1.2}
+.exec-stat span{font-size:10px;color:var(--saas-muted);font-weight:700}
+.exec-health{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 10px}
+.saas-health-ring{width:84px;height:84px;transform:rotate(-90deg)}
+.saas-health-ring .ring-bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:8}
+.saas-health-ring .ring-fg{fill:none;stroke:#6D5DFC;stroke-width:8;stroke-linecap:round;stroke-dasharray:283}
+.saas-health-ring text{fill:#fff;font-size:16px;font-weight:800}
+.exec-health>span{font-size:10px;color:var(--saas-muted);font-weight:700}
+
+.saas-prop-status{padding:16px 18px;margin-bottom:16px}
+.prop-status-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.prop-status-head h4{margin:0;font-size:14px;color:#fff}
+.prop-status-head span{font-size:12px;color:#000000;font-weight:700}
+.prop-status-bars{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.prop-bar-top{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--saas-muted);margin-bottom:6px;font-weight:700}
+.prop-bar-top b{color:#fff}
+.prop-bar-track{height:8px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+.prop-bar-track i{display:block;height:100%;border-radius:999px;transition:width .6s ease}
+.prop-bar-track.rented i{background:linear-gradient(90deg,#00C853,#00E676)}
+.prop-bar-track.vacant i{background:linear-gradient(90deg,#6D5DFC,#7C4DFF)}
+.prop-bar-track.reserved i{background:linear-gradient(90deg,#FFB300,#FFC107)}
+.prop-bar-track.maint i{background:linear-gradient(90deg,#FF5252,#FF7043)}
+
+.saas-kpi-secondary{margin-bottom:16px}
+.saas-kpi-hint{display:block;margin-top:4px;font-size:10px;color:var(--saas-muted);font-weight:600}
+.saas-kpi-alt:before{background:linear-gradient(90deg,var(--saas-cyan),var(--saas-primary))}
+
+.saas-renewal-strip{padding:14px 16px;margin-bottom:16px}
+.renewal-strip-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.renewal-strip-head h4{margin:0;font-size:14px;color:#fff}
+.renewal-strip-list{display:grid;gap:8px}
+.renewal-strip-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.renewal-strip-item>div{flex:1;min-width:0}
+.renewal-strip-item b{font-size:13px;color:#fff}
+.renewal-strip-item p{margin:2px 0 0;font-size:11px;color:var(--saas-muted)}
+
+.saas-insights-panel,.saas-cashflow-panel{padding:16px 18px;min-height:260px}
+.saas-insights-panel h4,.saas-cashflow-panel h4{margin:0 0 12px;font-size:14px;color:#fff}
+.insight-list{display:grid;gap:8px}
+.insight-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03)}
+.insight-item.high{border-color:rgba(255,82,82,.35);background:rgba(255,82,82,.08)}
+.insight-item.med{border-color:rgba(255,179,0,.3);background:rgba(255,179,0,.06)}
+.insight-item.ok{border-color:rgba(0,200,83,.28);background:rgba(0,200,83,.06)}
+.insight-item p{margin:0;font-size:12px;line-height:1.5;color:var(--saas-text)}
+.insight-ico{font-size:16px;line-height:1;flex-shrink:0}
+
+.cashflow-bars{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;height:160px;padding-top:8px}
+.cashflow-month{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.cashflow-col{position:relative;width:100%;max-width:42px;height:120px;display:flex;align-items:flex-end;justify-content:center;gap:3px}
+.cashflow-col i{display:block;width:14px;border-radius:6px 6px 2px 2px;min-height:4px;transition:height .5s ease}
+.cashflow-col i.inc{background:linear-gradient(180deg,#1e4f8c,#6D5DFC)}
+.cashflow-col i.exp{background:linear-gradient(180deg,#FF7043,#FF5252)}
+.cashflow-month span{font-size:11px;font-weight:700;color:var(--saas-muted)}
+.cashflow-month small{font-size:9px;color:#000000;font-weight:700}
+.cashflow-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:11px;color:var(--saas-muted);font-weight:700}
+.cashflow-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:4px;vertical-align:middle}
+.cashflow-legend i.inc{background:#1e4f8c}
+.cashflow-legend i.exp{background:#FF7043}
+
+.saas-recent-table{padding:0;overflow:hidden}
+.saas-recent-table .table-wrap{margin:0}
+.saas-recent-table tr:hover td{background:rgba(124,77,255,.08)!important}
+.saas-insight-grid{align-items:stretch}
+
+body.saas-luxury .userbox-pro b{font-size:var(--saas-fs-sm);max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;vertical-align:bottom;color:#fff!important}
+body.saas-luxury .userbox-pro .mini{font-size:12px!important;color:var(--saas-muted)!important}
+body.saas-luxury .avatar-pro{width:38px!important;height:38px!important;font-size:15px!important}
+
+/* Live ticker */
+.dash-live-ticker{padding:0;margin-bottom:16px;overflow:hidden}
+.ticker-track{overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.ticker-inner{display:flex;gap:28px;width:max-content;animation:tickerScroll 38s linear infinite;padding:10px 0}
+.ticker-item{font-size:12px;font-weight:700;color:#000000;white-space:nowrap;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+@keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Mega cockpit bento */
+.dash-mega-cockpit{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px;margin-bottom:22px}
+.bento-tile{padding:16px 18px;min-height:120px}
+.bento-span-12{grid-column:span 12}
+.bento-span-8{grid-column:span 8}
+.bento-span-6{grid-column:span 6}
+.bento-span-4{grid-column:span 4}
+.bento-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.bento-head h4{margin:0;font-size:14px;color:#fff;font-weight:800}
+.exec-brief-text{margin:0;font-size:13px;line-height:1.85;color:var(--saas-text);font-weight:600}
+.bento-brief{background:linear-gradient(135deg,rgba(109,93,252,.12),rgba(15,39,68,.06))!important}
+
+.bento-gauges{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.bento-gauge{text-align:center}
+.bento-gauge svg{width:64px;height:64px;transform:rotate(-90deg)}
+.bento-gauge .g-bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:6}
+.bento-gauge .g-fg{fill:none;stroke-width:6;stroke-linecap:round;stroke-dasharray:176}
+.bento-gauge text{transform:rotate(90deg);transform-origin:32px 32px;fill:#fff;font-size:11px;font-weight:800}
+.bento-gauge span{display:block;margin-top:6px;font-size:10px;color:var(--saas-muted);font-weight:700}
+
+.risk-grid{display:grid;gap:8px}
+.risk-pill{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+.risk-pill.high{border-color:rgba(255,82,82,.35);background:rgba(255,82,82,.1)}
+.risk-pill.med{border-color:rgba(255,179,0,.32);background:rgba(255,179,0,.08)}
+.risk-pill.low{border-color:rgba(0,200,83,.28);background:rgba(0,200,83,.06)}
+.risk-pill b{font-size:12px;color:#fff}
+.risk-pill span{font-size:12px;font-weight:800;color:#000000}
+
+.rank-list,.event-list,.bld-list{display:grid;gap:8px;max-height:240px;overflow:auto}
+.rank-row,.event-row,.bld-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:11px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);cursor:pointer;transition:.15s}
+.rank-row:hover,.event-row:hover{background:rgba(124,77,255,.1)}
+.rank-no{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;font-size:11px;font-weight:800;background:rgba(124,77,255,.25);color:#fff;flex-shrink:0}
+.rank-row>div{flex:1;min-width:0}
+.rank-row b,.event-row b{font-size:12px;color:#fff;display:block}
+.rank-row small,.event-row small{font-size:10px;color:var(--saas-muted)}
+.rank-row strong{font-size:12px;color:#000000;white-space:nowrap}
+
+.pipe-list{display:grid;gap:10px}
+.pipe-top{display:flex;justify-content:space-between;font-size:11px;color:var(--saas-muted);font-weight:700;margin-bottom:5px}
+.pipe-top b{color:#fff}
+.pipe-track{height:7px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+.pipe-track i{display:block;height:100%;border-radius:999px}
+.pipe-track.active i{background:linear-gradient(90deg,#00C853,#00E676)}
+.pipe-track.warn i{background:linear-gradient(90deg,#FFB300,#FFC107)}
+.pipe-track.danger i{background:linear-gradient(90deg,#FF5252,#FF7043)}
+.pipe-track.draft i{background:linear-gradient(90deg,#6D5DFC,#7C4DFF)}
+
+.aging-bars{display:grid;gap:10px}
+.aging-bar-item{display:grid;grid-template-columns:72px 1fr auto;gap:10px;align-items:center;font-size:11px;color:var(--saas-muted);font-weight:700}
+.aging-track{height:8px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+.aging-track i{display:block;height:100%;background:linear-gradient(90deg,#FF7043,#FF5252);border-radius:999px}
+.aging-bar-item b{color:#fff;font-size:11px}
+
+.event-date{font-size:10px;font-weight:800;color:#000000;min-width:72px;flex-shrink:0}
+.event-row.high{border-color:rgba(255,82,82,.3)}
+.event-row.med{border-color:rgba(255,179,0,.25)}
+
+.bld-row{flex-direction:column;align-items:stretch;cursor:default}
+.bld-row b{font-size:12px;color:#fff}
+.bld-bar{height:6px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;margin:6px 0}
+.bld-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--saas-primary),var(--saas-cyan));border-radius:999px}
+
+.forecast-box{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.forecast-box strong{font-size:28px;font-weight:800;color:#fff}
+.forecast-box span{font-size:12px;color:var(--saas-muted);font-weight:700}
+
+.maint-ops{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.maint-ops div{padding:10px;border-radius:12px;background:rgba(255,255,255,.04);text-align:center;border:1px solid rgba(255,255,255,.06)}
+.maint-ops b{display:block;font-size:18px;color:#fff}
+.maint-ops span{font-size:10px;color:var(--saas-muted);font-weight:700}
+
+.heat-map{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.heat-cell{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+.heat-cell span{font-size:12px;font-weight:800;color:var(--saas-muted)}
+.heat-cell i{display:block;width:100%;height:36px;border-radius:10px;background:linear-gradient(180deg,rgba(109,93,252,calc(var(--heat,50)/100)),rgba(15,39,68,calc(var(--heat,50)/130)))}
+
+.saas-kpi-tertiary{margin-bottom:16px}
+.saas-kpi-tert:before{background:linear-gradient(90deg,#FFB300,var(--saas-primary))}
+
+/* Sidebar nav groups */
+.nav-group-label{
+  padding:10px 14px 6px;margin-top:8px;font-size:11px;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--saas-muted);
+  border-top:1px solid rgba(255,255,255,.06)
+}
+.nav-group-label:first-child{margin-top:0;border-top:none;padding-top:4px}
+
+/* KPI Pro — sparkline, trend, tone */
+.saas-kpi-pro{display:flex;flex-direction:column;gap:4px}
+.saas-kpi-pro .saas-kpi-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.saas-kpi-pro .saas-kpi-body{display:flex;align-items:baseline;gap:8px}
+.saas-kpi-pro .saas-kpi-trend{
+  font-size:14px;font-weight:800;line-height:1;padding:2px 6px;border-radius:8px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)
+}
+.saas-kpi-pro .kpi-spark{width:52px;height:20px;flex-shrink:0;opacity:.9}
+.saas-kpi-pro.tone-ok:before{background:linear-gradient(90deg,#00C853,#00E676)}
+.saas-kpi-pro.tone-ok .saas-kpi-trend{color:#00E676}
+.saas-kpi-pro.tone-warn:before{background:linear-gradient(90deg,#FFB300,#FF7043)}
+.saas-kpi-pro.tone-warn .saas-kpi-trend{color:#FFB300}
+.saas-kpi-pro.tone-med:before{background:linear-gradient(90deg,#6D5DFC,#7C4DFF)}
+.saas-kpi-pro.tone-med .saas-kpi-trend{color:#000000}
+.saas-kpi-pro.tone-neutral:before{background:linear-gradient(90deg,rgba(255,255,255,.2),rgba(255,255,255,.08))}
+.saas-kpi-pro.tone-neutral .saas-kpi-trend{color:var(--saas-muted)}
+
+/* Executive command center badges */
+.exec-badge-command{
+  background:linear-gradient(135deg,rgba(212,175,55,.22),rgba(124,77,255,.18))!important;
+  border-color:rgba(212,175,55,.42)!important;color:#F5D76E!important;
+  box-shadow:0 0 24px rgba(212,175,55,.12);animation:glowPulse 3.5s ease-in-out infinite
+}
+.exec-meta-command{gap:10px}
+.exec-pill{
+  padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.05);
+  border:1px solid var(--saas-border);font-size:11px;font-weight:700;color:#E8ECF4
+}
+.exec-pill-gold{
+  background:linear-gradient(135deg,rgba(212,175,55,.18),rgba(212,175,55,.06));
+  border-color:rgba(212,175,55,.38);color:#F5D76E
+}
+.exec-hero-stats-command .exec-stat{
+  background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  border-color:rgba(212,175,55,.12)
+}
+@keyframes glowPulse{
+  0%,100%{box-shadow:0 0 18px rgba(212,175,55,.1)}
+  50%{box-shadow:0 0 32px rgba(212,175,55,.28),0 0 0 1px rgba(212,175,55,.15)}
+}
+
+/* Mega cockpit zones */
+.cockpit-zone-label{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;
+  font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  color:#000000;background:rgba(15,39,68,.08);border:1px solid rgba(15,39,68,.2);
+  margin-bottom:10px
+}
+.bento-tile.cockpit-zone{position:relative;overflow:hidden}
+.bento-tile.cockpit-zone:before{
+  content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--saas-primary),var(--saas-cyan));opacity:.65
+}
+.bento-ai-brief.glow-pulse{animation:glowPulse 4s ease-in-out infinite}
+.mega-portfolio-map .heat-map{margin-top:4px}
+.mega-revenue-engine .forecast-box{margin-top:6px}
+.mega-risk-radar .risk-grid{max-height:200px;overflow:auto}
+
+/* Chart gold gradients + draw-on-load */
+.canvas-wrap{position:relative}
+.canvas-wrap.chart-drawn canvas{animation:chartDrawIn .85s ease forwards}
+.canvas-wrap .chart-compare-legend{
+  position:absolute;top:8px;inset-inline-end:10px;display:flex;gap:10px;
+  font-size:9px;font-weight:700;color:var(--saas-muted);pointer-events:none
+}
+.canvas-wrap .chart-compare-legend i{display:inline-block;width:16px;height:2px;margin-inline-end:4px;vertical-align:middle;border-radius:2px}
+.canvas-wrap .chart-compare-legend i.cur{background:linear-gradient(90deg,#6D5DFC,#1e4f8c)}
+.canvas-wrap .chart-compare-legend i.prior{background:repeating-linear-gradient(90deg,rgba(245,215,110,.7) 0 4px,transparent 4px 8px)}
+@keyframes chartDrawIn{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:none}}
+
+/* Skeleton loaders */
+.saas-skeleton{
+  position:relative;overflow:hidden;border-radius:var(--saas-radius);
+  background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.08)
+}
+.saas-skeleton:after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.08) 50%,transparent 60%);
+  animation:saasShimmer 1.4s ease-in-out infinite
+}
+@keyframes saasShimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.saas-skeleton-kpi{min-height:108px}
+.saas-skeleton-hero{min-height:140px;margin-bottom:18px}
+.saas-skeleton-tile{min-height:120px;border-radius:16px}
+.saas-skeleton-chart{min-height:200px;border-radius:14px;margin-top:10px}
+
+/* Section fade + slide transitions */
+body.saas-luxury .section{display:none}
+body.saas-luxury .section.active{display:block;opacity:1;transform:none;pointer-events:auto}
+body.saas-luxury.app-ready .section:not(.active){opacity:0}
+body.saas-luxury .section.saas-dash.active .saas-kpi-pro,
+body.saas-luxury .section.saas-dash.active .bento-tile{
+  animation:sectionSlideIn .45s ease both;
+  opacity:1
+}
+body.saas-luxury .section.saas-dash.active .saas-kpi-pro:nth-child(1){animation-delay:.04s}
+body.saas-luxury .section.saas-dash.active .saas-kpi-pro:nth-child(2){animation-delay:.08s}
+body.saas-luxury .section.saas-dash.active .saas-kpi-pro:nth-child(3){animation-delay:.12s}
+body.saas-luxury .section.saas-dash.active .saas-kpi-pro:nth-child(4){animation-delay:.16s}
+@keyframes sectionSlideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.saas-analytics-mega{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.saas-chart-wide{grid-column:span 2}
+.saas-kpi-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.saas-kpi-tertiary{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+@media(max-width:1200px){
+  .bento-span-8,.bento-span-6,.bento-span-4{grid-column:span 6}
+  .bento-span-12{grid-column:span 12}
+  .bento-gauges{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .saas-analytics-mega{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .saas-chart-wide{grid-column:span 2}
+  .saas-kpi-tertiary{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:768px){
+  .bento-span-8,.bento-span-6,.bento-span-4,.bento-span-12{grid-column:span 12}
+  .bento-gauges{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .saas-analytics-mega,.saas-chart-wide{grid-template-columns:1fr!important;grid-column:span 1}
+  .saas-kpi-tertiary{grid-template-columns:1fr}
+}
+
+@media(max-width:1200px){
+  .exec-hero-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .prop-status-bars{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:768px){
+  .saas-exec-hero{flex-direction:column}
+  .exec-hero-stats{grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+  .prop-status-bars{grid-template-columns:1fr}
+}
+
+/* Responsive */
+@media(max-width:1200px){
+  .saas-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .saas-analytics-grid,.saas-split-grid{grid-template-columns:1fr}
+  .saas-fin-grid,.saas-reports-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(min-width:901px){
+  body.saas-luxury .sidebar-ultra{transform:none!important}
+}
+@media(max-width:900px){
+  :root{--saas-pad:16px;--saas-side:0px;--saas-float-gap:12px}
+  body.saas-luxury .content{padding:var(--saas-float-gap)!important;padding-inline-end:var(--saas-float-gap)!important}
+  body.saas-luxury .sidebar-ultra{
+    top:0!important;right:0!important;height:100vh!important;width:min(280px,88vw)!important;
+    border-radius:0!important;transform:translateX(100%);transition:transform .28s ease
+  }
+  body.saas-luxury .sidebar-ultra.open{transform:translateX(0)}
+  body.saas-luxury .app-shell{border-radius:20px;min-height:calc(100vh - var(--saas-float-gap) * 2)}
+  .app-header-row{gap:8px}
+  .app-header-actions{width:100%;justify-content:flex-end}
+  body.saas-luxury .search-pro{order:3;width:100%;max-width:none}
+  .saas-projects-grid,.saas-kpi-grid,.saas-fin-grid,.saas-reports-grid{grid-template-columns:1fr}
+  .mobile-nav{display:grid!important}
+}
+@media(min-width:901px){.mobile-nav{display:none!important}}
+
+/* ═══ Scale & proportions — executive readability ═══ */
+body.saas-luxury.app-ultra .gold-btn{
+  padding:11px 20px!important;font-size:var(--saas-fs-base)!important;
+  border-radius:12px!important;min-height:44px;line-height:1.2!important
+}
+body.saas-luxury.app-ultra .ghost{
+  padding:10px 18px!important;font-size:var(--saas-fs-sm)!important;border-radius:12px!important;min-height:42px
+}
+body.saas-luxury .section .card{
+  padding:20px 22px!important;margin-bottom:14px!important
+}
+body.saas-luxury .section .card h3{font-size:var(--saas-fs-lg)!important;margin:0 0 14px!important}
+body.saas-luxury .section .card .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+body.saas-luxury .mini{font-size:var(--saas-fs-sm)!important;line-height:1.55!important}
+body.saas-luxury .section#sec-reports .card{min-height:auto;padding:18px 22px!important}
+.saas-kpi strong{font-size:clamp(22px,2vw,28px)}
+.saas-kpi span{font-size:var(--saas-fs-sm)}
+.saas-kpi-hint{font-size:11px!important}
+.saas-dash-menu-btn{font-size:var(--saas-fs-sm)!important;padding:10px 16px!important}
+.saas-dash-menu-ico{font-size:15px!important}
+.saas-chip{font-size:var(--saas-fs-sm)!important;padding:8px 14px!important}
+.saas-section-head h3{font-size:18px!important}
+.saas-sub{font-size:var(--saas-fs-sm)!important}
+.saas-exec-hero h2{font-size:clamp(22px,2.4vw,32px)!important}
+.saas-exec-hero p{font-size:var(--saas-fs-base)!important}
+.exec-meta span{font-size:var(--saas-fs-sm)!important;padding:7px 12px!important}
+.exec-stat b{font-size:20px!important}
+.exec-stat span{font-size:11px!important}
+.saas-kpi-grid{gap:12px}
+@media(min-width:1400px){
+  .saas-kpi-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  body.saas-luxury .content{padding-inline-start:var(--saas-float-gap)!important}
+}
+
+/* KPI insight panel */
+.kpi-insight-panel{position:fixed;inset:0;z-index:160;display:none;pointer-events:none}
+.kpi-insight-panel.show{display:block;pointer-events:auto}
+.kpi-insight-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(6px)}
+.kpi-insight-sheet{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(480px,92vw);padding:22px;border-radius:24px;border:1px solid rgba(216,177,91,.35);box-shadow:0 30px 90px rgba(0,0,0,.45)}
+.kpi-insight-close{position:absolute;top:12px;left:12px}
+.kpi-insight-head{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.kpi-insight-head h3{margin:0;color:var(--gold2,#fff1b8)}
+.kpi-insight-analysis{color:var(--muted,#aeb8c9);line-height:1.7;margin:12px 0}
+.kpi-insight-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.kpi-insight-sheet .kpi-spark{width:100%;height:40px;margin:8px 0}
+
+/* Section fade transitions */
+.section.section-fade-out{opacity:0!important;transform:translateY(-8px)!important;transition:opacity .22s ease,transform .22s ease}
+.section.section-fade-in{animation:sectionFadeIn .32s ease}
+@keyframes sectionFadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* Chart draw animation */
+.canvas-wrap.chart-drawn canvas{animation:chartDraw .6s ease}
+@keyframes chartDraw{from{opacity:.2;transform:scaleY(.92)}to{opacity:1;transform:none}}
+
+/* Field mode */
+body.field-mode .nav-finance-extra,
+body.field-mode .nav button[data-section="revenues"],
+body.field-mode .nav button[data-section="admin-expenses"],
+body.field-mode .nav button[data-section="accounts"],
+body.field-mode #sec-revenues,
+body.field-mode #sec-admin-expenses,
+body.field-mode #sec-accounts,
+body.field-mode #sec-purchases,
+body.field-mode #sec-payroll,
+body.field-mode #sec-inventory,
+body.field-mode #sec-bank,
+body.field-mode #sec-chart-accounts,
+body.field-mode #sec-statements,
+body.field-mode #sec-bank-reconciliation,
+body.field-mode #sec-financial-periods{display:none!important}
+body.field-mode .field-mode-grid{display:grid!important}
+.field-mode-grid{display:none;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0}
+.field-mode-card{display:grid;gap:6px;padding:16px;border-radius:18px;border:1px solid rgba(216,177,91,.25);background:rgba(255,255,255,.06);color:inherit;cursor:pointer;text-align:center}
+.field-mode-btn.active{border-color:rgba(216,177,91,.75)!important;background:rgba(216,177,91,.18)!important}
+.top-backup-pill{font-size:11px;padding:8px 12px}
+
+/* Vision AI compose */
+.vision-ai-compose{display:flex;gap:8px;padding:10px 12px 12px;border-top:1px solid rgba(255,255,255,.08)}
+.vision-ai-compose input{flex:1;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#fff;border-radius:12px;padding:10px 12px}
+.vision-ai-compose .gold-btn{padding:10px 14px;min-height:auto}
+.vision-ai-actions button{margin:4px}
+.section-skeleton-overlay{position:absolute;inset:0;z-index:5;display:grid;gap:12px;padding:16px;background:rgba(7,17,38,.72);backdrop-filter:blur(4px);pointer-events:none}
+.section{position:relative}
+
+/* ═══ Enterprise Pro v28 — gold executive polish ═══ */
+:root{
+  --saas-gold:#D4AF37;
+  --saas-gold-light:#F5D76E;
+  --saas-gold-dim:rgba(212,175,55,.18);
+  --saas-gold-border:rgba(212,175,55,.35);
+}
+body.saas-luxury .app-header{
+  border-bottom:1px solid var(--saas-gold-border)!important;
+  box-shadow:0 12px 40px rgba(0,0,0,.22),inset 0 1px 0 rgba(212,175,55,.08)!important
+}
+body.saas-luxury .search-pro input{
+  border:1px solid rgba(212,175,55,.15)!important;
+  background:rgba(255,255,255,.04)!important;
+  transition:border-color .2s,box-shadow .2s
+}
+body.saas-luxury .search-pro input:focus{
+  border-color:var(--saas-gold-border)!important;
+  box-shadow:0 0 0 3px var(--saas-gold-dim)!important;
+  outline:none
+}
+body.saas-luxury .saas-kpi-pro{
+  position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,.10)!important;
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s
+}
+body.saas-luxury .saas-kpi-pro:before{
+  content:"";position:absolute;top:0;inset-inline:0;height:3px;
+  background:linear-gradient(90deg,var(--saas-gold),var(--saas-primary),var(--saas-cyan));
+  opacity:.85
+}
+body.saas-luxury .saas-kpi-pro:hover{
+  transform:translateY(-3px);
+  border-color:var(--saas-gold-border)!important;
+  box-shadow:0 16px 40px rgba(0,0,0,.28),0 0 24px var(--saas-gold-dim)!important
+}
+body.saas-luxury .saas-exec-hero{
+  border:1px solid var(--saas-gold-border)!important;
+  background:linear-gradient(135deg,rgba(212,175,55,.10),rgba(109,93,252,.08),rgba(255,255,255,.03))!important
+}
+body.saas-luxury .page-head h2{
+  font-size:1.35rem!important;font-weight:800!important;
+  background:linear-gradient(135deg,#fff,var(--saas-gold-light));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.lq-empty-state{
+  text-align:center;padding:32px 20px;border-radius:20px;
+  border:1px dashed var(--saas-gold-border);background:rgba(212,175,55,.06)
+}
+.lq-empty-state b{display:block;font-size:1.05rem;color:#fff;margin-bottom:8px}
+.lq-empty-state p{margin:0 0 14px;color:var(--saas-muted);font-size:.92rem}
+.lq-doc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:16px}
+.lq-doc-card{
+  display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:18px;
+  border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);
+  transition:transform .2s,border-color .2s
+}
+.lq-doc-card:hover{transform:translateY(-2px);border-color:var(--saas-gold-border)}
+.lq-doc-card .icon{font-size:2rem;flex-shrink:0}
+.lq-doc-card b{display:block;color:#fff;font-size:.95rem}
+.lq-doc-card small{display:block;margin-top:4px;color:var(--saas-muted);font-size:.82rem}
+body.saas-luxury #dashRecentInvoices>.mini,
+body.saas-luxury #saasProjectsGrid>.mini,
+body.saas-luxury .saas-task-list>.mini,
+body.saas-luxury .saas-timeline>.mini{
+  display:block;text-align:center;padding:24px 16px;border-radius:16px;
+  border:1px dashed var(--saas-gold-border);background:rgba(212,175,55,.05);
+  color:var(--saas-muted)!important;line-height:1.6
+}
+@media(max-width:900px){
+  body.saas-luxury .mobile-nav{display:flex!important}
+  body.saas-luxury .content{padding-inline-end:var(--saas-float-gap)!important}
+}
+
+/* ═══ Cockpit v30 — holographic ops simulation + grid layout ═══ */
+.lq-cockpit-v30{
+  position:relative;
+  padding:0 0 24px!important;
+  isolation:isolate
+}
+.lq-cockpit-v30 .lq-dash-legacy{display:block!important}
+.lq-cockpit-grid{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:16px;
+  align-items:start
+}
+.lq-area-sim{grid-column:1/-1}
+.lq-area-hero{grid-column:1/-1;margin:0!important}
+.lq-area-ticker{grid-column:1/-1;margin:0!important}
+.lq-area-kpi{grid-column:1/-1;margin:0!important}
+.lq-area-field{grid-column:1/-1}
+.lq-area-status{grid-column:span 8}
+.lq-area-renewal{grid-column:span 4;align-self:stretch}
+.lq-area-cockpit{grid-column:1/-1;margin:0!important}
+.lq-area-insights{grid-column:1/-1}
+.lq-area-analytics{grid-column:1/-1}
+.lq-area-projects{grid-column:1/-1}
+.lq-area-tasks{grid-column:1/-1}
+.lq-area-finance{grid-column:span 6}
+.lq-area-invoices{grid-column:span 6}
+.lq-area-reports{grid-column:1/-1}
+
+body.saas-luxury .app-body:has(#sec-dashboard.active) .page-head{display:none!important}
+
+/* Holographic simulation stage */
+.lq-sim-stage{
+  position:relative;
+  grid-column:1/-1;
+  min-height:clamp(240px,32vw,340px);
+  margin:0 0 4px!important;
+  padding:0!important;
+  border-radius:28px!important;
+  overflow:hidden;
+  border:1px solid rgba(212,175,55,.22)!important;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 110%,rgba(15,39,68,.16),transparent 58%),
+    radial-gradient(ellipse 55% 45% at 18% 22%,rgba(124,77,255,.18),transparent 62%),
+    radial-gradient(ellipse 50% 40% at 82% 18%,rgba(212,175,55,.14),transparent 58%),
+    linear-gradient(180deg,rgba(8,14,32,.92),rgba(4,8,18,.98))!important;
+  box-shadow:0 28px 90px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)!important
+}
+.lq-sim-stage:before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:
+    linear-gradient(90deg,rgba(15,39,68,.08) 1px,transparent 1px),
+    linear-gradient(rgba(15,39,68,.05) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.55),transparent 92%)
+}
+.lq-sim-stage:after{
+  content:"";position:absolute;inset-inline:0;top:0;height:2px;z-index:4;
+  background:linear-gradient(90deg,transparent,rgba(212,175,55,.85),rgba(109,93,252,.85),rgba(15,39,68,.75),transparent);
+  animation:lqSimScan 5.5s linear infinite
+}
+@keyframes lqSimScan{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+.lq-sim-inner{position:relative;z-index:2;height:100%;min-height:inherit;padding:18px 20px 16px;display:grid;grid-template-rows:auto 1fr auto;gap:10px}
+.lq-sim-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.lq-sim-head h3{margin:0;font-size:clamp(15px,1.6vw,18px);font-weight:800;color:#fff;letter-spacing:.02em}
+.lq-sim-head h3 em{font-style:normal;color:var(--saas-gold-light,#F5D76E)}
+.lq-sim-badge{
+  display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;
+  font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(226,232,240,.88);border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.35);backdrop-filter:blur(10px)
+}
+.lq-sim-badge i{width:8px;height:8px;border-radius:50%;background:#00E676;box-shadow:0 0 12px #00E676;animation:lqSimPulse 2s ease-in-out infinite}
+@keyframes lqSimPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.85)}}
+
+.lq-sim-core{
+  position:relative;display:grid;place-items:center;min-height:160px;padding:8px 0
+}
+.lq-sim-orbit{
+  position:relative;width:min(280px,72vw);height:min(280px,72vw);display:grid;place-items:center
+}
+.lq-sim-ring{
+  position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.08);
+  box-shadow:inset 0 0 40px rgba(109,93,252,.08)
+}
+.lq-sim-ring.r1{width:100%;height:100%;animation:lqSimSpin 28s linear infinite}
+.lq-sim-ring.r2{width:72%;height:72%;border-color:rgba(15,39,68,.18);animation:lqSimSpin 18s linear infinite reverse}
+.lq-sim-ring.r3{width:46%;height:46%;border-color:rgba(212,175,55,.22);animation:lqSimSpin 12s linear infinite}
+@keyframes lqSimSpin{to{transform:rotate(360deg)}}
+
+.lq-sim-nucleus{
+  position:relative;z-index:3;width:120px;height:120px;border-radius:50%;
+  display:grid;place-items:center;text-align:center;
+  background:radial-gradient(circle at 35% 28%,rgba(255,255,255,.95),rgba(109,93,252,.85) 42%,rgba(4,8,20,.95) 78%);
+  box-shadow:0 0 50px rgba(124,77,255,.45),0 0 90px rgba(212,175,55,.18);
+  animation:lqSimNucleus 4s ease-in-out infinite alternate
+}
+@keyframes lqSimNucleus{from{transform:scale(1)}to{transform:scale(1.04)}}
+.lq-sim-nucleus b{display:block;font-size:28px;font-weight:900;color:#fff;line-height:1}
+.lq-sim-nucleus span{display:block;margin-top:4px;font-size:10px;font-weight:800;color:rgba(226,232,240,.82);letter-spacing:.08em}
+
+.lq-sim-node{
+  position:absolute;z-index:4;min-width:92px;padding:10px 12px;border-radius:16px;text-align:center;
+  border:1px solid rgba(255,255,255,.12);background:rgba(6,10,24,.78);backdrop-filter:blur(14px);
+  box-shadow:0 12px 32px rgba(0,0,0,.35);animation:lqSimFloat 5s ease-in-out infinite
+}
+.lq-sim-node-t{top:2%;left:50%;transform:translateX(-50%);animation-delay:0s}
+.lq-sim-node-r{top:50%;right:-4%;transform:translateY(-50%);animation-delay:-1.2s}
+.lq-sim-node-b{bottom:4%;left:50%;transform:translateX(-50%);animation-delay:-2.4s}
+.lq-sim-node-l{top:50%;left:-4%;transform:translateY(-50%);animation-delay:-3.6s}
+@keyframes lqSimFloat{0%,100%{filter:brightness(1)}50%{filter:brightness(1.12)}}
+.lq-sim-node b{display:block;font-size:15px;font-weight:900;color:#fff}
+.lq-sim-node small{display:block;margin-top:3px;font-size:10px;font-weight:700;color:rgba(226,232,240,.72)}
+
+.lq-sim-city{
+  position:absolute;inset-inline:8%;bottom:0;height:38%;display:flex;align-items:flex-end;justify-content:center;gap:10px;opacity:.88;pointer-events:none
+}
+.lq-sim-tower{
+  flex:0 0 auto;width:clamp(28px,4vw,46px);border-radius:8px 8px 2px 2px;
+  background:linear-gradient(180deg,rgba(15,39,68,.35),rgba(109,93,252,.12) 55%,rgba(4,8,20,.9));
+  border:1px solid rgba(255,255,255,.1);box-shadow:0 -8px 24px rgba(15,39,68,.12);
+  animation:lqSimTower 3.5s ease-in-out infinite alternate
+}
+.lq-sim-tower:nth-child(odd){animation-delay:-1s}
+.lq-sim-tower:nth-child(3n){background:linear-gradient(180deg,rgba(212,175,55,.35),rgba(109,93,252,.1) 55%,rgba(4,8,20,.9))}
+@keyframes lqSimTower{from{filter:brightness(.92)}to{filter:brightness(1.15)}}
+
+.lq-sim-foot{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;
+  border-top:1px solid rgba(255,255,255,.08);padding-top:12px
+}
+.lq-sim-metric{
+  padding:10px 12px;border-radius:14px;text-align:center;
+  border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04)
+}
+.lq-sim-metric b{display:block;font-size:14px;font-weight:900;color:var(--saas-cyan,#1e4f8c)}
+.lq-sim-metric span{display:block;margin-top:4px;font-size:10px;font-weight:700;color:rgba(226,232,240,.72)}
+
+body.saas-luxury .lq-cockpit-v30 .saas-kpi-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:12px!important
+}
+body.saas-luxury .lq-cockpit-v30 .saas-exec-hero{
+  border-radius:24px!important;
+  padding:20px 22px!important
+}
+body.saas-luxury .lq-cockpit-v30 .dash-prop-status{
+  border-radius:22px!important;
+  min-height:100%
+}
+body.saas-luxury .lq-cockpit-v30 .saas-renewal-strip{
+  border-radius:22px!important;
+  padding:14px 16px!important;
+  border:1px solid rgba(255,255,255,.1)!important;
+  background:rgba(255,255,255,.04)!important
+}
+body.saas-luxury .lq-cockpit-v30 .saas-section{
+  margin:0!important;
+  padding:18px 20px!important;
+  border-radius:24px!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  background:rgba(255,255,255,.025)!important
+}
+body.saas-luxury .lq-cockpit-v30 .bento-tile{
+  border-radius:20px!important;
+  transition:transform .25s ease,box-shadow .25s ease
+}
+body.saas-luxury .lq-cockpit-v30 .bento-tile:hover{
+  transform:translateY(-2px);
+  box-shadow:0 20px 50px rgba(0,0,0,.32),0 0 30px rgba(109,93,252,.1)!important
+}
+
+@media(max-width:1100px){
+  .lq-area-status,.lq-area-renewal{grid-column:1/-1}
+  .lq-area-finance,.lq-area-invoices{grid-column:1/-1}
+  .lq-sim-foot{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:720px){
+  body.saas-luxury .lq-cockpit-v30 .saas-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .lq-sim-node{min-width:78px;padding:8px 10px}
+  .lq-sim-node b{font-size:13px}
+  .lq-sim-orbit{width:min(240px,88vw);height:min(240px,88vw)}
+}
+@media(prefers-reduced-motion:reduce){
+  .lq-sim-ring,.lq-sim-nucleus,.lq-sim-node,.lq-sim-tower,.lq-sim-stage:after,.lq-sim-badge i{animation:none!important}
+}

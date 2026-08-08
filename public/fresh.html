@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>تحديث NAJJAR &amp; AL SAMOOM TRADING…</title>
+  <style>
+    body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Cairo,Segoe UI,sans-serif;background:#0a0a0a;color:#f0d98a}
+    .box{text-align:center;padding:28px}
+    a,button{display:inline-block;margin-top:16px;padding:12px 18px;border-radius:12px;background:linear-gradient(135deg,#4a3208,#caa14a);color:#fff;text-decoration:none;border:0;font:800 15px Cairo,sans-serif;cursor:pointer}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>جاري تحديث نظام النجار والسموم…</h1>
+    <p>نمسح النسخة القديمة من جهازك الآن</p>
+    <button type="button" id="go">افتح النظام الآن</button>
+  </div>
+  <script>
+    (async function(){
+      try{
+        if(navigator.serviceWorker){
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all((regs||[]).map(r=>r.unregister()));
+        }
+      }catch(e){}
+      try{
+        if(window.caches && caches.keys){
+          const keys = await caches.keys();
+          await Promise.all((keys||[]).map(k=>caches.delete(k)));
+        }
+      }catch(e){}
+      try{
+        localStorage.removeItem('jawdah_cloud_token');
+        localStorage.removeItem('jawdah_portal_choice');
+        localStorage.removeItem('lq_hub_expanded');
+        localStorage.removeItem('lq_workspace_collapsed');
+        document.cookie = 'lq_token=; Path=/; Max-Age=0; SameSite=Lax';
+      }catch(e){}
+      const url = '/closed?fresh=' + Date.now();
+      document.getElementById('go').onclick = function(){ location.replace(url); };
+      setTimeout(function(){ location.replace(url); }, 600);
+    })();
+  </script>
+</body>
+</html>

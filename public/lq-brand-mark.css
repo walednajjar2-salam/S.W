@@ -1,0 +1,146 @@
+/* Launch Quality — beautiful brand-mark presentation */
+.lq-brand-mark{
+  --bm-size:168px;
+  position:relative;
+  width:var(--bm-size);
+  height:var(--bm-size);
+  margin:0 auto;
+  display:grid;
+  place-items:center;
+  isolation:isolate;
+}
+.lq-brand-mark::before{
+  content:"";
+  position:absolute;
+  inset:-18%;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 45%,
+      rgba(255,255,255,.55) 0%,
+      rgba(212,177,93,.38) 28%,
+      rgba(184,146,63,.14) 52%,
+      transparent 72%);
+  filter:blur(2px);
+  z-index:0;
+  animation:lqBrandHalo 6s ease-in-out infinite alternate;
+}
+.lq-brand-mark::after{
+  content:"";
+  position:absolute;
+  inset:4%;
+  border-radius:50%;
+  border:1px solid rgba(226,196,138,.22);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.04),
+    0 0 40px rgba(201,169,110,.12);
+  z-index:0;
+  pointer-events:none;
+}
+.lq-brand-mark img{
+  position:relative;
+  z-index:1;
+  width:86%;
+  height:86%;
+  object-fit:contain;
+  display:block;
+  filter:
+    drop-shadow(0 10px 22px rgba(0,0,0,.35))
+    drop-shadow(0 0 18px rgba(201,169,110,.22));
+  animation:lqBrandFloat 5.8s ease-in-out infinite alternate;
+}
+.lq-brand-mark--lg{--bm-size:min(210px,42vw)}
+.lq-brand-mark--hero{--bm-size:min(420px,56vw)}
+.lq-brand-mark--portal{--bm-size:min(300px,36vh)}
+.lq-brand-mark--md{--bm-size:min(150px,36vw)}
+.lq-brand-mark--sm{--bm-size:96px}
+
+/* Login hero: double size + crisp 3D motion */
+.lq-brand-mark--hero{
+  perspective:900px;
+}
+/* Portal: large animated 3D mark with deep shadow under it */
+.lq-brand-mark--portal{
+  perspective:1100px;
+}
+.lq-brand-mark--portal::before{
+  inset:-28%;
+  background:
+    radial-gradient(circle at 50% 45%,
+      rgba(255,255,255,.78) 0%,
+      rgba(212,177,93,.5) 24%,
+      rgba(197,165,106,.22) 48%,
+      transparent 72%);
+  animation:lqBrandHalo 5.5s ease-in-out infinite alternate;
+}
+.lq-brand-mark--portal::after{
+  inset:auto 18% -6% 18%;
+  height:18%;
+  border-radius:50%;
+  border:0;
+  background:radial-gradient(ellipse at center,rgba(15,42,74,.28),transparent 70%);
+  box-shadow:none;
+  filter:blur(2px);
+  animation:lqBrandGroundShadow 7s ease-in-out infinite;
+}
+.lq-brand-mark--portal img{
+  width:95%;
+  height:95%;
+  image-rendering:-webkit-optimize-contrast;
+  filter:
+    drop-shadow(0 18px 30px rgba(15,42,74,.32))
+    drop-shadow(0 0 28px rgba(197,165,106,.38))
+    contrast(1.07) saturate(1.1);
+  transform-style:preserve-3d;
+  animation:lqBrand3d 6.5s ease-in-out infinite;
+}
+@keyframes lqBrandGroundShadow{
+  0%{opacity:.55;transform:scaleX(.92)}
+  50%{opacity:.85;transform:scaleX(1.05)}
+  100%{opacity:.55;transform:scaleX(.92)}
+}
+.lq-brand-mark--hero img{
+  width:92%;
+  height:92%;
+  image-rendering:-webkit-optimize-contrast;
+  image-rendering:auto;
+  filter:
+    drop-shadow(0 16px 28px rgba(15,42,74,.28))
+    drop-shadow(0 0 26px rgba(197,165,106,.35))
+    contrast(1.06) saturate(1.08);
+  transform-style:preserve-3d;
+  animation:lqBrand3d 7s ease-in-out infinite;
+}
+.lq-brand-mark--hero::before{
+  inset:-22%;
+  background:
+    radial-gradient(circle at 50% 45%,
+      rgba(255,255,255,.7) 0%,
+      rgba(212,177,93,.42) 26%,
+      rgba(197,165,106,.16) 50%,
+      transparent 72%);
+}
+
+@keyframes lqBrandHalo{
+  from{opacity:.75;transform:scale(.96)}
+  to{opacity:1;transform:scale(1.04)}
+}
+@keyframes lqBrandFloat{
+  from{transform:translateY(0)}
+  to{transform:translateY(-6px)}
+}
+@keyframes lqBrand3d{
+  0%{transform:translateY(0) rotateY(-10deg) rotateX(2deg) scale(1)}
+  50%{transform:translateY(-10px) rotateY(10deg) rotateX(-2deg) scale(1.03)}
+  100%{transform:translateY(0) rotateY(-10deg) rotateX(2deg) scale(1)}
+}
+
+@media (max-width:860px){
+  .lq-brand-mark--hero{--bm-size:min(240px,62vw)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .lq-brand-mark::before,
+  .lq-brand-mark img,
+  .lq-brand-mark--hero img,
+  .lq-brand-mark--portal img{animation:none!important}
+}

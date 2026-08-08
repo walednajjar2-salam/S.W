@@ -1,0 +1,317 @@
+/* ═══ Launch Quality · Cosmic Glass Design System (Phase 1) ═══ */
+:root {
+  --lq-cosmos-deep: #020408;
+  --lq-cosmos-navy: #071426;
+  --lq-cosmos-violet: #1a1040;
+  --lq-glass-bg: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.11),
+    rgba(255, 255, 255, 0.03)
+  );
+  --lq-glass-border: rgba(255, 255, 255, 0.14);
+  --lq-glass-border-gold: rgba(212, 175, 55, 0.28);
+  --lq-glass-blur: blur(28px) saturate(1.45);
+  --lq-glass-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.42),
+    0 0 48px rgba(109, 93, 252, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --lq-star-cyan: rgba(0, 212, 255, 0.35);
+  --lq-star-gold: rgba(212, 175, 55, 0.28);
+}
+
+/* ── Starfield stack (login + app unified) ── */
+.lq-cosmos {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -25%, #1a2d5c 0%, var(--lq-cosmos-deep) 48%, #000 100%);
+}
+
+.lq-cosmos-nebula {
+  position: absolute;
+  inset: -10%;
+  background:
+    radial-gradient(ellipse 55% 42% at 12% 18%, rgba(109, 93, 252, 0.22), transparent 62%),
+    radial-gradient(ellipse 48% 38% at 88% 22%, rgba(0, 212, 255, 0.14), transparent 58%),
+    radial-gradient(ellipse 70% 50% at 50% 88%, rgba(212, 175, 55, 0.1), transparent 65%),
+    radial-gradient(ellipse 40% 30% at 72% 68%, rgba(124, 77, 255, 0.12), transparent 60%);
+  animation: lqNebulaDrift 28s ease-in-out infinite alternate;
+}
+
+.lq-cosmos-dust {
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+  background-image:
+  radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.45), transparent),
+  radial-gradient(1px 1px at 30% 65%, rgba(255, 255, 255, 0.35), transparent),
+  radial-gradient(1.5px 1.5px at 55% 15%, rgba(0, 212, 255, 0.5), transparent),
+  radial-gradient(1px 1px at 75% 42%, rgba(255, 255, 255, 0.4), transparent),
+  radial-gradient(1px 1px at 90% 78%, rgba(212, 175, 55, 0.45), transparent),
+  radial-gradient(1px 1px at 42% 88%, rgba(255, 255, 255, 0.3), transparent);
+  background-size: 100% 100%;
+}
+
+.lq-cosmos-stars {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.92;
+}
+
+@keyframes lqNebulaDrift {
+  from { transform: scale(1) translate(0, 0); }
+  to { transform: scale(1.04) translate(-1.5%, -1%); }
+}
+
+/* Let cosmic layer show through */
+body.va-theme,
+body.login-ultra.va-theme,
+body.enterprise-vision.login-ultra,
+body.enterprise-vision.saas-luxury,
+body.saas-luxury {
+  background: transparent !important;
+}
+
+body.saas-luxury:before,
+body.saas-luxury:after,
+body.login-ultra .login-bg,
+body.login-ultra .login-bg-glow,
+body.login-ultra .login-mesh {
+  opacity: 0.35 !important;
+}
+
+body.login-ultra #loginScreen .login-bg {
+  background: transparent !important;
+}
+
+.ev-cinema-lights {
+  opacity: 0.45;
+}
+
+.ev-neural-canvas {
+  opacity: 0.38 !important;
+  mix-blend-mode: screen;
+}
+
+body.saas-luxury .ev-neural-canvas {
+  opacity: 0.22 !important;
+}
+
+/* ── Unified glass surfaces ── */
+body.va-theme .glass-panel,
+body.login-ultra.va-theme .login-glass-card,
+body.login-ultra.va-theme .ev-auth-card,
+body.saas-luxury .saas-glass,
+body.saas-luxury.app-ultra .card,
+body.enterprise-vision .ev-auth-card,
+body.enterprise-vision .login-card--floating {
+  background: var(--lq-glass-bg) !important;
+  border: 1px solid var(--lq-glass-border) !important;
+  backdrop-filter: var(--lq-glass-blur) !important;
+  -webkit-backdrop-filter: var(--lq-glass-blur) !important;
+  box-shadow: var(--lq-glass-shadow) !important;
+}
+
+body.login-ultra #loginScreen .login-glass-card,
+body.login-ultra #loginScreen .ev-auth-card {
+  border-color: var(--lq-glass-border-gold) !important;
+}
+
+body.saas-luxury .saas-glass:hover,
+body.saas-luxury.app-ultra .card:hover {
+  border-color: rgba(0, 212, 255, 0.32) !important;
+  box-shadow:
+    0 28px 72px rgba(0, 0, 0, 0.48),
+    0 0 40px rgba(0, 212, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+/* Shell: sidebar + header + content island */
+body.saas-luxury .sidebar-ultra {
+  background: linear-gradient(
+    180deg,
+    rgba(10, 16, 36, 0.78),
+    rgba(6, 10, 26, 0.86)
+  ) !important;
+  backdrop-filter: var(--lq-glass-blur) !important;
+  -webkit-backdrop-filter: var(--lq-glass-blur) !important;
+  border-color: var(--lq-glass-border) !important;
+  box-shadow: var(--lq-glass-shadow) !important;
+}
+
+body.saas-luxury .app-shell {
+  background: linear-gradient(
+    165deg,
+    rgba(8, 14, 32, 0.72),
+    rgba(4, 8, 20, 0.82)
+  ) !important;
+  backdrop-filter: var(--lq-glass-blur) !important;
+  -webkit-backdrop-filter: var(--lq-glass-blur) !important;
+  border-color: var(--lq-glass-border) !important;
+  box-shadow: var(--lq-glass-shadow) !important;
+}
+
+body.saas-luxury .app-header {
+  background: linear-gradient(
+    180deg,
+    rgba(6, 10, 24, 0.88),
+    rgba(6, 10, 24, 0.55)
+  ) !important;
+  backdrop-filter: blur(20px) saturate(1.3) !important;
+  border-bottom-color: var(--lq-glass-border) !important;
+}
+
+/* Login stage */
+body.login-ultra .login-shell,
+body.enterprise-vision.login-ultra .login-shell {
+  z-index: 10;
+}
+
+body.login-ultra .va-login-analytics-head,
+body.login-ultra .va-insight-card {
+  backdrop-filter: var(--lq-glass-blur);
+  border-color: var(--lq-glass-border);
+}
+
+/* ── Dashboard layout fixes (empty bands + zoom) ── */
+body.enterprise-vision.saas-luxury #sec-dashboard.active {
+  padding-bottom: 120px !important;
+}
+
+.lq-cockpit-v30 > .va-dash-banner {
+  display: none !important;
+}
+
+.lq-area-empty,
+.saas-renewal-strip:empty,
+.lq-staff-field-wrap:empty {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+
+.lq-sim-stage {
+  min-height: clamp(180px, 24vh, 260px) !important;
+}
+
+.lq-sim-core {
+  min-height: 120px !important;
+}
+
+.lq-sim-orbit {
+  width: min(220px, 42vw) !important;
+  height: min(220px, 42vw) !important;
+}
+
+.lq-sim-nucleus {
+  width: 96px !important;
+  height: 96px !important;
+}
+
+.lq-sim-nucleus b {
+  font-size: 22px !important;
+}
+
+body.saas-luxury .lq-cockpit-v30 .saas-section {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  ) !important;
+  backdrop-filter: var(--lq-glass-blur) !important;
+  border-color: var(--lq-glass-border) !important;
+}
+
+/* Charts — stable height at any zoom */
+.saas-chart-panel .canvas-wrap {
+  height: clamp(160px, 18vh, 220px) !important;
+  min-height: 160px !important;
+}
+
+.saas-analytics-mega {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+}
+
+.saas-chart-wide {
+  grid-column: 1 / -1 !important;
+}
+
+@media (min-width: 1100px) {
+  .saas-chart-wide {
+    grid-column: span 2 !important;
+  }
+
+  .saas-analytics-mega {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* KPI row — responsive without breaking */
+body.saas-luxury .lq-cockpit-v30 .saas-kpi-grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+}
+
+/* Users + data sections unified with dashboard glass */
+body.saas-luxury .section:not(.saas-dash) .card {
+  padding: 18px 20px !important;
+}
+
+body.saas-luxury .section:not(.saas-dash) .toolbar {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--lq-glass-border);
+}
+
+body.saas-luxury .table-wrap {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+/* Walid dock glass */
+.vision-ai-dock {
+  border-color: rgba(0, 212, 255, 0.22) !important;
+  background: linear-gradient(
+    165deg,
+    rgba(10, 16, 36, 0.88),
+    rgba(4, 8, 20, 0.92)
+  ) !important;
+  backdrop-filter: var(--lq-glass-blur) !important;
+}
+
+/* Phase badge on section heads */
+body.va-theme.saas-luxury .saas-section-head::after {
+  content: "BI · Live";
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 212, 255, 0.12);
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  color: var(--va-cyan, #00d4ff);
+  margin-inline-start: auto;
+}
+
+@media (max-width: 720px) {
+  body.enterprise-vision.saas-luxury #sec-dashboard.active {
+    padding-bottom: 100px !important;
+  }
+
+  .lq-sim-foot {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lq-cosmos-nebula {
+    animation: none !important;
+  }
+}

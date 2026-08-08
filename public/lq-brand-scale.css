@@ -1,0 +1,174 @@
+/* Launch Quality · Brand scale — logo, watermark nav, form lists (agreed HD sizes) */
+
+/* ── Header logo (was 38px — too small) ── */
+body.lq-layout-v2 .lq-header-brand {
+  padding: 6px 14px 6px 10px !important;
+  gap: 12px !important;
+  border-radius: 16px !important;
+}
+
+body.lq-layout-v2 .lq-header-logo {
+  width: clamp(72px, 8vw, 96px) !important;
+  height: auto !important;
+  max-height: 88px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 8px 22px rgba(45, 130, 134, 0.42))
+    drop-shadow(0 2px 8px rgba(212, 175, 55, 0.28)) !important;
+}
+
+body.lq-layout-v2 .lq-header-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.2;
+}
+
+body.lq-layout-v2 .lq-header-brand-text strong {
+  font-size: clamp(13px, 1.4vw, 16px);
+  font-weight: 800;
+  color: #e8f4f4;
+  white-space: nowrap;
+}
+
+body.lq-layout-v2 .lq-header-brand-text small {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+}
+
+body.lq-layout-v2 .lq-header-brand > span:not(.lq-header-brand-text) {
+  font-size: 14px !important;
+  font-weight: 800 !important;
+}
+
+/* Sidebar HD logo — keep agreed 118px */
+body.saas-luxury .brand-logo-pro--hd {
+  width: min(118px, 92%) !important;
+  max-height: 108px !important;
+}
+
+body.saas-luxury .brand-logo-pro--circle {
+  width: 118px !important;
+  height: auto !important;
+  max-height: 108px !important;
+}
+
+/* ── Floating nav = brand watermark card ── */
+.lq-nav-float-card {
+  width: min(520px, 96vw) !important;
+  padding: 18px 18px 20px !important;
+}
+
+.lq-nav-float-brand img {
+  width: clamp(72px, 14vw, 88px) !important;
+  height: auto !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 10px 28px rgba(212, 175, 55, 0.38))
+    drop-shadow(0 4px 14px rgba(45, 130, 134, 0.35)) !important;
+}
+
+.lq-nav-float-brand strong {
+  font-size: 16px !important;
+}
+
+.lq-nav-float-brand small {
+  font-size: 11px !important;
+  margin-top: 2px;
+}
+
+.lq-nav-float-grid button {
+  min-height: 88px !important;
+  padding: 10px 8px !important;
+  font-size: 12px !important;
+  border-radius: 18px !important;
+}
+
+.lq-nav-float-grid button .nav-icon {
+  width: 42px !important;
+  height: 42px !important;
+  font-size: 20px !important;
+}
+
+.lq-nav-float-fab {
+  width: 64px !important;
+  height: 64px !important;
+  font-size: 13px !important;
+}
+
+/* ── Property form & unit lists (larger touch targets) ── */
+.lq-unit-atelier h3 {
+  font-size: 1.25rem !important;
+}
+
+.lq-unit-atelier .mini {
+  font-size: 13px !important;
+}
+
+.lq-unit-grid input,
+.lq-unit-atelier input,
+.lq-unit-atelier select,
+#sec-properties .form input,
+#sec-properties .form select,
+#sec-properties .form textarea {
+  min-height: 52px !important;
+  font-size: 15px !important;
+  padding: 12px 16px !important;
+  border-radius: 16px !important;
+}
+
+#sec-properties .form label {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  gap: 8px !important;
+}
+
+.lq-chip-button,
+.lq-unit-toolbar .lq-chip-button {
+  min-height: 46px !important;
+  padding: 0 20px !important;
+  font-size: 14px !important;
+}
+
+#sec-properties .gold-btn {
+  min-height: 50px !important;
+  font-size: 16px !important;
+  padding: 14px 28px !important;
+}
+
+.lq-status-grid .lq-status-card {
+  min-height: 100px !important;
+  padding: 16px !important;
+}
+
+.lq-status-card strong {
+  font-size: 1.75rem !important;
+}
+
+/* Sidebar nav — readable size when sidebar used */
+body.saas-luxury .nav-ultra button {
+  padding: 13px 16px !important;
+  font-size: 14px !important;
+  min-height: 48px !important;
+}
+
+body.saas-luxury .nav-ultra .nav-icon {
+  width: 38px !important;
+  height: 38px !important;
+  font-size: 17px !important;
+}
+
+@media (max-width: 720px) {
+  body.lq-layout-v2 .lq-header-brand-text {
+    display: none;
+  }
+
+  body.lq-layout-v2 .lq-header-logo {
+    width: 64px !important;
+    max-height: 58px !important;
+  }
+
+  .lq-nav-float-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}

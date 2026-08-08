@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>عقارات نزوى | جودة الانطلاقة</title>
+  <link rel="stylesheet" href="/quick-estate/quick-estate.css?v=nizwa-clean2">
+  <style>
+    :root{
+      --qe-logo:url('/quick-estate/assets/logo_real_estate_transparent.png');
+    }
+    /* No watermark / no translucency behind the workspace */
+    html, body.app-body.theme-realestate, body.theme-realestate.section-dashboard{
+      background:#eef2f6 !important;
+      background-image:none !important;
+    }
+    body.section-dashboard .content.dashboard-page,
+    body.section-dashboard .content.dashboard-page.brand-realestate{
+      background:#f7f8fa !important;
+      background-image:none !important;
+    }
+    body.section-dashboard .content.dashboard-page::before,
+    .content::before, .content.brand-realestate::before{
+      content:none !important; display:none !important; opacity:0 !important;
+      background:none !important; background-image:none !important;
+    }
+    body.section-dashboard .content .card,
+    body.section-dashboard .content .stat-card,
+    body.section-dashboard .content .table-wrap{
+      background:#fff !important; backdrop-filter:none !important;
+    }
+    .qe-topbar-actions{display:flex;gap:8px;align-items:center}
+    .qe-back{text-decoration:none}
+    #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9999;padding:12px 18px;border-radius:12px;background:#123;color:#fff;opacity:0;pointer-events:none;transition:.25s}
+    #toast.show{opacity:1}
+    #toast.error{background:#8b1e1e}
+    #toast.success{background:#0f5c3b}
+    .drawer,.modal{position:fixed;inset:0;background:rgba(8,16,32,.45);display:none;z-index:1000}
+    .drawer.open,.modal.open{display:grid;place-items:center;padding:16px}
+    .drawer-panel,.modal-panel{width:min(760px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:18px;padding:18px;position:relative}
+    .drawer-close,.modal-close{position:absolute;left:12px;top:12px}
+    .hidden{display:none!important}
+  </style>
+  <link rel="stylesheet" href="/lq-crystal-building-theme.css?v=crystal3">
+</head>
+<body class="app-body theme-realestate section-dashboard">
+  <div class="app-shell">
+    <aside class="sidebar open">
+      <div class="sidebar-brand">
+        <img id="sidebarSectionLogo" class="sidebar-section-logo" src="/quick-estate/assets/logo_real_estate_transparent.png" alt="شعار العقارات">
+        <div><strong>جودة الانطلاقة ش.م.م</strong><small>عقارات نزوى</small></div>
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-section="dashboard"><span class="nav-inner"><span class="nav-icon">▣</span><span class="nav-label">لوحة التحكم</span></span></button>
+        <button class="nav-item" data-section="real_estate"><span class="nav-inner"><span class="nav-icon">▦</span><span class="nav-label">عقارات نزوى</span></span></button>
+      </nav>
+      <div class="sidebar-foot">
+        <a class="btn secondary qe-back" data-back-platforms href="/portal-select.html">رجوع للمنصات</a>
+      </div>
+    </aside>
+    <section class="workspace">
+      <header class="topbar">
+        <button id="mobileMenu" class="btn ghost" type="button">☰</button>
+        <div class="topbar-logo-slot">
+          <img id="topbarSectionLogo" class="topbar-section-logo" src="/quick-estate/assets/logo_real_estate_transparent.png" alt="شعار العقارات">
+        </div>
+        <div>
+          <h1 id="pageTitle">لوحة التحكم</h1>
+          <p id="pageSubtitle">منصة عقارات نزوى — وحدات وعقود</p>
+        </div>
+        <div class="qe-topbar-actions">
+          <a class="btn secondary qe-back qe-back-top" data-back-platforms href="/portal-select.html">رجوع للمنصات</a>
+          <button id="refreshPage" class="btn secondary" type="button">تحديث</button>
+          <span id="userChip" class="pill approved">—</span>
+        </div>
+      </header>
+      <main id="content" class="content dashboard-page brand-realestate"></main>
+    </section>
+  </div>
+
+  <div id="drawer" class="drawer" aria-hidden="true">
+    <div class="drawer-panel">
+      <button id="drawerClose" class="btn ghost drawer-close" type="button">إغلاق</button>
+      <div id="drawerContent"></div>
+    </div>
+  </div>
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-panel">
+      <button id="modalClose" class="btn ghost modal-close" type="button">إغلاق</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+  <div id="toast" class="toast"></div>
+
+  <script>
+    window.APP_USER = { role: 'operations', display_name: '', username: '' };
+    try { localStorage.setItem('jawdah_portal_choice', 'nizwaestate'); } catch (_) {}
+  </script>
+  <script src="/quick-estate/app.js?v=nizwa3-back"></script>
+</body>
+</html>

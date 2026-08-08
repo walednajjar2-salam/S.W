@@ -1,0 +1,52 @@
+/* Phase 9 — role-based UI visibility */
+.lq-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  border: 1px solid rgba(61, 154, 158, 0.45);
+  background: rgba(26, 107, 111, 0.22);
+  color: #d8f7ff;
+  white-space: nowrap;
+}
+
+.lq-role-badge.viewer {
+  border-color: rgba(255, 200, 120, 0.45);
+  background: rgba(180, 120, 40, 0.18);
+  color: #ffe8b8;
+}
+
+.lq-role-hidden {
+  display: none !important;
+}
+
+body.lq-readonly .lq-write-only,
+body.lq-readonly button[onclick*="delRecord"],
+body.lq-readonly button[onclick*="editRecord"],
+body.lq-readonly button[onclick*="createProperty"],
+body.lq-readonly button[onclick*="createClient"],
+body.lq-readonly button[onclick*="createContract"],
+body.lq-readonly button[onclick*="createUser"],
+body.lq-readonly button[onclick*="voidInvoice"],
+body.lq-readonly .lq-record-actions .danger,
+body.lq-readonly .lq-record-actions .gold-btn {
+  display: none !important;
+}
+
+body.lq-role-viewer .add-new-btn {
+  display: none !important;
+}
+
+.lq-role-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 10px;
+}
+
+.lq-role-strip .badge {
+  font-size: 11px;
+}

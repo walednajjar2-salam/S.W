@@ -1,0 +1,602 @@
+/* ============================================================
+   OFFICIAL LOGIN — Daylight Estate (3D courtyard)
+   Owner-approved redesign family: 2026-08-02
+   Clear Arabic font + aligned shell + OTP row preserved
+   ============================================================ */
+
+html:has(#loginScreen:not(.hidden)),
+body:has(#loginScreen:not(.hidden)){
+  height:100% !important;
+  overflow:hidden !important;
+}
+
+body.login-ultra,
+body.saas-login{
+  --lq-login-ink:var(--lq-atm-ink, #0f2740);
+  --lq-login-text:var(--lq-atm-text, #102033);
+  --lq-login-muted:var(--lq-atm-muted, #4d6278);
+  --lq-login-gold:var(--lq-atm-gold, #b8923f);
+  --lq-login-gold-bright:var(--lq-atm-gold-bright, #d4b15d);
+  --lq-login-gold-deep:var(--lq-atm-gold-deep, #8d6d2c);
+  --lq-login-font:var(--lq-font, var(--lq-font-ar, "IBM Plex Sans Arabic","Cairo",sans-serif));
+}
+
+body.login-ultra #loginScreen,
+body.saas-login #loginScreen{
+  position:fixed !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100dvh !important;
+  max-height:100dvh !important;
+  overflow:hidden !important;
+  display:grid !important;
+  place-items:center !important;
+  margin:0 !important;
+  padding:clamp(16px,3vh,28px) !important;
+  box-sizing:border-box !important;
+  isolation:isolate;
+  z-index:20 !important;
+  background:var(--lq-atm-sky, #eaf4ff) !important;
+  font-family:var(--lq-login-font) !important;
+  color:var(--lq-login-text) !important;
+}
+
+body.login-ultra #loginScreen.hidden,
+body.saas-login #loginScreen.hidden,
+#loginScreen.hidden{
+  display:none !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+  height:0 !important;
+  max-height:0 !important;
+  min-height:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+}
+
+body.login-ultra #loginScreen .login-bg,
+body.login-ultra #loginScreen .login-bg-glow,
+body.login-ultra #loginScreen .login-mesh{
+  display:none !important;
+}
+
+body.login-ultra #loginScreen .login-cinema-photo-layer{
+  opacity:1 !important;
+  visibility:visible !important;
+  display:block !important;
+  filter:none !important;
+}
+
+/* Hide clutter */
+body.login-ultra #loginScreen .login-icons,
+body.login-ultra #loginScreen .login-float-icon,
+body.login-ultra #loginScreen .va-login-analytics,
+body.login-ultra #loginScreen .login-bottom-center,
+body.login-ultra #loginScreen .login-company-footer,
+body.login-ultra #loginScreen .login-owner-ticker,
+body.login-ultra #loginScreen .login-dev-credit,
+body.login-ultra #loginScreen .login-desc-grid,
+body.login-ultra #loginScreen .login-features,
+body.login-ultra #loginScreen .login-glass-stage-shine,
+body.login-ultra #loginScreen .ev-trust-strip,
+body.login-ultra #loginScreen .ev-holo-orbs,
+body.login-ultra #loginScreen .login-secure-badge,
+body.login-ultra #loginScreen .login-windows-cta,
+body.login-ultra #loginScreen ~ .ev-cinema-lights,
+body.login-ultra .ev-neural-canvas,
+body.login-ultra .lq-cosmos{
+  display:none !important;
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+  height:0 !important;
+  width:0 !important;
+  overflow:hidden !important;
+}
+
+/* Aligned two-column shell */
+body.login-ultra #loginScreen .login-shell{
+  position:relative !important;
+  z-index:2 !important;
+  width:min(1080px,100%) !important;
+  max-width:1080px !important;
+  margin:0 auto !important;
+  padding:0 !important;
+  gap:clamp(22px,4vw,42px) !important;
+  display:grid !important;
+  /* Physical layout like reference even under dir=rtl */
+  direction:ltr !important;
+  grid-template-columns:minmax(300px,400px) minmax(280px,1fr) !important;
+  grid-template-areas:"form brand" !important;
+  align-items:center !important;
+  justify-items:stretch !important;
+  animation:lqLoginRise .75s ease both;
+}
+/* The shell above is pinned to a physical LTR grid so the brand always sits
+   beside the form. Its children must therefore be told the direction again,
+   and it has to be the document's, otherwise English stays right-aligned. */
+html[dir="rtl"] body.login-ultra #loginScreen .login-stage,
+html[dir="rtl"] body.login-ultra #loginScreen .login-top-logo,
+html[dir="rtl"] body.login-ultra #loginScreen .login-glass-card{
+  direction:rtl !important;
+}
+html[dir="ltr"] body.login-ultra #loginScreen .login-stage,
+html[dir="ltr"] body.login-ultra #loginScreen .login-top-logo,
+html[dir="ltr"] body.login-ultra #loginScreen .login-glass-card{
+  direction:ltr !important;
+}
+
+body.login-ultra #loginScreen .login-top-logo{
+  grid-area:brand !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  margin:0 !important;
+  padding:0 !important;
+  gap:0 !important;
+}
+body.login-ultra #loginScreen .login-logo-wrap,
+body.login-ultra #loginScreen .login-logo-wrap--float,
+body.login-ultra #loginScreen .lq-brand-mark{
+  margin:0 auto 10px !important;
+  padding:0 !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+body.login-ultra #loginScreen .lq-brand-mark,
+body.login-ultra #loginScreen .lq-brand-mark--hero{
+  width:min(420px,56vw) !important;
+  height:min(420px,56vw) !important;
+}
+body.login-ultra #loginScreen .login-logo-img,
+body.login-ultra #loginScreen .login-logo-img--float,
+body.login-ultra #loginScreen .lq-brand-mark img{
+  width:92% !important;
+  height:92% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:contain !important;
+  display:block !important;
+  margin:0 auto !important;
+}
+
+body.login-ultra #loginScreen .login-brand-copy{
+  display:block !important;
+  text-align:center !important;
+  width:100% !important;
+}
+body.login-ultra #loginScreen .login-brand-name{
+  margin:0 !important;
+  font-family:var(--lq-login-font) !important;
+  font-weight:800 !important;
+  font-size:clamp(2rem,4.6vw,2.9rem) !important;
+  line-height:1.15 !important;
+  color:var(--lq-login-ink) !important;
+  -webkit-text-fill-color:var(--lq-login-ink) !important;
+  text-shadow:0 2px 16px rgba(255,255,255,.6) !important;
+  background:none !important;
+}
+body.login-ultra #loginScreen .login-brand-ar{
+  margin:8px 0 0 !important;
+  font-size:clamp(1.1rem,2.3vw,1.35rem) !important;
+  font-weight:800 !important;
+  color:var(--lq-login-gold-deep) !important;
+  -webkit-text-fill-color:var(--lq-login-gold-deep) !important;
+}
+body.login-ultra #loginScreen .login-brand-support{
+  margin:12px auto 0 !important;
+  max-width:26rem !important;
+  font-size:.95rem !important;
+  line-height:1.65 !important;
+  color:var(--lq-login-text) !important;
+  -webkit-text-fill-color:var(--lq-login-text) !important;
+  font-weight:600 !important;
+  text-shadow:0 1px 10px rgba(255,255,255,.5) !important;
+}
+body.login-ultra #loginScreen .login-brand-rule{
+  width:80px !important;
+  height:3px !important;
+  margin:14px auto 0 !important;
+  border:0 !important;
+  border-radius:99px !important;
+  background:linear-gradient(90deg,transparent,var(--lq-login-gold),transparent) !important;
+}
+
+body.login-ultra #loginScreen .login-stage,
+body.login-ultra #loginScreen .login-stage--center{
+  grid-area:form !important;
+  width:100% !important;
+  max-width:420px !important;
+  margin:0 !important;
+  padding:0 !important;
+  display:block !important;
+  justify-self:stretch !important;
+  animation:lqLoginRise .85s .08s ease both;
+}
+body.login-ultra #loginScreen .login-glass-stage,
+body.login-ultra #loginScreen .login-auth,
+body.login-ultra #loginScreen .login-auth--float{
+  margin:0 !important;
+  padding:0 !important;
+  width:100% !important;
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+body.login-ultra #loginScreen .login-glass-stage::before,
+body.login-ultra #loginScreen .login-glass-stage::after{
+  content:none !important;
+  display:none !important;
+}
+
+body.login-ultra #loginScreen .login-glass-card,
+body.login-ultra #loginScreen .ev-auth-card,
+body.saas-login #loginScreen .login-glass-card{
+  width:100% !important;
+  max-width:420px !important;
+  margin:0 !important;
+  padding:22px 22px 20px !important;
+  box-sizing:border-box !important;
+  background:rgba(255,255,255,.95) !important;
+  background-image:
+    linear-gradient(165deg,rgba(255,255,255,.98),rgba(248,250,252,.94)),
+    linear-gradient(160deg,rgba(212,177,93,.12),transparent 46%) !important;
+  border:2.5px solid rgba(15,42,74,.18) !important;
+  outline:1px solid rgba(197,165,106,.55) !important;
+  outline-offset:-5px !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 -1px 0 rgba(15,42,74,.06) inset,
+    0 10px 18px rgba(15,42,74,.08),
+    0 28px 56px rgba(15,42,74,.16),
+    0 2px 0 rgba(197,165,106,.35) !important;
+  backdrop-filter:blur(14px) !important;
+  -webkit-backdrop-filter:blur(14px) !important;
+  color:var(--lq-login-text) !important;
+  border-radius:20px !important;
+  font-family:var(--lq-login-font) !important;
+  transform:perspective(1000px) rotateX(1.2deg) !important;
+}
+body.login-ultra #loginScreen .login-glass-card::before,
+body.login-ultra #loginScreen .login-glass-card::after,
+body.login-ultra #loginScreen .ev-auth-card::before,
+body.login-ultra #loginScreen .ev-auth-card::after{
+  content:none !important;
+  display:none !important;
+}
+
+/* Languages — always visible on login card */
+body.login-ultra #loginScreen #loginLangMount,
+body.login-ultra #loginScreen .login-topbar-lang{
+  display:flex !important;
+  justify-content:flex-end !important;
+  align-items:center !important;
+  margin:0 0 12px !important;
+  padding:0 !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  height:auto !important;
+  width:100% !important;
+  position:relative !important;
+  z-index:6 !important;
+}
+body.login-ultra #loginScreen .lq-lang-switch{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  font-size:.8rem !important;
+  font-weight:800 !important;
+  color:var(--lq-login-ink) !important;
+  font-family:var(--lq-login-font) !important;
+}
+body.login-ultra #loginScreen .lq-lang-switch select{
+  min-height:38px !important;
+  min-width:128px !important;
+  border:2px solid rgba(15,42,74,.18) !important;
+  border-radius:11px !important;
+  background:#fff !important;
+  color:var(--lq-login-text) !important;
+  font-weight:700 !important;
+  font-family:var(--lq-login-font) !important;
+  padding:6px 10px !important;
+  box-shadow:0 1px 0 rgba(255,255,255,.8) inset, 0 4px 10px rgba(15,42,74,.06) !important;
+}
+
+body.login-ultra #loginScreen .login-card-head{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  gap:4px !important;
+  margin:0 0 14px !important;
+  padding:0 0 12px !important;
+  border-bottom:1px solid var(--lq-atm-line, rgba(16,32,51,.12)) !important;
+  text-align:start !important;
+}
+body.login-ultra #loginScreen .login-card-brand{display:none !important}
+body.login-ultra #loginScreen .login-card-title{
+  color:var(--lq-login-ink) !important;
+  font-family:var(--lq-login-font) !important;
+  font-size:1.35rem !important;
+  font-weight:800 !important;
+  margin:0 !important;
+  line-height:1.3 !important;
+  background:none !important;
+  -webkit-text-fill-color:var(--lq-login-ink) !important;
+  text-align:start !important;
+}
+body.login-ultra #loginScreen .login-card-sub{
+  color:var(--lq-login-muted) !important;
+  font-size:.9rem !important;
+  margin:4px 0 0 !important;
+  -webkit-text-fill-color:var(--lq-login-muted) !important;
+  font-weight:600 !important;
+  text-align:start !important;
+}
+
+body.login-ultra #loginScreen .ev-auth-tabs{
+  display:flex !important;
+  gap:6px !important;
+  margin:0 0 12px !important;
+}
+body.login-ultra #loginScreen .ev-auth-tab[data-auth="face"],
+body.login-ultra #loginScreen .ev-auth-tab[data-auth="fingerprint"],
+body.login-ultra #loginScreen .ev-auth-tab[data-auth="sso"]{
+  display:none !important;
+}
+body.login-ultra #loginScreen .ev-auth-tab{
+  flex:1 !important;
+  padding:8px 10px !important;
+  background:#eef3f8 !important;
+  color:var(--lq-login-text) !important;
+  border:1px solid rgba(16,32,51,.12) !important;
+  border-radius:10px !important;
+  font-size:13px !important;
+  font-family:var(--lq-login-font) !important;
+}
+body.login-ultra #loginScreen .ev-auth-tab.active{
+  background:linear-gradient(145deg,rgba(212,177,93,.35),rgba(184,146,63,.16)) !important;
+  border-color:rgba(184,146,63,.5) !important;
+  font-weight:800 !important;
+}
+
+body.login-ultra #loginScreen .login-field{
+  position:relative !important;
+  display:block !important;
+  margin:0 0 12px !important;
+  text-align:start !important;
+}
+body.login-ultra #loginScreen .login-field-label{
+  display:block !important;
+  color:var(--lq-login-muted) !important;
+  -webkit-text-fill-color:var(--lq-login-muted) !important;
+  font-size:.8rem !important;
+  font-weight:800 !important;
+  margin-bottom:5px !important;
+  text-align:start !important;
+}
+body.login-ultra #loginScreen .login-field-icon{display:none !important;}
+body.login-ultra #loginScreen .login-form input:not(.ev-otp-input):not([type="checkbox"]):not([type="radio"]),
+body.login-ultra #loginScreen #loginUser,
+body.login-ultra #loginScreen #loginPass,
+body.login-ultra #loginScreen #otpUser,
+body.login-ultra #loginScreen input[type="text"]:not(.ev-otp-input),
+body.login-ultra #loginScreen input[type="password"]{
+  width:100% !important;
+  box-sizing:border-box !important;
+  background:linear-gradient(180deg,#ffffff 0%,#f7f9fc 100%) !important;
+  color:var(--lq-login-text) !important;
+  -webkit-text-fill-color:var(--lq-login-text) !important;
+  caret-color:var(--lq-login-text) !important;
+  border:2px solid rgba(15,42,74,.16) !important;
+  border-radius:14px !important;
+  padding:11px 14px !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  font-family:var(--lq-login-font) !important;
+  min-height:44px !important;
+  text-align:start !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 6px 14px rgba(15,42,74,.05) !important;
+  transition:border-color .2s ease, box-shadow .2s ease, transform .15s ease !important;
+}
+body.login-ultra #loginScreen #loginPass{
+  padding-inline-end:68px !important;
+}
+body.login-ultra #loginScreen .login-form input:not(.ev-otp-input):not([type="checkbox"]):not([type="radio"]):focus,
+body.login-ultra #loginScreen #loginUser:focus,
+body.login-ultra #loginScreen #loginPass:focus{
+  outline:none !important;
+  border-color:rgba(197,165,106,.85) !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.95) inset,
+    0 0 0 3px rgba(212,177,93,.28),
+    0 8px 18px rgba(15,42,74,.08) !important;
+  transform:translateY(-1px) !important;
+}
+body.login-ultra #loginScreen .login-form input::placeholder{
+  color:#7a8796 !important;
+  -webkit-text-fill-color:#7a8796 !important;
+}
+body.login-ultra #loginScreen .login-form input:not(.ev-otp-input):not([type="checkbox"]):not([type="radio"]):-webkit-autofill,
+body.login-ultra #loginScreen #loginUser:-webkit-autofill,
+body.login-ultra #loginScreen #loginPass:-webkit-autofill{
+  -webkit-text-fill-color:var(--lq-login-text) !important;
+  box-shadow:0 0 0 1000px #ffffff inset !important;
+  transition:background-color 99999s ease-out !important;
+}
+body.login-ultra #loginScreen .login-pass-toggle{
+  position:absolute !important;
+  inset-inline-end:8px !important;
+  inset-inline-start:auto !important;
+  top:28px !important;
+  border:0 !important;
+  background:transparent !important;
+  color:var(--lq-login-muted) !important;
+  font-size:12px !important;
+  font-weight:800 !important;
+  font-family:var(--lq-login-font) !important;
+  cursor:pointer !important;
+  padding:6px 8px !important;
+}
+body.login-ultra #loginScreen .login-inline-tools{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:8px !important;
+  margin:0 0 12px !important;
+  color:var(--lq-login-muted) !important;
+  font-size:.82rem !important;
+  font-weight:600 !important;
+  font-family:var(--lq-login-font) !important;
+}
+body.login-ultra #loginScreen .login-remember-check{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:7px !important;
+  margin:0 !important;
+  font-size:.8rem !important;
+  font-weight:700 !important;
+  color:var(--lq-login-muted) !important;
+  cursor:pointer !important;
+  line-height:1.2 !important;
+}
+body.login-ultra #loginScreen .login-remember-check input,
+body.login-ultra #loginScreen #loginRemember,
+body.login-ultra #loginScreen input[type="checkbox"]{
+  appearance:auto !important;
+  -webkit-appearance:checkbox !important;
+  width:15px !important;
+  height:15px !important;
+  min-width:15px !important;
+  max-width:15px !important;
+  min-height:15px !important;
+  max-height:15px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border-radius:3px !important;
+  flex:0 0 15px !important;
+  accent-color:var(--lq-login-gold-deep) !important;
+  box-shadow:none !important;
+  background:#fff !important;
+  transform:none !important;
+}
+body.login-ultra #loginScreen .login-inline-tools label,
+body.login-ultra #loginScreen .login-inline-tools button,
+body.login-ultra #loginScreen #capsHint{
+  color:var(--lq-login-muted) !important;
+  -webkit-text-fill-color:var(--lq-login-muted) !important;
+  font-family:var(--lq-login-font) !important;
+}
+body.login-ultra #loginScreen .login-help-btn{
+  border:0 !important;
+  background:transparent !important;
+  color:var(--lq-login-gold-deep) !important;
+  font-weight:800 !important;
+  cursor:pointer !important;
+  padding:0 !important;
+}
+body.login-ultra #loginScreen .login-submit.gold-btn,
+body.login-ultra #loginScreen #loginBtn{
+  width:100% !important;
+  margin-top:4px !important;
+  background:linear-gradient(145deg,var(--lq-login-gold-bright),var(--lq-login-gold-deep)) !important;
+  color:#1a1408 !important;
+  -webkit-text-fill-color:#1a1408 !important;
+  border:1.5px solid rgba(154,122,63,.45) !important;
+  font-size:.92rem !important;
+  font-weight:800 !important;
+  padding:10px 12px !important;
+  border-radius:12px !important;
+  min-height:40px !important;
+  max-height:44px !important;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.35) inset,
+    0 8px 16px rgba(141,109,44,.22) !important;
+  font-family:var(--lq-login-font) !important;
+}
+body.login-ultra #loginScreen .login-submit.gold-btn:hover,
+body.login-ultra #loginScreen #loginBtn:hover{
+  filter:brightness(1.04) !important;
+}
+
+/* Removed downloads row by request */
+body.login-ultra #loginScreen .login-quiet-links{
+  display:none !important;
+}
+
+body.login-ultra #lqBrandWatermark{display:none !important;}
+
+@keyframes lqLoginRise{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:none}
+}
+
+@media (max-width:860px){
+  body.login-ultra #loginScreen{
+    padding:16px !important;
+    overflow:auto !important;
+  }
+  body.login-ultra #loginScreen .login-shell{
+    grid-template-columns:1fr !important;
+    grid-template-areas:"brand" "form" !important;
+    gap:14px !important;
+    max-width:420px !important;
+  }
+  body.login-ultra #loginScreen .lq-brand-mark,
+  body.login-ultra #loginScreen .lq-brand-mark--hero{
+    width:min(240px,62vw) !important;
+    height:min(240px,62vw) !important;
+  }
+}
+
+/* OTP one row */
+body.login-ultra #loginScreen .ev-otp-inputs{
+  display:flex !important;
+  flex-direction:row !important;
+  flex-wrap:nowrap !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:8px !important;
+  width:100% !important;
+  margin:8px 0 12px !important;
+  direction:ltr !important;
+}
+body.login-ultra #loginScreen .ev-otp-inputs .ev-otp-input,
+body.login-ultra #loginScreen input.ev-otp-input{
+  flex:0 0 42px !important;
+  width:42px !important;
+  min-width:42px !important;
+  max-width:42px !important;
+  height:48px !important;
+  margin:0 !important;
+  padding:0 !important;
+  text-align:center !important;
+  font-size:18px !important;
+  font-weight:800 !important;
+  border-radius:12px !important;
+  border:1px solid rgba(16,32,51,.16) !important;
+  background:#ffffff !important;
+  color:var(--lq-login-text) !important;
+  box-sizing:border-box !important;
+  font-family:var(--lq-login-font) !important;
+}
+@media (max-width:420px){
+  body.login-ultra #loginScreen .ev-otp-inputs{gap:6px !important}
+  body.login-ultra #loginScreen .ev-otp-inputs .ev-otp-input,
+  body.login-ultra #loginScreen input.ev-otp-input{
+    flex-basis:36px !important;
+    width:36px !important;
+    min-width:36px !important;
+    max-width:36px !important;
+    height:44px !important;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  body.login-ultra #loginScreen .login-shell,
+  body.login-ultra #loginScreen .login-stage{animation:none !important}
+}
