@@ -1,45 +1,60 @@
-# نشر S.W على الإنternet
+# نشر S.W على Railway — دليل كامل
 
-## لماذا `localhost` لا يعمل من الموبايل؟
+## 1) إنشاء مشروع Railway
 
-`localhost` = جهازك فقط. من الموبايل **لن يفتح** إلا بعد **نشر** الموقع.
+1. https://railway.app/dashboard
+2. **New Project** → **Deploy from GitHub Repo**
+3. اختر: **walednajjar2-salam/S.W**
+4. Railway يبني من `Dockerfile` تلقائياً
 
 ---
 
-## نشر دائم — Railway (موصى به)
+## 2) Volume (مهم — حفظ البيانات)
 
-1. https://railway.app/dashboard → **New Project**
-2. **Deploy from GitHub repo** → اختر **S.W**
-3. Railway يكتشف `Dockerfile` تلقائياً
-4. **Variables** (اختياري):
+1. داخل المشروع → خدمة **web** → **Volumes**
+2. **Add Volume**
+3. Mount path: **`/app/data`**
+4. Redeploy
+
+---
+
+## 3) Variables
 
 | Variable | Value |
 |----------|--------|
-| `SMM_ADMIN_EMAIL` | walednajjar2@gmail.com |
-| `SMM_ADMIN_PASSWORD` | najjar |
-| `SMM_SECRET_KEY` | أي نص سري طويل |
+| `SMM_ADMIN_EMAIL` | `walednajjar2@gmail.com` |
+| `SMM_ADMIN_PASSWORD` | `najjar` |
+| `SMM_SECRET_KEY` | نص سري طويل عشوائي |
+| `SMM_DATABASE_PATH` | `/app/data/panel.db` |
 
-5. **Networking → Generate Domain**
-6. افتح: `https://xxx.up.railway.app/login`
-
----
-
-## نشر — Render
-
-1. https://dashboard.render.com → **New +** → **Blueprint**
-2. اربط مستودع **S.W** (يستخدم `render.yaml`)
+> `PORT` يُحقن تلقائياً من Railway — **لا تضعه يدوياً**
 
 ---
 
-## تشغيل محلي (للتطوير)
+## 4) Domain
 
-```bash
-cd smm-panel
-pip install -r requirements.txt
-python run.py
+**Settings → Networking → Generate Domain**
+
+افتح: `https://YOUR-DOMAIN.up.railway.app/login`
+
+---
+
+## 5) التحقق
+
+```text
+GET https://YOUR-DOMAIN.up.railway.app/api/health
 ```
 
-افتح: http://localhost:8090/login
+المتوقع:
+
+```json
+{
+  "ok": true,
+  "service": "S.W",
+  "mode": "simulation",
+  "bots": false
+}
+```
 
 ---
 
@@ -48,3 +63,19 @@ python run.py
 | البريد | كلمة المرور |
 |--------|-------------|
 | walednajjar2@gmail.com | najjar |
+
+---
+
+## اختبار محلي قبل النشر
+
+```bash
+python3 scripts/verify_production.py
+```
+
+---
+
+## Dockerfile
+
+- Python 3.12
+- Health check على `/api/health`
+- بيانات SQLite على `/app/data/panel.db`

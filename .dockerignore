@@ -1,0 +1,15 @@
+.git
+.gitignore
+**/__pycache__
+**/*.pyc
+**/.venv
+**/data/*.db
+smm-panel/.venv
+smm-panel/data
+*.md
+!smm-panel/README.md
+docs
+scripts
+INVENTORY_DELETED_AR.md
+tmp
+terminals

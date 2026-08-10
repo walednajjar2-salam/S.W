@@ -27,6 +27,7 @@ from app.schemas import (
 )
 from app.seed import seed_if_empty
 from app.worker import worker
+from app.config import settings
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "public"
 ASSETS_DIR = STATIC_DIR / "assets"
@@ -73,7 +74,13 @@ def _calc_amount(price_per_1000: float, quantity: int) -> float:
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "mode": "simulation", "bots": False}
+    return {
+        "ok": True,
+        "service": "S.W",
+        "mode": "simulation",
+        "bots": False,
+        "database": settings.db_path,
+    }
 
 
 @app.post("/api/auth/register", response_model=AuthResponse)

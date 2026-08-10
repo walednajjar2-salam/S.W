@@ -4,10 +4,14 @@ services:
     runtime: docker
     dockerfilePath: ./Dockerfile
     healthCheckPath: /api/health
+    disk:
+      name: sw-data
+      mountPath: /app/data
+      sizeGB: 1
     envVars:
       - key: SMM_SECRET_KEY
         generateValue: true
       - key: SMM_ADMIN_EMAIL
         value: walednajjar2@gmail.com
-      - key: SMM_ADMIN_PASSWORD
-        value: najjar
+      - key: SMM_DATABASE_PATH
+        value: /app/data/panel.db

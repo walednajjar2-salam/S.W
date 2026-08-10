@@ -6,7 +6,7 @@ from app.config import settings
 
 
 def _db_path() -> Path:
-    path = Path(settings.database_path)
+    path = Path(settings.db_path)
     path.parent.mkdir(parents=True, exist_ok=True)
     return path
 
