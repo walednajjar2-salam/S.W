@@ -25,12 +25,13 @@ python run.py
 
 افتح: **http://localhost:8090**
 
-## حسابات تجريبية
+## حساب المدير
 
-| الدور | البريد | كلمة المرور | الرصيد |
+| الاسم | البريد | كلمة المرور | الرصيد |
 |-------|--------|-------------|--------|
-| مدير | admin@example.com | admin123 | $1000 |
-| مستخدم | demo@example.com | demo123 | $50 |
+| Najjar | najjar@example.com | najjar | $1000 |
+
+التسجيل العام **مغلق** — Najjar فقط.
 
 ## هيكل المشروع
 
@@ -68,8 +69,8 @@ delivered >= quantity → status: completed
 ```bash
 export SMM_SECRET_KEY="your-secret"
 export SMM_DELIVERY_INTERVAL_SECONDS=2
-export SMM_ADMIN_EMAIL=admin@example.com
-export SMM_ADMIN_PASSWORD=admin123
+export SMM_ADMIN_EMAIL=najjar@example.com
+export SMM_ADMIN_PASSWORD=najjar
 ```
 
 ## ⚠️ تنبيه

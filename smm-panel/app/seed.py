@@ -59,19 +59,7 @@ def seed_if_empty() -> None:
                 (
                     settings.admin_email,
                     hash_password(settings.admin_password),
-                    "المدير",
-                ),
-            )
-            conn.execute(
-                """
-                INSERT INTO users (email, password_hash, name, role, balance)
-                VALUES (?, ?, ?, 'user', ?)
-                """,
-                (
-                    "demo@example.com",
-                    hash_password("demo123"),
-                    "حساب تجريبي",
-                    settings.default_user_balance,
+                    "Najjar",
                 ),
             )
 

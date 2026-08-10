@@ -76,24 +76,11 @@ def health():
 
 
 @app.post("/api/auth/register", response_model=AuthResponse)
-def register(body: RegisterRequest):
-    with get_conn() as conn:
-        exists = conn.execute(
-            "SELECT id FROM users WHERE email = ?", (body.email.lower(),)
-        ).fetchone()
-        if exists:
-            raise HTTPException(status.HTTP_400_BAD_REQUEST, "البريد مسجّل مسبقاً")
-        cur = conn.execute(
-            """
-            INSERT INTO users (email, password_hash, name, role, balance)
-            VALUES (?, ?, ?, 'user', 0)
-            """,
-            (body.email.lower(), hash_password(body.password), body.name.strip()),
-        )
-        user_id = cur.lastrowid
-        user = dict(conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone())
-    token = create_access_token(user_id, user["role"])
-    return AuthResponse(access_token=token, user=_user_public(user))
+def register(_: RegisterRequest):
+    raise HTTPException(
+        status.HTTP_403_FORBIDDEN,
+        "التسجيل مغلق — حساب المدير Najjar فقط",
+    )
 
 
 @app.post("/api/auth/login", response_model=AuthResponse)

@@ -7,8 +7,8 @@ class Settings(BaseSettings):
     delivery_interval_seconds: float = 2.0
     delivery_batch_ratio: float = 0.08
     default_user_balance: float = 50.0
-    admin_email: str = "admin@example.com"
-    admin_password: str = "admin123"
+    admin_email: str = "najjar@example.com"
+    admin_password: str = "najjar"
 
     class Config:
         env_prefix = "SMM_"

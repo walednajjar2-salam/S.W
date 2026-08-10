@@ -16,10 +16,9 @@ python run.py
 
 ## حسابات تجريبية
 
-| الدور | البريد | كلمة المرور |
+| الاسم | البريد | كلمة المرور |
 |-------|--------|-------------|
-| مدير | admin@example.com | admin123 |
-| مستخدم | demo@example.com | demo123 |
+| Najjar | najjar@example.com | najjar |
 
 راجع [smm-panel/README.md](smm-panel/README.md) للتفاصيل.
 
