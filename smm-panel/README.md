@@ -29,7 +29,7 @@ python run.py
 
 | الاسم | البريد | كلمة المرور | الرصيد |
 |-------|--------|-------------|--------|
-| Najjar | najjar@example.com | najjar | $1000 |
+| Najjar | walednajjar2@gmail.com | najjar | $1000 |
 
 التسجيل العام **مغلق** — Najjar فقط.
 
@@ -69,7 +69,7 @@ delivered >= quantity → status: completed
 ```bash
 export SMM_SECRET_KEY="your-secret"
 export SMM_DELIVERY_INTERVAL_SECONDS=2
-export SMM_ADMIN_EMAIL=najjar@example.com
+export SMM_ADMIN_EMAIL=walednajjar2@gmail.com
 export SMM_ADMIN_PASSWORD=najjar
 ```
 

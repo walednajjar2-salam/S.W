@@ -18,7 +18,7 @@ python run.py
 
 | الاسم | البريد | كلمة المرور |
 |-------|--------|-------------|
-| Najjar | najjar@example.com | najjar |
+| Najjar | walednajjar2@gmail.com | najjar |
 
 راجع [smm-panel/README.md](smm-panel/README.md) للتفاصيل.
 

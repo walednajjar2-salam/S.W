@@ -81,3 +81,13 @@ def seed_if_empty() -> None:
                         svc["price_per_1000"],
                     ),
                 )
+
+        admin = conn.execute(
+            "SELECT id, email FROM users WHERE role = 'admin' ORDER BY id LIMIT 1"
+        ).fetchone()
+        target_email = settings.admin_email.lower()
+        if admin and admin["email"] != target_email:
+            conn.execute(
+                "UPDATE users SET email = ? WHERE id = ?",
+                (target_email, admin["id"]),
+            )
