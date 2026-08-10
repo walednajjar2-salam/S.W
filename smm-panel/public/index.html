@@ -3,55 +3,141 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة خدمات — نموذج تعليمي</title>
+  <meta name="description" content="S.W — لوحة خدمات تعليمية بنظام SMM Panel كامل" />
+  <title>S.W — لوحة الخدمات</title>
   <link rel="stylesheet" href="/assets/styles.css" />
 </head>
 <body>
   <div class="container">
-    <nav class="nav">
-      <div class="nav-brand">📊 لوحة الخدمات</div>
+    <nav class="site-nav">
+      <div class="brand">
+        <div class="brand-logo">SW</div>
+        <div>S.<span>W</span></div>
+      </div>
       <div class="nav-links">
-        <a class="btn btn-primary" href="/login">دخول المدير</a>
+        <a class="btn btn-ghost btn-sm" href="/login">دخول</a>
+        <a class="btn btn-primary btn-sm" href="/panel">لوحة التحكم</a>
       </div>
     </nav>
 
     <section class="hero">
-      <h1>نظام لوحة خدمات — للتعلم فقط</h1>
+      <div class="hero-badge">🎓 مشروع تعليمي — بدون بوتات</div>
+      <h1>
+        لوحة خدمات <span class="gradient">احترافية</span><br />
+        للتعلم والتطوير
+      </h1>
       <p>
-        نفس هيكل مواقع SMM: تسجيل، محفظة، طلبات، طابور تسليم، ولوحة إدارة —
-        <strong>بدون بوتات</strong> وبدون اتصال بإنستجرام أو تيك توك.
+        نظام SMM Panel كامل: تسجيل، محفظة، طلبات، طابور تسليم، ولوحة إدارة —
+        التسليم <strong>محاكى داخلياً</strong> بدون أي اتصال بمنصات حقيقية.
       </p>
-      <a class="btn btn-primary" href="/panel">افتح لوحة التحكم</a>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="/login">ابدأ الآن</a>
+        <a class="btn btn-ghost btn-lg" href="/panel">عرض اللوحة</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>5+</strong><span>خدمات جاهزة</span></div>
+        <div class="hero-stat"><strong>JWT</strong><span>مصادقة آمنة</span></div>
+        <div class="hero-stat"><strong>RTL</strong><span>واجهة عربية</span></div>
+        <div class="hero-stat"><strong>24/7</strong><span>Worker محاكى</span></div>
+      </div>
     </section>
 
-    <div class="notice">
-      ⚠️ هذا مشروع تعليمي. التسليم <strong>محاكى</strong> داخلياً — لا يؤثر على حسابات حقيقية.
-    </div>
-
-    <div class="grid grid-3">
-      <div class="card">
-        <h3>👤 حسابات</h3>
-        <p class="stat-label">تسجيل، دخول، JWT، أدوار (مستخدم / مدير)</p>
-      </div>
-      <div class="card">
-        <h3>🛒 طلبات</h3>
-        <p class="stat-label">اختر خدمة، أرسل الرابط، ادفع من المحفظة</p>
-      </div>
-      <div class="card">
-        <h3>⚙️ طابور</h3>
-        <p class="stat-label">Worker يحدّث التقدم تلقائياً (محاكاة)</p>
+    <div class="notice" style="margin-bottom: 40px;">
+      <span>⚠️</span>
+      <div>
+        هذا مشروع <strong>تعليمي</strong> فقط. التسليم محاكى داخلياً —
+        لا يؤثر على حسابات إنستجرام أو تيك توك أو يوتيوب.
       </div>
     </div>
 
-    <div class="card" style="margin-top: 24px;">
-      <h3>حساب المدير</h3>
-      <table>
-        <tr><th>الاسم</th><th>البريد</th><th>كلمة المرور</th></tr>
-        <tr><td>Najjar</td><td>walednajjar2@gmail.com</td><td>najjar</td></tr>
-      </table>
+    <div class="grid grid-3" style="margin-bottom: 48px;">
+      <div class="card card-hover feature-card">
+        <div class="feature-icon" style="background: rgba(124,58,237,0.15);">👤</div>
+        <h3>حسابات ومصادقة</h3>
+        <p>تسجيل دخول JWT، أدوار مستخدم/مدير، محفظة رصيد لكل حساب</p>
+      </div>
+      <div class="card card-hover feature-card">
+        <div class="feature-icon" style="background: rgba(6,182,212,0.12);">🛒</div>
+        <h3>نظام الطلبات</h3>
+        <p>اختر الخدمة، أدخل الرابط والكمية، ادفع من المحفظة تلقائياً</p>
+      </div>
+      <div class="card card-hover feature-card">
+        <div class="feature-icon" style="background: rgba(16,185,129,0.12);">⚙️</div>
+        <h3>طابور التسليم</h3>
+        <p>Worker يحدّث التقدم تلقائياً — محاكاة واقعية بدون API خارجي</p>
+      </div>
     </div>
 
-    <footer>مشروع تعليمي — FastAPI + SQLite + Worker محاكى</footer>
+    <h2 style="text-align:center; margin-bottom: 28px; font-size: 1.5rem;">الخدمات المتاحة</h2>
+    <div class="grid grid-3" style="margin-bottom: 48px;">
+      <div class="card service-card card-hover">
+        <div class="service-card-header">
+          <span class="badge badge-platform badge-instagram">Instagram</span>
+        </div>
+        <h4>متابعين إنستجرام</h4>
+        <p class="desc">محاكاة تسليم — بدون بوتات حقيقية</p>
+        <p class="price">$2.50 / 1000</p>
+      </div>
+      <div class="card service-card card-hover">
+        <div class="service-card-header">
+          <span class="badge badge-platform badge-instagram">Instagram</span>
+        </div>
+        <h4>لايكات إنستجرام</h4>
+        <p class="desc">محاكاة تسليم على رابط منشور</p>
+        <p class="price">$1.20 / 1000</p>
+      </div>
+      <div class="card service-card card-hover">
+        <div class="service-card-header">
+          <span class="badge badge-platform badge-tiktok">TikTok</span>
+        </div>
+        <h4>متابعين تيك توك</h4>
+        <p class="desc">محاكاة تسليم — تعليمي فقط</p>
+        <p class="price">$1.80 / 1000</p>
+      </div>
+      <div class="card service-card card-hover">
+        <div class="service-card-header">
+          <span class="badge badge-platform badge-tiktok">TikTok</span>
+        </div>
+        <h4>مشاهدات تيك توك</h4>
+        <p class="desc">محاكاة مشاهدات على رابط فيديو</p>
+        <p class="price">$0.50 / 1000</p>
+      </div>
+      <div class="card service-card card-hover">
+        <div class="service-card-header">
+          <span class="badge badge-platform badge-youtube">YouTube</span>
+        </div>
+        <h4>مشتركين يوتيوب</h4>
+        <p class="desc">محاكاة تسليم على رابط قناة</p>
+        <p class="price">$5.00 / 1000</p>
+      </div>
+      <div class="card card-hover feature-card" style="display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+        <div class="feature-icon" style="background: rgba(124,58,237,0.15);">➕</div>
+        <h3>أضف خدماتك</h3>
+        <p>من لوحة الإدارة — أضف منصات وأسعار جديدة</p>
+      </div>
+    </div>
+
+    <div class="card card-glass" style="margin-bottom: 48px;">
+      <h3 style="margin-top:0;">حساب المدير</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>الاسم</th><th>البريد</th><th>كلمة المرور</th><th>الرصيد</th></tr>
+          <tr>
+            <td><strong>Najjar</strong></td>
+            <td>walednajjar2@gmail.com</td>
+            <td>najjar</td>
+            <td style="color:var(--success); font-weight:700;">$1000.00</td>
+          </tr>
+        </table>
+      </div>
+      <div style="margin-top: 20px;">
+        <a class="btn btn-primary" href="/login">تسجيل الدخول كمدير</a>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      S.W — مشروع تعليمي | FastAPI + SQLite + Worker محاكى
+    </footer>
   </div>
 </body>
 </html>

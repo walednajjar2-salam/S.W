@@ -3,107 +3,200 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة التحكم</title>
+  <title>لوحة التحكم — S.W</title>
   <link rel="stylesheet" href="/assets/styles.css" />
 </head>
 <body>
-  <div class="container">
-    <nav class="nav">
-      <div class="nav-brand">📊 لوحة التحكم</div>
-      <div class="nav-links">
-        <span id="userInfo" style="color:var(--muted);"></span>
-        <button class="btn btn-ghost" onclick="logout()">خروج</button>
-      </div>
-    </nav>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar(false)"></div>
 
-    <div class="notice">
-      التسليم <strong>محاكى</strong> — Worker يحدّث العداد داخلياً. لا اتصال خارجي.
-    </div>
-
-    <div class="tabs">
-      <button class="tab active" data-tab="order">طلب جديد</button>
-      <button class="tab" data-tab="orders">طلباتي</button>
-      <button class="tab" data-tab="wallet">المحفظة</button>
-      <button class="tab hidden" id="adminTab" data-tab="admin">إدارة</button>
-    </div>
-
-    <!-- طلب جديد -->
-    <section id="tab-order" class="card">
-      <h2>طلب خدمة جديد</h2>
-      <form id="orderForm" class="grid grid-2">
-        <div>
-          <label>الخدمة</label>
-          <select id="serviceId" required></select>
+  <div class="panel-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="brand-logo">SW</div>
+          <div>S.<span>W</span></div>
         </div>
-        <div>
-          <label>الكمية</label>
-          <input type="number" id="quantity" min="100" value="1000" required />
-        </div>
-        <div style="grid-column: 1 / -1;">
-          <label>رابط الحساب / المنشور</label>
-          <input type="url" id="targetUrl" required placeholder="https://instagram.com/username" />
-        </div>
-        <div>
-          <p class="stat-label">السعر التقديري</p>
-          <p class="stat-value" id="pricePreview">$0.00</p>
-        </div>
-        <div style="display:flex; align-items:end;">
-          <button class="btn btn-primary" type="submit">إرسال الطلب</button>
-        </div>
-      </form>
-      <p id="orderMsg" class="hidden"></p>
-    </section>
-
-    <!-- الطلبات -->
-    <section id="tab-orders" class="card hidden">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h2>الطلبات</h2>
-        <button class="btn btn-ghost" onclick="loadOrders()">تحديث</button>
-      </div>
-      <div id="ordersList"></div>
-    </section>
-
-    <!-- المحفظة -->
-    <section id="tab-wallet" class="card hidden">
-      <h2>المحفظة</h2>
-      <p>الرصيد: <strong id="balance">$0</strong></p>
-      <form id="topupForm" style="display:flex; gap:12px; flex-wrap:wrap; margin:16px 0;">
-        <input type="number" id="topupAmount" min="1" max="10000" value="25" step="1" style="max-width:160px;" />
-        <button class="btn btn-primary" type="submit">شحن تجريبي</button>
-      </form>
-      <p id="walletMsg" class="hidden"></p>
-      <h3>آخر المعاملات</h3>
-      <div id="txList"></div>
-    </section>
-
-    <!-- الإدارة -->
-    <section id="tab-admin" class="hidden">
-      <div class="grid grid-3" id="adminStats"></div>
-
-      <div class="card" style="margin-top:16px;">
-        <h2>إدارة الخدمات</h2>
-        <form id="serviceForm" class="grid grid-2">
-          <div><label>المنصة</label><input id="svcPlatform" required placeholder="instagram" /></div>
-          <div><label>الاسم</label><input id="svcName" required /></div>
-          <div><label>الحد الأدنى</label><input type="number" id="svcMin" value="100" /></div>
-          <div><label>الحد الأقصى</label><input type="number" id="svcMax" value="50000" /></div>
-          <div><label>السعر / 1000</label><input type="number" step="0.01" id="svcPrice" value="2.5" /></div>
-          <div style="display:flex; align-items:end;"><button class="btn btn-primary" type="submit">إضافة خدمة</button></div>
-        </form>
-        <div id="servicesAdmin" style="margin-top:20px;"></div>
       </div>
 
-      <div class="card" style="margin-top:16px;">
-        <h2>المستخدمون</h2>
-        <div id="usersAdmin"></div>
-      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="order" onclick="showTab('order')">
+          <span class="nav-icon">➕</span> طلب جديد
+        </button>
+        <button class="nav-item" data-tab="orders" onclick="showTab('orders')">
+          <span class="nav-icon">📋</span> طلباتي
+        </button>
+        <button class="nav-item" data-tab="wallet" onclick="showTab('wallet')">
+          <span class="nav-icon">💰</span> المحفظة
+        </button>
+        <button class="nav-item hidden" id="adminTab" data-tab="admin" onclick="showTab('admin')">
+          <span class="nav-icon">⚙️</span> الإدارة
+        </button>
+      </nav>
 
-      <div class="card" style="margin-top:16px;">
-        <h2>كل الطلبات</h2>
-        <div id="allOrdersAdmin"></div>
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="user-avatar" id="userAvatar">N</div>
+          <div class="user-info">
+            <div class="user-name" id="userName">—</div>
+            <div class="user-balance" id="userBalance">$0.00</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="width:100%; margin-top:10px;" onclick="logout()">خروج</button>
       </div>
-    </section>
+    </aside>
+
+    <!-- Main -->
+    <main class="panel-main">
+      <header class="panel-topbar">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+          <h1 id="pageTitle">طلب جديد</h1>
+        </div>
+        <div id="topBalance" style="font-weight:700; color:var(--success);"></div>
+      </header>
+
+      <div class="panel-content">
+        <div class="alert alert-info" style="margin-bottom:24px;">
+          <span>ℹ️</span>
+          <div>التسليم <strong>محاكى</strong> — Worker يحدّث العداد داخلياً. لا اتصال خارجي بأي منصة.</div>
+        </div>
+
+        <!-- Quick stats -->
+        <div class="grid grid-4" id="quickStats" style="margin-bottom:28px;"></div>
+
+        <!-- طلب جديد -->
+        <section id="tab-order">
+          <div class="section-header">
+            <h2>طلب خدمة جديد</h2>
+          </div>
+
+          <div class="grid grid-2">
+            <div class="card card-glass">
+              <h3 style="margin-top:0; font-size:1rem;">اختر الخدمة</h3>
+              <div id="serviceCards" class="grid" style="gap:12px; margin-bottom:20px;"></div>
+
+              <form id="orderForm">
+                <div class="form-group">
+                  <label for="serviceId">الخدمة</label>
+                  <select id="serviceId" required></select>
+                </div>
+                <div class="form-group">
+                  <label for="quantity">الكمية</label>
+                  <input type="number" id="quantity" min="100" value="1000" required />
+                </div>
+                <div class="form-group">
+                  <label for="targetUrl">رابط الحساب / المنشور</label>
+                  <input type="url" id="targetUrl" required placeholder="https://instagram.com/username" />
+                </div>
+                <button class="btn btn-primary btn-lg" style="width:100%;" type="submit">
+                  🚀 إرسال الطلب
+                </button>
+              </form>
+              <p id="orderMsg" class="hidden"></p>
+            </div>
+
+            <div>
+              <div class="price-box card" style="margin-bottom:20px;">
+                <p class="stat-label">السعر التقديري</p>
+                <p class="price-value" id="pricePreview">$0.00</p>
+                <p style="color:var(--text-muted); font-size:0.82rem; margin:8px 0 0;">يُخصم من المحفظة عند الإرسال</p>
+              </div>
+
+              <div class="card">
+                <h3 style="margin-top:0; font-size:1rem;">💡 نصائح</h3>
+                <ul style="color:var(--text-secondary); font-size:0.88rem; padding-right:20px; margin:0;">
+                  <li>تأكد من صحة الرابط قبل الإرسال</li>
+                  <li>الحد الأدنى والأقصى يتغيران حسب الخدمة</li>
+                  <li>التقدم يُحدَّث تلقائياً كل ثوانٍ</li>
+                  <li>هذا مشروع تعليمي — لا تأثير حقيقي</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- الطلبات -->
+        <section id="tab-orders" class="hidden">
+          <div class="section-header">
+            <h2>طلباتي</h2>
+            <button class="btn btn-ghost btn-sm" onclick="loadOrders()">🔄 تحديث</button>
+          </div>
+          <div id="ordersList"></div>
+        </section>
+
+        <!-- المحفظة -->
+        <section id="tab-wallet" class="hidden">
+          <div class="section-header">
+            <h2>المحفظة</h2>
+          </div>
+
+          <div class="wallet-balance-card">
+            <p class="stat-label">الرصيد الحالي</p>
+            <p class="amount" id="balance">$0.00</p>
+          </div>
+
+          <div class="card card-glass">
+            <h3 style="margin-top:0;">شحن تجريبي</h3>
+            <div class="quick-amounts">
+              <button type="button" class="quick-amount" data-amt="10">$10</button>
+              <button type="button" class="quick-amount active" data-amt="25">$25</button>
+              <button type="button" class="quick-amount" data-amt="50">$50</button>
+              <button type="button" class="quick-amount" data-amt="100">$100</button>
+            </div>
+            <form id="topupForm" class="topup-form">
+              <input type="number" id="topupAmount" min="1" max="10000" value="25" step="1" />
+              <button class="btn btn-primary" type="submit">💳 شحن الآن</button>
+            </form>
+            <p id="walletMsg" class="hidden"></p>
+          </div>
+
+          <div class="card" style="margin-top:20px;">
+            <h3 style="margin-top:0;">آخر المعاملات</h3>
+            <div id="txList"></div>
+          </div>
+        </section>
+
+        <!-- الإدارة -->
+        <section id="tab-admin" class="hidden">
+          <div class="section-header">
+            <h2>لوحة الإدارة</h2>
+          </div>
+
+          <div class="grid grid-4" id="adminStats" style="margin-bottom:24px;"></div>
+
+          <div class="card card-glass" style="margin-bottom:20px;">
+            <h3 style="margin-top:0;">إضافة خدمة جديدة</h3>
+            <form id="serviceForm" class="grid grid-2">
+              <div class="form-group"><label>المنصة</label><input id="svcPlatform" required placeholder="instagram" /></div>
+              <div class="form-group"><label>الاسم</label><input id="svcName" required placeholder="متابعين..." /></div>
+              <div class="form-group"><label>الحد الأدنى</label><input type="number" id="svcMin" value="100" /></div>
+              <div class="form-group"><label>الحد الأقصى</label><input type="number" id="svcMax" value="50000" /></div>
+              <div class="form-group"><label>السعر / 1000</label><input type="number" step="0.01" id="svcPrice" value="2.5" /></div>
+              <div style="display:flex; align-items:end;"><button class="btn btn-primary" type="submit">➕ إضافة</button></div>
+            </form>
+          </div>
+
+          <div class="card" style="margin-bottom:20px;">
+            <h3 style="margin-top:0;">الخدمات</h3>
+            <div id="servicesAdmin"></div>
+          </div>
+
+          <div class="card" style="margin-bottom:20px;">
+            <h3 style="margin-top:0;">المستخدمون</h3>
+            <div id="usersAdmin"></div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-top:0;">كل الطلبات</h3>
+            <div id="allOrdersAdmin"></div>
+          </div>
+        </section>
+      </div>
+    </main>
   </div>
+
+  <div class="toast-container" id="toasts"></div>
 
   <script src="/assets/app.js"></script>
   <script>
@@ -111,16 +204,14 @@
 
     let services = [];
     let refreshTimer = null;
-
-    document.querySelectorAll(".tab").forEach((btn) => {
-      btn.addEventListener("click", () => showTab(btn.dataset.tab));
-    });
+    let selectedServiceId = null;
 
     function showTab(name) {
-      document.querySelectorAll(".tab").forEach((t) => t.classList.toggle("active", t.dataset.tab === name));
+      setActiveNav(name);
       ["order", "orders", "wallet", "admin"].forEach((id) => {
         document.getElementById(`tab-${id}`)?.classList.toggle("hidden", id !== name);
       });
+      toggleSidebar(false);
       if (name === "orders") loadOrders();
       if (name === "wallet") loadWallet();
       if (name === "admin") loadAdmin();
@@ -129,9 +220,60 @@
     async function refreshUser() {
       const user = await api("/me");
       setUser(user);
-      document.getElementById("userInfo").textContent = `${user.name} — ${formatMoney(user.balance)}`;
+      document.getElementById("userName").textContent = user.name;
+      document.getElementById("userBalance").textContent = formatMoney(user.balance);
+      document.getElementById("userAvatar").textContent = userInitials(user.name);
       document.getElementById("balance").textContent = formatMoney(user.balance);
+      document.getElementById("topBalance").textContent = formatMoney(user.balance);
       if (user.role === "admin") document.getElementById("adminTab").classList.remove("hidden");
+      updateQuickStats(user);
+    }
+
+    function updateQuickStats(user) {
+      document.getElementById("quickStats").innerHTML = `
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-value">${formatMoney(user.balance)}</div>
+          <div class="stat-label">رصيد المحفظة</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👤</div>
+          <div class="stat-value">${user.role === "admin" ? "مدير" : "مستخدم"}</div>
+          <div class="stat-label">نوع الحساب</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📦</div>
+          <div class="stat-value">${services.length}</div>
+          <div class="stat-label">خدمات متاحة</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-value">محاكى</div>
+          <div class="stat-label">وضع التسليم</div>
+        </div>`;
+    }
+
+    function renderServiceCards() {
+      const container = document.getElementById("serviceCards");
+      container.innerHTML = services.map((s) => `
+        <div class="card service-card ${selectedServiceId === s.id ? "selected" : ""}"
+             data-id="${s.id}" onclick="selectService(${s.id})">
+          <div class="service-card-header">
+            ${platformBadge(s.platform)}
+            <span>${platformIcon(s.platform)}</span>
+          </div>
+          <h4>${s.name}</h4>
+          <p class="desc">${s.description || ""}</p>
+          <p class="price">${formatMoney(s.price_per_1000)} / 1000</p>
+        </div>
+      `).join("");
+    }
+
+    function selectService(id) {
+      selectedServiceId = id;
+      document.getElementById("serviceId").value = id;
+      renderServiceCards();
+      updatePricePreview();
     }
 
     async function loadServices() {
@@ -142,7 +284,7 @@
           [${s.platform}] ${s.name} — ${formatMoney(s.price_per_1000)}/1000
         </option>`
       ).join("");
-      updatePricePreview();
+      if (services.length) selectService(services[0].id);
     }
 
     function updatePricePreview() {
@@ -156,7 +298,11 @@
       document.getElementById("quantity").max = opt.dataset.max;
     }
 
-    document.getElementById("serviceId").addEventListener("change", updatePricePreview);
+    document.getElementById("serviceId").addEventListener("change", () => {
+      selectedServiceId = parseInt(document.getElementById("serviceId").value, 10);
+      renderServiceCards();
+      updatePricePreview();
+    });
     document.getElementById("quantity").addEventListener("input", updatePricePreview);
 
     document.getElementById("orderForm").addEventListener("submit", async (e) => {
@@ -172,49 +318,17 @@
             quantity: parseInt(document.getElementById("quantity").value, 10),
           }),
         });
-        msg.textContent = `تم إنشاء الطلب #${order.id} — التسليم محاكى`;
+        showToast(`تم إنشاء الطلب #${order.id}`);
+        msg.textContent = `✅ تم إنشاء الطلب #${order.id} — التسليم محاكى`;
         msg.className = "success";
         await refreshUser();
         showTab("orders");
       } catch (err) {
         msg.textContent = err.message;
         msg.className = "error";
+        showToast(err.message, "error");
       }
     });
-
-    function renderOrders(rows, containerId, admin = false) {
-      if (!rows.length) {
-        document.getElementById(containerId).innerHTML = "<p style='color:var(--muted)'>لا توجد طلبات</p>";
-        return;
-      }
-      document.getElementById(containerId).innerHTML = `
-        <table>
-          <tr>
-            <th>#</th>
-            ${admin ? "<th>المستخدم</th>" : ""}
-            <th>الخدمة</th>
-            <th>الرابط</th>
-            <th>التقدم</th>
-            <th>الحالة</th>
-            <th>المبلغ</th>
-          </tr>
-          ${rows.map((o) => {
-            const pct = formatProgress(o.delivered, o.quantity);
-            return `<tr>
-              <td>${o.id}</td>
-              ${admin ? `<td>${o.user_email || ""}</td>` : ""}
-              <td>${o.service_name}</td>
-              <td style="max-width:140px; overflow:hidden; text-overflow:ellipsis;">${o.target_url}</td>
-              <td>
-                <div>${o.delivered}/${o.quantity} (${pct}%)</div>
-                <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
-              </td>
-              <td>${statusBadge(o.status)}</td>
-              <td>${formatMoney(o.amount)}</td>
-            </tr>`;
-          }).join("")}
-        </table>`;
-    }
 
     async function loadOrders() {
       const rows = await api("/orders");
@@ -225,16 +339,24 @@
       await refreshUser();
       const txs = await api("/wallet/transactions");
       document.getElementById("txList").innerHTML = txs.length ? `
-        <table>
+        <div class="table-wrap"><table>
           <tr><th>النوع</th><th>المبلغ</th><th>ملاحظة</th><th>التاريخ</th></tr>
           ${txs.map((t) => `<tr>
             <td>${t.kind}</td>
-            <td>${formatMoney(t.amount)}</td>
-            <td>${t.note || ""}</td>
-            <td>${t.created_at}</td>
+            <td><strong style="color:${t.amount >= 0 ? "var(--success)" : "var(--danger)"}">${formatMoney(t.amount)}</strong></td>
+            <td>${t.note || "—"}</td>
+            <td style="font-size:0.82rem; color:var(--text-muted);">${t.created_at}</td>
           </tr>`).join("")}
-        </table>` : "<p style='color:var(--muted)'>لا معاملات</p>";
+        </table></div>` : renderEmptyState("💳", "لا توجد معاملات بعد");
     }
+
+    document.querySelectorAll(".quick-amount").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".quick-amount").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("topupAmount").value = btn.dataset.amt;
+      });
+    });
 
     document.getElementById("topupForm").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -242,42 +364,50 @@
       try {
         const amount = parseFloat(document.getElementById("topupAmount").value);
         await api("/wallet/topup", { method: "POST", body: JSON.stringify({ amount }) });
-        msg.textContent = "تم الشحن التجريبي";
+        msg.textContent = `✅ تم شحن ${formatMoney(amount)} بنجاح`;
         msg.className = "success";
+        showToast(`تم شحن ${formatMoney(amount)}`);
         await loadWallet();
       } catch (err) {
         msg.textContent = err.message;
         msg.className = "error";
+        showToast(err.message, "error");
       }
     });
 
     async function loadAdmin() {
       const stats = await api("/admin/stats");
       document.getElementById("adminStats").innerHTML = `
-        <div class="card"><div class="stat-value">${stats.users}</div><div class="stat-label">مستخدمون</div></div>
-        <div class="card"><div class="stat-value">${stats.orders}</div><div class="stat-label">طلبات</div></div>
-        <div class="card"><div class="stat-value">${formatMoney(stats.revenue)}</div><div class="stat-label">إجمالي الطلبات</div></div>
-        <div class="card"><div class="stat-value">${stats.processing_orders}</div><div class="stat-label">قيد التسليم</div></div>`;
+        <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-value">${stats.users}</div><div class="stat-label">مستخدمون</div></div>
+        <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-value">${stats.orders}</div><div class="stat-label">طلبات</div></div>
+        <div class="stat-card"><div class="stat-icon">💵</div><div class="stat-value">${formatMoney(stats.revenue)}</div><div class="stat-label">إجمالي الطلبات</div></div>
+        <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-value">${stats.processing_orders}</div><div class="stat-label">قيد التسليم</div></div>`;
 
       const allSvc = await api("/services?active_only=false");
-      document.getElementById("servicesAdmin").innerHTML = `
-        <table>
-          <tr><th>ID</th><th>المنصة</th><th>الاسم</th><th>السعر/1000</th><th>نشط</th></tr>
+      document.getElementById("servicesAdmin").innerHTML = allSvc.length ? `
+        <div class="table-wrap"><table>
+          <tr><th>ID</th><th>المنصة</th><th>الاسم</th><th>السعر/1000</th><th>الحالة</th></tr>
           ${allSvc.map((s) => `<tr>
-            <td>${s.id}</td><td>${s.platform}</td><td>${s.name}</td>
-            <td>${formatMoney(s.price_per_1000)}</td><td>${s.active ? "✓" : "✗"}</td>
+            <td>#${s.id}</td>
+            <td>${platformBadge(s.platform)}</td>
+            <td>${s.name}</td>
+            <td><strong>${formatMoney(s.price_per_1000)}</strong></td>
+            <td>${s.active ? '<span class="badge badge-completed">نشط</span>' : '<span class="badge badge-pending">معطل</span>'}</td>
           </tr>`).join("")}
-        </table>`;
+        </table></div>` : renderEmptyState("📦", "لا خدمات");
 
       const users = await api("/admin/users");
-      document.getElementById("usersAdmin").innerHTML = `
-        <table>
-          <tr><th>ID</th><th>البريد</th><th>الدور</th><th>الرصيد</th><th>تعديل</th></tr>
+      document.getElementById("usersAdmin").innerHTML = users.length ? `
+        <div class="table-wrap"><table>
+          <tr><th>ID</th><th>البريد</th><th>الدور</th><th>الرصيد</th><th>إجراء</th></tr>
           ${users.map((u) => `<tr>
-            <td>${u.id}</td><td>${u.email}</td><td>${u.role}</td><td>${formatMoney(u.balance)}</td>
-            <td><button class="btn btn-ghost" onclick="adjustBalance(${u.id})">+10$</button></td>
+            <td>#${u.id}</td>
+            <td>${u.email}</td>
+            <td>${u.role === "admin" ? '<span class="badge badge-processing">مدير</span>' : '<span class="badge badge-pending">مستخدم</span>'}</td>
+            <td><strong style="color:var(--success)">${formatMoney(u.balance)}</strong></td>
+            <td><button class="btn btn-ghost btn-sm" onclick="adjustBalance(${u.id})">+$10</button></td>
           </tr>`).join("")}
-        </table>`;
+        </table></div>` : renderEmptyState("👥", "لا مستخدمين");
 
       const orders = await api("/orders");
       renderOrders(orders, "allOrdersAdmin", true);
@@ -288,6 +418,7 @@
         method: "POST",
         body: JSON.stringify({ amount: 10, note: "هدية مدير" }),
       });
+      showToast("تم إضافة $10 للرصيد");
       loadAdmin();
     }
 
@@ -303,16 +434,17 @@
           price_per_1000: parseFloat(document.getElementById("svcPrice").value),
         }),
       });
+      showToast("تمت إضافة الخدمة");
       e.target.reset();
       loadAdmin();
       loadServices();
     });
 
     async function init() {
-      await refreshUser();
       await loadServices();
+      await refreshUser();
       refreshTimer = setInterval(() => {
-        const active = document.querySelector(".tab.active")?.dataset.tab;
+        const active = document.querySelector(".nav-item.active")?.dataset.tab;
         if (active === "orders") loadOrders();
       }, 3000);
     }

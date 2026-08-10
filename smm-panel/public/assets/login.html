@@ -3,30 +3,90 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>تسجيل الدخول</title>
+  <title>تسجيل الدخول — S.W</title>
   <link rel="stylesheet" href="/assets/styles.css" />
 </head>
 <body>
-  <div class="container" style="max-width: 420px; padding-top: 48px;">
-    <div class="card">
-      <h2 style="margin-top:0;">تسجيل الدخول</h2>
-      <form id="loginForm">
-        <label>البريد</label>
-        <input type="email" id="email" required placeholder="walednajjar2@gmail.com" />
-        <label style="margin-top:12px;">كلمة المرور</label>
-        <input type="password" id="password" required placeholder="najjar" />
-        <button class="btn btn-primary" style="width:100%; margin-top:16px;" type="submit">دخول</button>
-      </form>
-      <p id="msg" class="error hidden"></p>
-      <p><a href="/">← الرئيسية</a></p>
+  <div class="auth-page">
+    <div class="auth-form-side">
+      <div class="auth-card card card-glass">
+        <div class="brand" style="margin-bottom: 24px;">
+          <div class="brand-logo">SW</div>
+          <div>S.<span>W</span></div>
+        </div>
+        <h2>مرحباً بعودتك</h2>
+        <p class="subtitle">سجّل دخولك للوصول إلى لوحة التحكم</p>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="email">البريد الإلكتروني</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="email" required placeholder="walednajjar2@gmail.com" autocomplete="email" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">كلمة المرور</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="password" required placeholder="••••••" autocomplete="current-password" />
+            </div>
+          </div>
+          <button class="btn btn-primary btn-lg" style="width:100%; margin-top:8px;" type="submit">
+            دخول إلى اللوحة
+          </button>
+        </form>
+
+        <p id="msg" class="error hidden"></p>
+
+        <div class="auth-footer">
+          <a href="/">← العودة للرئيسية</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-brand">
+      <div class="brand">
+        <div class="brand-logo">SW</div>
+        <div>S.<span>W</span></div>
+      </div>
+      <h1>لوحة خدمات<br />تعليمية متكاملة</h1>
+      <p>
+        تعلّم كيف تعمل لوحات SMM Panel من الداخل —
+        محفظة، طلبات، تسليم محاكى، وإدارة كاملة.
+      </p>
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="auth-feature-icon">📊</div>
+          <span>لوحة تحكم عربية RTL احترافية</span>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🔐</div>
+          <span>مصادقة JWT آمنة</span>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">⚡</div>
+          <span>Worker تسليم محاكى في الوقت الفعلي</span>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🎓</div>
+          <span>بدون بوتات — تعليمي 100%</span>
+        </div>
+      </div>
     </div>
   </div>
+
+  <div class="toast-container" id="toasts"></div>
+
   <script src="/assets/app.js"></script>
   <script>
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const msg = document.getElementById("msg");
+      const btn = e.target.querySelector("button[type=submit]");
       msg.classList.add("hidden");
+      btn.disabled = true;
+      btn.textContent = "جاري الدخول...";
       try {
         const data = await api("/auth/login", {
           method: "POST",
@@ -37,10 +97,15 @@
         });
         setToken(data.access_token);
         setUser(data.user);
-        window.location.href = "/panel";
+        showToast("تم تسجيل الدخول بنجاح", "success");
+        setTimeout(() => { window.location.href = "/panel"; }, 400);
       } catch (err) {
         msg.textContent = err.message;
         msg.classList.remove("hidden");
+        showToast(err.message, "error");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "دخول إلى اللوحة";
       }
     });
   </script>

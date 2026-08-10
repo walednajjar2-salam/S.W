@@ -43,8 +43,7 @@ function formatMoney(n) {
 }
 
 function formatProgress(delivered, quantity) {
-  const pct = quantity ? Math.min(100, Math.round((delivered / quantity) * 100)) : 0;
-  return pct;
+  return quantity ? Math.min(100, Math.round((delivered / quantity) * 100)) : 0;
 }
 
 function statusBadge(status) {
@@ -53,8 +52,18 @@ function statusBadge(status) {
     completed: "مكتمل",
     pending: "انتظار",
   };
-  const cls = `badge badge-${status}`;
-  return `<span class="${cls}">${map[status] || status}</span>`;
+  return `<span class="badge badge-${status}">${map[status] || status}</span>`;
+}
+
+function platformBadge(platform) {
+  const p = (platform || "").toLowerCase();
+  const labels = { instagram: "Instagram", tiktok: "TikTok", youtube: "YouTube" };
+  return `<span class="badge badge-platform badge-${p}">${labels[p] || platform}</span>`;
+}
+
+function platformIcon(platform) {
+  const icons = { instagram: "📸", tiktok: "🎵", youtube: "▶️" };
+  return icons[(platform || "").toLowerCase()] || "📦";
 }
 
 function requireAuth() {
@@ -69,4 +78,112 @@ function logout() {
   setToken(null);
   setUser(null);
   window.location.href = "/login";
+}
+
+function showToast(message, type = "success") {
+  const container = document.getElementById("toasts");
+  if (!container) return;
+  const el = document.createElement("div");
+  el.className = `toast toast-${type}`;
+  el.textContent = message;
+  container.appendChild(el);
+  setTimeout(() => {
+    el.style.opacity = "0";
+    el.style.transition = "opacity 0.3s";
+    setTimeout(() => el.remove(), 300);
+  }, 3500);
+}
+
+function toggleSidebar(open) {
+  const sidebar = document.getElementById("sidebar");
+  const overlay = document.getElementById("sidebarOverlay");
+  if (!sidebar) return;
+  const isOpen = open ?? !sidebar.classList.contains("open");
+  sidebar.classList.toggle("open", isOpen);
+  overlay?.classList.toggle("open", isOpen);
+}
+
+function setActiveNav(tab) {
+  document.querySelectorAll(".nav-item").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.tab === tab);
+  });
+  const titles = {
+    order: "طلب جديد",
+    orders: "طلباتي",
+    wallet: "المحفظة",
+    admin: "لوحة الإدارة",
+  };
+  const titleEl = document.getElementById("pageTitle");
+  if (titleEl) titleEl.textContent = titles[tab] || "لوحة التحكم";
+}
+
+function renderEmptyState(icon, text) {
+  return `<div class="empty-state"><div class="empty-state-icon">${icon}</div><p>${text}</p></div>`;
+}
+
+function renderOrderCards(rows, admin = false) {
+  if (!rows.length) return renderEmptyState("📭", "لا توجد طلبات بعد");
+  return rows.map((o) => {
+    const pct = formatProgress(o.delivered, o.quantity);
+    return `<div class="order-card">
+      <div class="order-card-header">
+        <span class="order-card-id">#${o.id}</span>
+        ${statusBadge(o.status)}
+      </div>
+      <div class="order-card-meta">
+        ${admin ? `<div><strong>المستخدم:</strong> ${o.user_email || "—"}</div>` : ""}
+        <div><strong>الخدمة:</strong> ${o.service_name}</div>
+        <div><strong>المبلغ:</strong> ${formatMoney(o.amount)}</div>
+        <div style="grid-column:1/-1;"><strong>الرابط:</strong> ${o.target_url}</div>
+      </div>
+      <div>${o.delivered.toLocaleString()} / ${o.quantity.toLocaleString()} (${pct}%)</div>
+      <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
+    </div>`;
+  }).join("");
+}
+
+function renderOrdersTable(rows, admin = false) {
+  if (!rows.length) return renderEmptyState("📭", "لا توجد طلبات بعد");
+  return `<div class="table-wrap"><table>
+    <tr>
+      <th>#</th>
+      ${admin ? "<th>المستخدم</th>" : ""}
+      <th>الخدمة</th>
+      <th>الرابط</th>
+      <th>التقدم</th>
+      <th>الحالة</th>
+      <th>المبلغ</th>
+    </tr>
+    ${rows.map((o) => {
+      const pct = formatProgress(o.delivered, o.quantity);
+      return `<tr>
+        <td><strong style="color:var(--primary-light)">#${o.id}</strong></td>
+        ${admin ? `<td>${o.user_email || ""}</td>` : ""}
+        <td>${o.service_name}</td>
+        <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${o.target_url}</td>
+        <td style="min-width:140px;">
+          <div style="font-size:0.82rem; color:var(--text-secondary);">${o.delivered}/${o.quantity} (${pct}%)</div>
+          <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
+        </td>
+        <td>${statusBadge(o.status)}</td>
+        <td><strong>${formatMoney(o.amount)}</strong></td>
+      </tr>`;
+    }).join("")}
+  </table></div>`;
+}
+
+function renderOrders(rows, containerId, admin = false) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = `
+    <div class="desktop-table">${renderOrdersTable(rows, admin)}</div>
+    <div class="mobile-cards">${renderOrderCards(rows, admin)}</div>`;
+}
+
+function userInitials(name) {
+  if (!name) return "?";
+  const parts = name.trim().split(/\s+/);
+  return parts.length >= 2
+    ? (parts[0][0] + parts[1][0]).toUpperCase()
+    : name.slice(0, 2).toUpperCase();
 }
