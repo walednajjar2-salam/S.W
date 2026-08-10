@@ -22,6 +22,10 @@ python run.py
 
 راجع [smm-panel/README.md](smm-panel/README.md) للتفاصيل.
 
-## حذف Railway والمستودعات القديمة
+## النشر على Railway
 
-راجع [docs/CLEANUP_MANUAL_AR.md](docs/CLEANUP_MANUAL_AR.md) — خطوات يدوية (الـ Agent لا يملك صلاحية حذف GitHub/Railway).
+راجع **[docs/DEPLOY_SW_AR.md](docs/DEPLOY_SW_AR.md)** — بناء Docker جاهز + Volume + Variables.
+
+```bash
+python3 scripts/verify_production.py   # اختبار قبل النشر
+```
