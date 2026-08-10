@@ -1123,3 +1123,33 @@ code {
   padding: 2px 6px;
   border-radius: 4px;
 }
+
+.payment-info-box { margin-top: 8px; }
+
+.payment-info-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.payment-info-item {
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border);
+}
+
+.payment-info-label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.payment-copy {
+  cursor: pointer;
+  color: var(--primary-light);
+  transition: color var(--transition);
+}
+
+.payment-copy:hover { color: #c4b5fd; }

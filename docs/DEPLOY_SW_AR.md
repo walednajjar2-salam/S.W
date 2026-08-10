@@ -31,6 +31,10 @@
 | `SMM_INSTAGRAM_CLIENT_SECRET` | (اختياري) OAuth إنستجرام |
 | `SMM_TIKTOK_CLIENT_KEY` | (اختياري) OAuth تيك توك |
 | `SMM_TIKTOK_CLIENT_SECRET` | (اختياري) OAuth تيك توك |
+| `SMM_PAYMENT_PHONE` | رقم الهاتف للتواصل/التحويل |
+| `SMM_PAYMENT_ACCOUNT` | رقم الحساب أو IBAN |
+| `SMM_PAYMENT_BANK` | اسم البنك أو المحفظة (زين كاش، إلخ) |
+| `SMM_PAYMENT_HOLDER` | اسم صاحب الحساب (افتراضي: Najjar) |
 
 > `PORT` يُحقن تلقائياً من Railway — **لا تضعه يدوياً**
 

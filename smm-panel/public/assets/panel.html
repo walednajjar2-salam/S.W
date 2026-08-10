@@ -589,6 +589,30 @@
       renderOrders(rows, "ordersList");
     }
 
+    async function loadPaymentInfo() {
+      const info = await api("/payment/info");
+      const box = document.getElementById("paymentInfoBox");
+      if (!info.configured) {
+        box.innerHTML = `
+          <div class="alert alert-warning">
+            <span>⏳</span>
+            <div>بيانات الحساب والهاتف <strong>لم تُضبط بعد</strong> — سيتم إضافتها قريباً.</div>
+          </div>`;
+        return;
+      }
+      box.innerHTML = `
+        <div class="payment-info-grid">
+          ${info.holder ? `<div class="payment-info-item"><span class="payment-info-label">اسم صاحب الحساب</span><strong>${info.holder}</strong></div>` : ""}
+          ${info.bank ? `<div class="payment-info-item"><span class="payment-info-label">البنك / المحفظة</span><strong>${info.bank}</strong></div>` : ""}
+          ${info.account ? `<div class="payment-info-item"><span class="payment-info-label">رقم الحساب</span><strong class="payment-copy" onclick="copyText('${info.account.replace(/'/g, "\\'")}')">${info.account} 📋</strong></div>` : ""}
+          ${info.phone ? `<div class="payment-info-item"><span class="payment-info-label">رقم الهاتف</span><strong class="payment-copy" onclick="copyText('${info.phone.replace(/'/g, "\\'")}')">${info.phone} 📋</strong></div>` : ""}
+        </div>`;
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => showToast("تم النسخ ✓"));
+    }
+
     async function loadWallet() {
       await refreshUser();
       await loadPaymentInfo();
