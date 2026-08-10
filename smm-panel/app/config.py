@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     instagram_client_secret: str = ""
     tiktok_client_key: str = ""
     tiktok_client_secret: str = ""
+    payment_phone: str = ""
+    payment_account: str = ""
+    payment_bank: str = ""
+    payment_holder: str = "Najjar"
 
     class Config:
         env_prefix = "SMM_"

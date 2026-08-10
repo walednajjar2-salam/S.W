@@ -580,6 +580,18 @@ async def platform_preview(
     return await preview_url(url, platform)
 
 
+@app.get("/api/payment/info")
+def payment_info(_: dict = Depends(get_current_user)):
+    """بيانات التحويل/الشحن — تُضبط من Railway Variables."""
+    return {
+        "phone": settings.payment_phone,
+        "account": settings.payment_account,
+        "bank": settings.payment_bank,
+        "holder": settings.payment_holder,
+        "configured": bool(settings.payment_phone or settings.payment_account),
+    }
+
+
 @app.get("/")
 def index():
     return FileResponse(STATIC_DIR / "index.html")

@@ -147,8 +147,18 @@
             <p class="amount" id="balance">$0.00</p>
           </div>
 
-          <div class="card card-glass">
-            <h3 style="margin-top:0;">شحن تجريبي</h3>
+          <div class="card card-glass" style="margin-top:20px;">
+            <h3 style="margin-top:0;">💳 شحن الرصيد — تحويل يدوي</h3>
+            <div id="paymentInfoBox" class="payment-info-box">
+              <p style="color:var(--text-muted);">جاري تحميل بيانات الدفع...</p>
+            </div>
+            <p style="color:var(--text-secondary); font-size:0.85rem; margin:12px 0 0;">
+              بعد التحويل، تواصل مع المدير أو استخدم الشحن التجريبي أدناه للاختبار.
+            </p>
+          </div>
+
+          <div class="card card-glass" style="margin-top:20px;">
+            <h3 style="margin-top:0;">شحن تجريبي (اختبار)</h3>
             <div class="quick-amounts">
               <button type="button" class="quick-amount" data-amt="10">$10</button>
               <button type="button" class="quick-amount active" data-amt="25">$25</button>
@@ -581,6 +591,7 @@
 
     async function loadWallet() {
       await refreshUser();
+      await loadPaymentInfo();
       const txs = await api("/wallet/transactions");
       document.getElementById("txList").innerHTML = txs.length ? `
         <div class="table-wrap"><table>
