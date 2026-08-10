@@ -1,37 +1,27 @@
-# NAJJAR & AL SAMOOM TRADING
+# لوحة خدمات — مشروع تعليمي
 
-منصة سيارات مستعملة ومستوردة — بداية جديدة نظيفة.
+تم إزالة منصة **السيارات والعقارات** القديمة بالكامل.  
+المشروع الحالي: **`smm-panel/`** فقط — نظام SMM تعليمي بدون بوتات.
 
-## الروابط (حدّث بعد Railway جديد)
-
-| | |
-|--|--|
-| **الإنتاج** | https://web-production-08d73.up.railway.app *(يُستبدل بعد إنشاء Railway جديد)* |
-| **الدخول** | `/najjar-al-samoom-used-imported-cars/login.html` |
-| **ويندوز** | `/get-windows` |
-| **أندرويد** | `/get-android` |
-
-## تشغيل محلي
+## التشغيل
 
 ```bash
-python3 server.py
+cd smm-panel
+pip install -r requirements.txt
+python run.py
 ```
 
-## بداية جديدة — Railway
+افتح: http://localhost:8090
 
-راجع **[docs/FRESH_START_AR.md](docs/FRESH_START_AR.md)** لمسح Railway القديم وإنشاء نشر جديد.
+## حسابات تجريبية
 
-## Git
+| الدور | البريد | كلمة المرور |
+|-------|--------|-------------|
+| مدير | admin@example.com | admin123 |
+| مستخدم | demo@example.com | demo123 |
 
-- فرع واحد: `main`
-- تاريخ نظيف — fresh start
+راجع [smm-panel/README.md](smm-panel/README.md) للتفاصيل.
 
-## الفريق
+## حذف Railway والمستودعات القديمة
 
-| User | Pass |
-|------|------|
-| waleed.najjar | 1 |
-| hamad.sumoom | 2 |
-| sara | 3 |
-| sales | 4 |
-| accounting | 5 |
+راجع [docs/CLEANUP_MANUAL_AR.md](docs/CLEANUP_MANUAL_AR.md) — خطوات يدوية (الـ Agent لا يملك صلاحية حذف GitHub/Railway).

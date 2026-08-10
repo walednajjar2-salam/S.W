@@ -1,16 +1,9 @@
-# Android build toolchain (large — regenerate via scripts/build_android_webview_apk.sh)
-tools/android/sdk/
-tools/android/*.zip
-tools/android/gradle-*/
-tools/android/.temp/
-
-# Android project build outputs
-mobile/android-webview/.gradle/
-mobile/android-webview/build/
-mobile/android-webview/app/build/
-mobile/android-webview/local.properties
-
-# Runtime state produced by the server (database, uploads, backups)
-data/
 __pycache__/
 *.pyc
+*.pyo
+.env
+.venv/
+smm-panel/data/
+smm-panel/.venv/
+*.db
+.DS_Store
