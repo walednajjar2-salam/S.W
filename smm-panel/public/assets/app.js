@@ -111,6 +111,7 @@ function setActiveNav(tab) {
     order: "طلب جديد",
     orders: "طلباتي",
     wallet: "المحفظة",
+    accounts: "ربط الحسابات",
     admin: "لوحة الإدارة",
   };
   const titleEl = document.getElementById("pageTitle");

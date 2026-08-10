@@ -1,10 +1,11 @@
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
+import json
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, Query, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.auth import (
@@ -23,11 +24,26 @@ from app.schemas import (
     RegisterRequest,
     ServiceCreate,
     ServiceUpdate,
+    SocialLinkRequest,
+    UrlValidateRequest,
     WalletTopUp,
 )
 from app.seed import seed_if_empty
 from app.worker import worker
 from app.config import settings
+from app.platforms import (
+    instagram_profile_url,
+    preview_url,
+    tiktok_profile_url,
+    validate_url_for_platform,
+)
+from app.social_oauth import (
+    exchange_instagram_code,
+    exchange_tiktok_code,
+    oauth_configured,
+    pop_oauth_state,
+    start_oauth,
+)
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "public"
 ASSETS_DIR = STATIC_DIR / "assets"
@@ -72,6 +88,66 @@ def _calc_amount(price_per_1000: float, quantity: int) -> float:
     return round((price_per_1000 / 1000) * quantity, 4)
 
 
+def _social_public(row: dict) -> dict:
+    meta = {}
+    if row.get("meta_json"):
+        try:
+            meta = json.loads(row["meta_json"])
+        except json.JSONDecodeError:
+            meta = {}
+    return {
+        "id": row["id"],
+        "platform": row["platform"],
+        "username": row["username"],
+        "profile_url": row["profile_url"],
+        "verified": bool(row["verified"]),
+        "connected_at": row["connected_at"],
+        "meta": meta,
+    }
+
+
+def _save_social_connection(user_id: int, data: dict) -> dict:
+    now = datetime.now(timezone.utc).isoformat()
+    meta_json = json.dumps(data.get("meta") or {}, ensure_ascii=False)
+    with get_conn() as conn:
+        conn.execute(
+            """
+            INSERT INTO social_connections
+            (user_id, platform, platform_user_id, username, profile_url,
+             access_token, verified, meta_json, connected_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(user_id, platform) DO UPDATE SET
+                platform_user_id = excluded.platform_user_id,
+                username = excluded.username,
+                profile_url = excluded.profile_url,
+                access_token = excluded.access_token,
+                verified = excluded.verified,
+                meta_json = excluded.meta_json,
+                updated_at = excluded.updated_at
+            """,
+            (
+                user_id,
+                data["platform"],
+                data.get("platform_user_id", ""),
+                data["username"],
+                data["profile_url"],
+                data.get("access_token", ""),
+                1 if data.get("verified") else 0,
+                meta_json,
+                now,
+                now,
+            ),
+        )
+        row = conn.execute(
+            """
+            SELECT * FROM social_connections
+            WHERE user_id = ? AND platform = ?
+            """,
+            (user_id, data["platform"]),
+        ).fetchone()
+    return _social_public(dict(row))
+
+
 @app.get("/api/health")
 def health():
     return {
@@ -80,6 +156,10 @@ def health():
         "mode": "simulation",
         "bots": False,
         "database": settings.db_path,
+        "integrations": {
+            "instagram_oauth": oauth_configured("instagram"),
+            "tiktok_oauth": oauth_configured("tiktok"),
+        },
     }
 
 
@@ -183,6 +263,10 @@ def create_order(body: OrderCreate, user: dict = Depends(get_current_user)):
         ).fetchone()
         if not svc:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "الخدمة غير متاحة")
+        ok, url_msg, parsed = validate_url_for_platform(body.target_url, svc["platform"])
+        if not ok:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, url_msg)
+        target_url = parsed["url"] if parsed else body.target_url
         if body.quantity < svc["min_qty"] or body.quantity > svc["max_qty"]:
             raise HTTPException(
                 status.HTTP_400_BAD_REQUEST,
@@ -218,7 +302,7 @@ def create_order(body: OrderCreate, user: dict = Depends(get_current_user)):
             (
                 user["id"],
                 body.service_id,
-                body.target_url,
+                target_url,
                 body.quantity,
                 amount,
                 now,
@@ -360,6 +444,140 @@ def admin_stats(_: dict = Depends(require_admin)):
         "revenue": round(revenue, 2),
         "processing_orders": processing,
     }
+
+
+@app.get("/api/social/connections")
+def list_social_connections(user: dict = Depends(get_current_user)):
+    with get_conn() as conn:
+        rows = conn.execute(
+            """
+            SELECT * FROM social_connections
+            WHERE user_id = ?
+            ORDER BY platform
+            """,
+            (user["id"],),
+        ).fetchall()
+    return [_social_public(dict(r)) for r in rows]
+
+
+@app.get("/api/social/oauth/status")
+def social_oauth_status(_: dict = Depends(get_current_user)):
+    return {
+        "instagram": oauth_configured("instagram"),
+        "tiktok": oauth_configured("tiktok"),
+        "public_base_url": settings.public_base_url,
+    }
+
+
+@app.post("/api/social/link")
+def link_social_manual(body: SocialLinkRequest, user: dict = Depends(get_current_user)):
+    if body.platform == "instagram":
+        profile_url = instagram_profile_url(body.username)
+    else:
+        profile_url = tiktok_profile_url(body.username)
+
+    return _save_social_connection(
+        user["id"],
+        {
+            "platform": body.platform,
+            "platform_user_id": "",
+            "username": body.username,
+            "profile_url": profile_url,
+            "access_token": "",
+            "verified": False,
+            "meta": {"verified_via": "manual"},
+        },
+    )
+
+
+@app.delete("/api/social/connections/{platform}")
+def unlink_social(platform: str, user: dict = Depends(get_current_user)):
+    platform = platform.strip().lower()
+    with get_conn() as conn:
+        cur = conn.execute(
+            "DELETE FROM social_connections WHERE user_id = ? AND platform = ?",
+            (user["id"], platform),
+        )
+    if cur.rowcount == 0:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "لا يوجد حساب مربوط")
+    return {"ok": True, "platform": platform}
+
+
+@app.get("/api/social/oauth/{platform}/start")
+def social_oauth_start(platform: str, user: dict = Depends(get_current_user)):
+    try:
+        url = start_oauth(platform, user["id"])
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, str(exc)) from exc
+    return {"url": url}
+
+
+@app.get("/api/social/oauth/instagram/callback")
+async def instagram_oauth_callback(
+    code: str = Query(default=""),
+    state: str = Query(default=""),
+    error: str = Query(default=""),
+):
+    if error:
+        return RedirectResponse(f"/panel?oauth=error&platform=instagram&msg={error}")
+    payload = pop_oauth_state(state)
+    if not payload or payload.get("platform") != "instagram":
+        return RedirectResponse("/panel?oauth=error&platform=instagram&msg=invalid_state")
+    try:
+        data = await exchange_instagram_code(code)
+        data["platform"] = "instagram"
+        data["verified"] = True
+        _save_social_connection(payload["user_id"], data)
+        return RedirectResponse("/panel?oauth=success&platform=instagram")
+    except Exception as exc:
+        return RedirectResponse(
+            f"/panel?oauth=error&platform=instagram&msg={str(exc)[:120]}"
+        )
+
+
+@app.get("/api/social/oauth/tiktok/callback")
+async def tiktok_oauth_callback(
+    code: str = Query(default=""),
+    state: str = Query(default=""),
+    error: str = Query(default=""),
+):
+    if error:
+        return RedirectResponse(f"/panel?oauth=error&platform=tiktok&msg={error}")
+    payload = pop_oauth_state(state)
+    if not payload or payload.get("platform") != "tiktok":
+        return RedirectResponse("/panel?oauth=error&platform=tiktok&msg=invalid_state")
+    try:
+        data = await exchange_tiktok_code(code)
+        data["platform"] = "tiktok"
+        data["verified"] = True
+        _save_social_connection(payload["user_id"], data)
+        return RedirectResponse("/panel?oauth=success&platform=tiktok")
+    except Exception as exc:
+        return RedirectResponse(
+            f"/panel?oauth=error&platform=tiktok&msg={str(exc)[:120]}"
+        )
+
+
+@app.post("/api/platforms/validate")
+async def validate_platform_url(body: UrlValidateRequest, _: dict = Depends(get_current_user)):
+    if body.platform:
+        ok, message, parsed = validate_url_for_platform(body.url, body.platform)
+        preview = None
+        if ok and parsed:
+            full = await preview_url(parsed["url"], body.platform)
+            preview = full.get("preview")
+        return {"ok": ok, "message": message, "parsed": parsed, "preview": preview}
+    result = await preview_url(body.url)
+    return result
+
+
+@app.get("/api/platforms/preview")
+async def platform_preview(
+    url: str = Query(..., min_length=5),
+    platform: str | None = Query(default=None),
+    _: dict = Depends(get_current_user),
+):
+    return await preview_url(url, platform)
 
 
 @app.get("/")

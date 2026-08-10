@@ -29,6 +29,9 @@
         <button class="nav-item" data-tab="wallet" onclick="showTab('wallet')">
           <span class="nav-icon">💰</span> المحفظة
         </button>
+        <button class="nav-item" data-tab="accounts" onclick="showTab('accounts')">
+          <span class="nav-icon">🔗</span> ربط الحسابات
+        </button>
         <button class="nav-item hidden" id="adminTab" data-tab="admin" onclick="showTab('admin')">
           <span class="nav-icon">⚙️</span> الإدارة
         </button>
@@ -59,7 +62,10 @@
       <div class="panel-content">
         <div class="alert alert-info" style="margin-bottom:24px;">
           <span>ℹ️</span>
-          <div>التسليم <strong>محاكى</strong> — Worker يحدّث العداد داخلياً. لا اتصال خارجي بأي منصة.</div>
+          <div>
+            مربوط بـ <strong>إنستجرام</strong> و<strong>تيك توك</strong> — تحقق من الروابط ومعاينة الحساب.
+            التسليم <strong>محاكى</strong> (بدون بوتات).
+          </div>
         </div>
 
         <!-- Quick stats -->
@@ -87,7 +93,12 @@
                 </div>
                 <div class="form-group">
                   <label for="targetUrl">رابط الحساب / المنشور</label>
+                  <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+                    <button type="button" class="btn btn-ghost btn-sm" id="useConnectedBtn" onclick="useConnectedUrl()">استخدم الحساب المربوط</button>
+                    <button type="button" class="btn btn-ghost btn-sm" onclick="validateTargetUrl()">✓ تحقق من الرابط</button>
+                  </div>
                   <input type="url" id="targetUrl" required placeholder="https://instagram.com/username" />
+                  <div id="urlPreview" class="url-preview hidden"></div>
                 </div>
                 <button class="btn btn-primary btn-lg" style="width:100%;" type="submit">
                   🚀 إرسال الطلب
@@ -157,6 +168,77 @@
           </div>
         </section>
 
+        <!-- ربط الحسابات -->
+        <section id="tab-accounts" class="hidden">
+          <div class="section-header">
+            <h2>ربط إنستجرام وتيك توك</h2>
+          </div>
+
+          <div class="grid grid-2">
+            <div class="card social-connect-card instagram">
+              <div class="social-connect-header">
+                <span class="social-platform-icon">📸</span>
+                <div>
+                  <h3 style="margin:0;">Instagram</h3>
+                  <p class="stat-label" style="margin:4px 0 0;">اربط حسابك أو أدخل اسم المستخدم</p>
+                </div>
+              </div>
+              <div id="instagramStatus" class="social-status">جاري التحميل...</div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; margin:16px 0;">
+                <button class="btn btn-primary btn-sm" onclick="startOAuth('instagram')">🔗 ربط عبر Instagram</button>
+                <button class="btn btn-ghost btn-sm" onclick="unlinkSocial('instagram')">إلغاء الربط</button>
+              </div>
+              <form id="instagramLinkForm" class="social-manual-form">
+                <label>أو اسم المستخدم يدوياً</label>
+                <div style="display:flex; gap:8px;">
+                  <input type="text" id="instagramUsername" placeholder="@username" />
+                  <button class="btn btn-ghost btn-sm" type="submit">حفظ</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="card social-connect-card tiktok">
+              <div class="social-connect-header">
+                <span class="social-platform-icon">🎵</span>
+                <div>
+                  <h3 style="margin:0;">TikTok</h3>
+                  <p class="stat-label" style="margin:4px 0 0;">اربط حسابك أو أدخل اسم المستخدم</p>
+                </div>
+              </div>
+              <div id="tiktokStatus" class="social-status">جاري التحميل...</div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap; margin:16px 0;">
+                <button class="btn btn-primary btn-sm" onclick="startOAuth('tiktok')">🔗 ربط عبر TikTok</button>
+                <button class="btn btn-ghost btn-sm" onclick="unlinkSocial('tiktok')">إلغاء الربط</button>
+              </div>
+              <form id="tiktokLinkForm" class="social-manual-form">
+                <label>أو اسم المستخدم يدوياً</label>
+                <div style="display:flex; gap:8px;">
+                  <input type="text" id="tiktokUsername" placeholder="@username" />
+                  <button class="btn btn-ghost btn-sm" type="submit">حفظ</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="card card-glass" style="margin-top:20px;">
+            <h3 style="margin-top:0;">OAuth — للربط الرسمي</h3>
+            <p style="color:var(--text-secondary); font-size:0.9rem;">
+              لربط OAuth الكامل، أضف في Railway Variables:
+            </p>
+            <div class="table-wrap">
+              <table>
+                <tr><th>Variable</th><th>الوصف</th></tr>
+                <tr><td><code>SMM_PUBLIC_BASE_URL</code></td><td>https://web-production-f3cc8.up.railway.app</td></tr>
+                <tr><td><code>SMM_INSTAGRAM_CLIENT_ID</code></td><td>من Meta Developers</td></tr>
+                <tr><td><code>SMM_INSTAGRAM_CLIENT_SECRET</code></td><td>من Meta Developers</td></tr>
+                <tr><td><code>SMM_TIKTOK_CLIENT_KEY</code></td><td>من TikTok Developers</td></tr>
+                <tr><td><code>SMM_TIKTOK_CLIENT_SECRET</code></td><td>من TikTok Developers</td></tr>
+              </table>
+            </div>
+            <p id="oauthConfigStatus" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0;"></p>
+          </div>
+        </section>
+
         <!-- الإدارة -->
         <section id="tab-admin" class="hidden">
           <div class="section-header">
@@ -205,15 +287,18 @@
     let services = [];
     let refreshTimer = null;
     let selectedServiceId = null;
+    let socialConnections = [];
+    let urlPreviewTimer = null;
 
     function showTab(name) {
       setActiveNav(name);
-      ["order", "orders", "wallet", "admin"].forEach((id) => {
+      ["order", "orders", "wallet", "accounts", "admin"].forEach((id) => {
         document.getElementById(`tab-${id}`)?.classList.toggle("hidden", id !== name);
       });
       toggleSidebar(false);
       if (name === "orders") loadOrders();
       if (name === "wallet") loadWallet();
+      if (name === "accounts") loadSocialAccounts();
       if (name === "admin") loadAdmin();
     }
 
@@ -274,6 +359,165 @@
       document.getElementById("serviceId").value = id;
       renderServiceCards();
       updatePricePreview();
+      updateUrlPlaceholder();
+    }
+
+    function currentServicePlatform() {
+      const svc = services.find((s) => s.id === selectedServiceId);
+      return svc?.platform || "";
+    }
+
+    function updateUrlPlaceholder() {
+      const platform = currentServicePlatform();
+      const hints = {
+        instagram: "https://instagram.com/username",
+        tiktok: "https://tiktok.com/@username",
+        youtube: "https://youtube.com/@channel",
+      };
+      document.getElementById("targetUrl").placeholder = hints[platform] || "https://...";
+    }
+
+    function getConnection(platform) {
+      return socialConnections.find((c) => c.platform === platform);
+    }
+
+    function useConnectedUrl() {
+      const platform = currentServicePlatform();
+      const conn = getConnection(platform);
+      if (!conn) {
+        showToast(`اربط حساب ${platform} أولاً`, "error");
+        showTab("accounts");
+        return;
+      }
+      document.getElementById("targetUrl").value = conn.profile_url;
+      validateTargetUrl();
+    }
+
+    async function loadSocialAccounts() {
+      socialConnections = await api("/social/connections");
+      renderSocialStatus("instagram");
+      renderSocialStatus("tiktok");
+
+      const oauth = await api("/social/oauth/status");
+      document.getElementById("oauthConfigStatus").innerHTML =
+        `Instagram OAuth: ${oauth.instagram ? "✅ مُفعّل" : "⚪ غير مُعد"} | TikTok OAuth: ${oauth.tiktok ? "✅ مُفعّل" : "⚪ غير مُعد"}`;
+    }
+
+    function renderSocialStatus(platform) {
+      const el = document.getElementById(`${platform}Status`);
+      const conn = getConnection(platform);
+      if (!conn) {
+        el.innerHTML = '<span class="badge badge-pending">غير مربوط</span>';
+        return;
+      }
+      el.innerHTML = `
+        <div class="social-linked">
+          ${conn.verified ? '<span class="badge badge-completed">✓ موثّق OAuth</span>' : '<span class="badge badge-processing">يدوي</span>'}
+          <strong>@${conn.username}</strong>
+          <a href="${conn.profile_url}" target="_blank" rel="noopener">فتح الحساب ↗</a>
+        </div>`;
+    }
+
+    async function startOAuth(platform) {
+      try {
+        const data = await api(`/social/oauth/${platform}/start`);
+        window.location.href = data.url;
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    }
+
+    async function unlinkSocial(platform) {
+      try {
+        await api(`/social/connections/${platform}`, { method: "DELETE" });
+        showToast(`تم إلغاء ربط ${platform}`);
+        await loadSocialAccounts();
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    }
+
+    async function linkManual(platform, username) {
+      await api("/social/link", {
+        method: "POST",
+        body: JSON.stringify({ platform, username }),
+      });
+      showToast(`تم ربط @${username.replace("@", "")}`);
+      await loadSocialAccounts();
+    }
+
+    async function validateTargetUrl() {
+      const url = document.getElementById("targetUrl").value.trim();
+      if (!url) return;
+      const platform = currentServicePlatform();
+      try {
+        const result = await api("/platforms/validate", {
+          method: "POST",
+          body: JSON.stringify({ url, platform }),
+        });
+        renderUrlPreview(result);
+        if (result.ok) showToast("الرابط صالح ✓");
+        else showToast(result.message, "error");
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    }
+
+    function renderUrlPreview(result) {
+      const box = document.getElementById("urlPreview");
+      if (!result?.ok) {
+        box.className = "url-preview url-preview-error";
+        box.innerHTML = `<span>❌ ${result?.message || "رابط غير صالح"}</span>`;
+        box.classList.remove("hidden");
+        return;
+      }
+      const p = result.preview || {};
+      box.className = "url-preview url-preview-ok";
+      box.innerHTML = `
+        <span>✅ ${result.message}</span>
+        ${p.author ? `<strong>@${p.author}</strong>` : ""}
+        ${p.title ? `<span style="color:var(--text-muted)">${p.title}</span>` : ""}
+      `;
+      box.classList.remove("hidden");
+    }
+
+    document.getElementById("targetUrl").addEventListener("input", () => {
+      clearTimeout(urlPreviewTimer);
+      urlPreviewTimer = setTimeout(() => {
+        const url = document.getElementById("targetUrl").value.trim();
+        if (url.length > 10) validateTargetUrl();
+        else document.getElementById("urlPreview").classList.add("hidden");
+      }, 600);
+    });
+
+    document.getElementById("instagramLinkForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const u = document.getElementById("instagramUsername").value;
+      if (!u) return;
+      await linkManual("instagram", u);
+      e.target.reset();
+    });
+
+    document.getElementById("tiktokLinkForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const u = document.getElementById("tiktokUsername").value;
+      if (!u) return;
+      await linkManual("tiktok", u);
+      e.target.reset();
+    });
+
+    function handleOAuthRedirect() {
+      const params = new URLSearchParams(window.location.search);
+      const oauth = params.get("oauth");
+      const platform = params.get("platform");
+      if (!oauth) return;
+      if (oauth === "success") {
+        showToast(`تم ربط ${platform} بنجاح ✓`);
+        showTab("accounts");
+      } else {
+        showToast(`فشل ربط ${platform}: ${params.get("msg") || ""}`, "error");
+      }
+      window.history.replaceState({}, "", "/panel");
     }
 
     async function loadServices() {
@@ -441,8 +685,10 @@
     });
 
     async function init() {
+      handleOAuthRedirect();
       await loadServices();
       await refreshUser();
+      socialConnections = await api("/social/connections");
       refreshTimer = setInterval(() => {
         const active = document.querySelector(".nav-item.active")?.dataset.tab;
         if (active === "orders") loadOrders();

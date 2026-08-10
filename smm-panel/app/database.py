@@ -76,5 +76,21 @@ def init_db() -> None:
                 created_at TEXT NOT NULL DEFAULT (datetime('now')),
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );
+
+            CREATE TABLE IF NOT EXISTS social_connections (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                platform TEXT NOT NULL,
+                platform_user_id TEXT NOT NULL DEFAULT '',
+                username TEXT NOT NULL,
+                profile_url TEXT NOT NULL,
+                access_token TEXT NOT NULL DEFAULT '',
+                verified INTEGER NOT NULL DEFAULT 0,
+                meta_json TEXT NOT NULL DEFAULT '{}',
+                connected_at TEXT NOT NULL DEFAULT (datetime('now')),
+                updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+                FOREIGN KEY (user_id) REFERENCES users(id),
+                UNIQUE(user_id, platform)
+            );
             """
         )

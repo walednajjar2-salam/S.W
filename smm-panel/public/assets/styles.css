@@ -1051,3 +1051,75 @@ tr:hover td { background: rgba(255, 255, 255, 0.02); }
     grid-template-columns: 1fr;
   }
 }
+
+/* ─── Social connect ─── */
+.social-connect-card {
+  border-top: 3px solid var(--border-strong);
+}
+
+.social-connect-card.instagram { border-top-color: var(--instagram); }
+.social-connect-card.tiktok { border-top-color: var(--tiktok); }
+
+.social-connect-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.social-platform-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.social-status { min-height: 28px; margin-bottom: 8px; }
+
+.social-linked {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.social-manual-form label {
+  font-size: 0.82rem;
+  margin-bottom: 6px;
+}
+
+.url-preview {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.url-preview-ok {
+  background: var(--success-bg);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: var(--success);
+}
+
+.url-preview-error {
+  background: var(--danger-bg);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--danger);
+}
+
+code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.82rem;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+}

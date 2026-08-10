@@ -66,3 +66,26 @@ class WalletTopUp(BaseModel):
 class BalanceAdjust(BaseModel):
     amount: float = Field(ge=-10000, le=10000)
     note: str = Field(default="", max_length=200)
+
+
+class SocialLinkRequest(BaseModel):
+    platform: str = Field(min_length=2, max_length=40)
+    username: str = Field(min_length=1, max_length=80)
+
+    @field_validator("platform")
+    @classmethod
+    def platform_allowed(cls, v: str) -> str:
+        p = v.strip().lower()
+        if p not in ("instagram", "tiktok"):
+            raise ValueError("المنصة المدعومة: instagram أو tiktok")
+        return p
+
+    @field_validator("username")
+    @classmethod
+    def clean_username(cls, v: str) -> str:
+        return v.strip().lstrip("@")
+
+
+class UrlValidateRequest(BaseModel):
+    url: str = Field(min_length=5, max_length=500)
+    platform: Optional[str] = Field(default=None, max_length=40)

@@ -26,6 +26,11 @@
 | `SMM_ADMIN_PASSWORD` | `najjar` |
 | `SMM_SECRET_KEY` | نص سري طويل عشوائي |
 | `SMM_DATABASE_PATH` | `/app/data/panel.db` |
+| `SMM_PUBLIC_BASE_URL` | `https://YOUR-DOMAIN.up.railway.app` |
+| `SMM_INSTAGRAM_CLIENT_ID` | (اختياري) OAuth إنستجرام |
+| `SMM_INSTAGRAM_CLIENT_SECRET` | (اختياري) OAuth إنستجرام |
+| `SMM_TIKTOK_CLIENT_KEY` | (اختياري) OAuth تيك توك |
+| `SMM_TIKTOK_CLIENT_SECRET` | (اختياري) OAuth تيك توك |
 
 > `PORT` يُحقن تلقائياً من Railway — **لا تضعه يدوياً**
 
