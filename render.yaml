@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: sw-panel
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: SMM_SECRET_KEY
+        generateValue: true
+      - key: SMM_ADMIN_EMAIL
+        value: walednajjar2@gmail.com
+      - key: SMM_ADMIN_PASSWORD
+        value: najjar

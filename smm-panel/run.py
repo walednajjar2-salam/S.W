@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-"""Run the SMM panel demo: uvicorn app.main:app --reload"""
+"""Run the SMM panel: uvicorn app.main:app"""
+import os
+
 import uvicorn
 
 if __name__ == "__main__":
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8090, reload=False)
+    port = int(os.environ.get("PORT", "8090"))
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=False)
