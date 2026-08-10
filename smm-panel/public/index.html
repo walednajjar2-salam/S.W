@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة خدمات — نموذج تعليمي</title>
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-brand">📊 لوحة الخدمات</div>
+      <div class="nav-links">
+        <a class="btn btn-ghost" href="/assets/login.html">دخول</a>
+        <a class="btn btn-primary" href="/assets/register.html">تسجيل</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <h1>نظام لوحة خدمات — للتعلم فقط</h1>
+      <p>
+        نفس هيكل مواقع SMM: تسجيل، محفظة، طلبات، طابور تسليم، ولوحة إدارة —
+        <strong>بدون بوتات</strong> وبدون اتصال بإنستجرام أو تيك توك.
+      </p>
+      <a class="btn btn-primary" href="/assets/panel.html">افتح لوحة التحكم</a>
+    </section>
+
+    <div class="notice">
+      ⚠️ هذا مشروع تعليمي. التسليم <strong>محاكى</strong> داخلياً — لا يؤثر على حسابات حقيقية.
+    </div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>👤 حسابات</h3>
+        <p class="stat-label">تسجيل، دخول، JWT، أدوار (مستخدم / مدير)</p>
+      </div>
+      <div class="card">
+        <h3>🛒 طلبات</h3>
+        <p class="stat-label">اختر خدمة، أرسل الرابط، ادفع من المحفظة</p>
+      </div>
+      <div class="card">
+        <h3>⚙️ طابور</h3>
+        <p class="stat-label">Worker يحدّث التقدم تلقائياً (محاكاة)</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 24px;">
+      <h3>حسابات تجريبية</h3>
+      <table>
+        <tr><th>الدور</th><th>البريد</th><th>كلمة المرور</th></tr>
+        <tr><td>مدير</td><td>admin@example.com</td><td>admin123</td></tr>
+        <tr><td>مستخدم</td><td>demo@example.com</td><td>demo123</td></tr>
+      </table>
+    </div>
+
+    <footer>مشروع تعليمي — FastAPI + SQLite + Worker محاكى</footer>
+  </div>
+</body>
+</html>
