@@ -34,7 +34,9 @@
 | `SMM_PAYMENT_PHONE` | رقم الهاتف للتواصل/التحويل |
 | `SMM_PAYMENT_ACCOUNT` | رقم الحساب أو IBAN |
 | `SMM_PAYMENT_BANK` | اسم البنك أو المحفظة (زين كاش، إلخ) |
-| `SMM_PAYMENT_HOLDER` | اسم صاحب الحساب (افتراضي: Najjar) |
+| `SMM_PAYMENT_HOLDER` | اسم صاحب الحساب |
+| `SMM_PAYMENT_IBAN` | IBAN |
+| `SMM_PAYMENT_SWIFT` | رمز SWIFT |
 
 > `PORT` يُحقن تلقائياً من Railway — **لا تضعه يدوياً**
 

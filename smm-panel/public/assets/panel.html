@@ -603,9 +603,11 @@
       box.innerHTML = `
         <div class="payment-info-grid">
           ${info.holder ? `<div class="payment-info-item"><span class="payment-info-label">اسم صاحب الحساب</span><strong>${info.holder}</strong></div>` : ""}
-          ${info.bank ? `<div class="payment-info-item"><span class="payment-info-label">البنك / المحفظة</span><strong>${info.bank}</strong></div>` : ""}
+          ${info.bank ? `<div class="payment-info-item"><span class="payment-info-label">البنك</span><strong>${info.bank}</strong></div>` : ""}
           ${info.account ? `<div class="payment-info-item"><span class="payment-info-label">رقم الحساب</span><strong class="payment-copy" onclick="copyText('${info.account.replace(/'/g, "\\'")}')">${info.account} 📋</strong></div>` : ""}
-          ${info.phone ? `<div class="payment-info-item"><span class="payment-info-label">رقم الهاتف</span><strong class="payment-copy" onclick="copyText('${info.phone.replace(/'/g, "\\'")}')">${info.phone} 📋</strong></div>` : ""}
+          ${info.iban ? `<div class="payment-info-item"><span class="payment-info-label">IBAN</span><strong class="payment-copy" onclick="copyText('${info.iban.replace(/'/g, "\\'")}')">${info.iban} 📋</strong></div>` : ""}
+          ${info.swift ? `<div class="payment-info-item"><span class="payment-info-label">رمز SWIFT</span><strong class="payment-copy" onclick="copyText('${info.swift.replace(/'/g, "\\'")}')">${info.swift} 📋</strong></div>` : ""}
+          ${info.phone ? `<div class="payment-info-item"><span class="payment-info-label">تحويل على الرقم</span><strong class="payment-copy" onclick="copyText('${info.phone.replace(/'/g, "\\'")}')">${info.phone} 📋</strong></div>` : ""}
         </div>`;
     }
 

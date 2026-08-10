@@ -582,13 +582,19 @@ async def platform_preview(
 
 @app.get("/api/payment/info")
 def payment_info(_: dict = Depends(get_current_user)):
-    """بيانات التحويل/الشحن — تُضبط من Railway Variables."""
+    """بيانات التحويل البنكي — تُضبط من Railway Variables."""
     return {
         "phone": settings.payment_phone,
         "account": settings.payment_account,
         "bank": settings.payment_bank,
         "holder": settings.payment_holder,
-        "configured": bool(settings.payment_phone or settings.payment_account),
+        "iban": settings.payment_iban,
+        "swift": settings.payment_swift,
+        "configured": bool(
+            settings.payment_phone
+            or settings.payment_account
+            or settings.payment_iban
+        ),
     }
 
 
