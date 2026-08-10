@@ -59,7 +59,7 @@ function statusBadge(status) {
 
 function requireAuth() {
   if (!getToken()) {
-    window.location.href = "/assets/login.html";
+    window.location.href = "/login";
     return false;
   }
   return true;
@@ -68,5 +68,5 @@ function requireAuth() {
 function logout() {
   setToken(null);
   setUser(null);
-  window.location.href = "/assets/login.html";
+  window.location.href = "/login";
 }

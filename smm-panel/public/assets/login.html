@@ -37,7 +37,7 @@
         });
         setToken(data.access_token);
         setUser(data.user);
-        window.location.href = "/assets/panel.html";
+        window.location.href = "/panel";
       } catch (err) {
         msg.textContent = err.message;
         msg.classList.remove("hidden");

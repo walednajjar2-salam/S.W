@@ -29,6 +29,7 @@ from app.seed import seed_if_empty
 from app.worker import worker
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "public"
+ASSETS_DIR = STATIC_DIR / "assets"
 
 
 @asynccontextmanager
@@ -359,4 +360,14 @@ def index():
     return FileResponse(STATIC_DIR / "index.html")
 
 
-app.mount("/assets", StaticFiles(directory=STATIC_DIR), name="assets")
+@app.get("/login")
+def login_page():
+    return FileResponse(ASSETS_DIR / "login.html")
+
+
+@app.get("/panel")
+def panel_page():
+    return FileResponse(ASSETS_DIR / "panel.html")
+
+
+app.mount("/assets", StaticFiles(directory=ASSETS_DIR), name="assets")
