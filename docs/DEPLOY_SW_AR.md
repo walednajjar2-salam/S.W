@@ -16,6 +16,19 @@
 3. Mount path: **`/app/data`**
 4. Redeploy
 
+> **مهم:** مع Volume يجب **منطقة واحدة + replica واحد** فقط.  
+> إذا ظهر: *Multiple region deployments are not supported with volumes*  
+> → **Settings → Scaling** → منطقة واحدة، Replicas = 1.
+
+---
+
+## 2b) Scaling (منطقة واحدة)
+
+1. **Settings → Scaling / Regions**
+2. اترك **منطقة واحدة** فقط (مثلاً US East)
+3. **Replicas = 1**
+4. Start Command = **`./start.sh`** أو **فارغ**
+
 ---
 
 ## 3) Variables

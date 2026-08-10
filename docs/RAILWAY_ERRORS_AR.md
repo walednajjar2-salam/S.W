@@ -30,12 +30,37 @@ cd: smm-panel: No such file or directory
 
 ---
 
-## الخطأ #3 — 4 مناطق (Regions)
+## الخطأ #3 — عدة مناطق + Volume (الخطأ الحالي)
 
-المشروع منشور على **4 regions** بنفس الوقت.  
-SQLite **ما يشتغل** مع عدة نسخ على نفس الملف.
+**رسالة Railway:**
+```text
+Multiple region deployments are not supported with volumes.
+```
 
-**الحل:** **Settings → Scaling** → **1 replica** فقط (منطقة واحدة)
+**السبب:** الخدمة مضبوطة على **عدة regions** (مثلاً asia, europe, sfo, us-east)  
+بينما **Volume** (`app-data` على `/app/data`) يعمل **بمنطقة واحدة فقط**.  
+SQLite على volume **لا يتحمل** أكثر من نسخة واحدة.
+
+**الحل (من الموبايل):**
+
+1. افتح خدمة **web** → **Settings** → **Scaling** (أو Regions)
+2. **احذف** كل المناطق ما عدا **واحدة** (يفضل us-east إن Volume فيها)
+3. اضبط **Replicas = 1**
+4. **Deploy** من جديد
+
+> تم إضافة `multiRegionConfig` في `railway.toml` لفرض **منطقة واحدة + replica واحد**  
+> بعد merge لـ `main`، Railway يطبّق الإعداد تلقائياً على كل deploy.
+
+---
+
+## الخطأ #4 — Bucket اسمه `cursor`
+
+**رسالة محتملة:**
+```text
+Bucket region undefined is invalid
+```
+
+**الحل:** احذف Bucket **`cursor`** — المشروع **ما يحتاجه** (SQLite على Volume كافي).
 
 ---
 

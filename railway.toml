@@ -3,6 +3,12 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
+# Override any dashboard startCommand (Docker layout is /app, not smm-panel/)
+startCommand = "./start.sh"
 healthcheckPath = "/api/health"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
+# Volumes + SQLite require exactly one region and one replica.
+# See: https://docs.railway.com/volumes/reference
+[deploy.multiRegionConfig.us-east4-eqdc4a]
+numReplicas = 1
