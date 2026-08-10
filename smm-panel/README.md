@@ -23,7 +23,7 @@ pip install -r requirements.txt
 python run.py
 ```
 
-افتح: **http://localhost:8090**
+افتح: **http://localhost:8090/login**
 
 ## حساب المدير
 
