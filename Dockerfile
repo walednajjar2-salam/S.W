@@ -19,9 +19,11 @@ RUN pip install -r requirements.txt
 
 COPY smm-panel/ ./
 
+RUN chmod +x start.sh
+
 EXPOSE 8080
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD curl -fsS "http://127.0.0.1:${PORT}/api/health" | grep -q '"ok"[[:space:]]*:[[:space:]]*true'
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=5 \
+  CMD curl -fsS "http://127.0.0.1:${PORT}/api/health" | grep -q '"ok"'
 
-CMD ["python", "run.py"]
+CMD ["./start.sh"]
