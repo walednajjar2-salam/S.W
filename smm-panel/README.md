@@ -51,27 +51,24 @@ smm-panel/
 └── run.py
 ```
 
-## ربط إنستجرام وتيك توك
+## ربط إنستجرام وتيك توك (رسمي)
 
-من اللوحة → **ربط الحسابات**:
+من اللوحة → **ربط الحسابات** → **ربط رسمي عبر Instagram / TikTok**.
 
-1. **يدوياً:** الصق `@username` أو رابط الحساب — يعمل فوراً بدون مفاتيح.
-2. **OAuth رسمي:** أضف المتغيرات التالية ثم اضغط «ربط عبر Instagram / TikTok»:
+1. المدير يحفظ مفاتيح التطبيق داخل اللوحة (أو عبر متغيرات Railway).
+2. انسخ Redirect URI الظاهر في اللوحة إلى:
+   - Meta: Instagram API setup with Instagram login → OAuth redirect URIs
+   - TikTok: Login Kit → Redirect URI
+3. اضغط زر الربط الرسمي. يفتح إنستجرام أو تيك توك لتوثيق الحساب.
 
-```bash
-export SMM_PUBLIC_BASE_URL="https://YOUR-DOMAIN.up.railway.app"
-export SMM_INSTAGRAM_CLIENT_ID="..."
-export SMM_INSTAGRAM_CLIENT_SECRET="..."
-export SMM_TIKTOK_CLIENT_KEY="..."
-export SMM_TIKTOK_CLIENT_SECRET="..."
-```
+الحساب المطلوب لإنستجرام: **Business أو Creator** (ليس حساباً شخصياً عادياً).
 
-Redirect URIs التي يجب تسجيلها في لوحة المطوّرين:
+يمكن أيضاً لصق `@username` يدوياً كبديل بدون مفاتيح.
 
-- Instagram: `{SMM_PUBLIC_BASE_URL}/api/social/oauth/instagram/callback`
-- TikTok: `{SMM_PUBLIC_BASE_URL}/api/social/oauth/tiktok/callback`
+Redirect URIs:
 
-التسليم يبقى **محاكاة** حتى بعد ربط الحساب — لا بوتات ولا إرسال حقيقي للمنصات.
+- `{BASE}/api/social/oauth/instagram/callback`
+- `{BASE}/api/social/oauth/tiktok/callback`
 
 ## كيف يعمل التسليم (محاكاة)
 

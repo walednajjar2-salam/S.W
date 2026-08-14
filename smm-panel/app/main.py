@@ -4,7 +4,7 @@ from pathlib import Path
 from urllib.parse import quote
 import json
 
-from fastapi import Depends, FastAPI, HTTPException, Query, status
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -21,6 +21,7 @@ from app.schemas import (
     AuthResponse,
     BalanceAdjust,
     LoginRequest,
+    OAuthConfigUpdate,
     OrderCreate,
     RegisterRequest,
     ServiceCreate,
@@ -43,7 +44,10 @@ from app.social_oauth import (
     exchange_instagram_code,
     exchange_tiktok_code,
     oauth_configured,
+    oauth_status_payload,
     pop_oauth_state,
+    public_base_from_headers,
+    save_oauth_setting,
     start_oauth,
 )
 
@@ -476,17 +480,27 @@ def list_social_connections(user: dict = Depends(get_current_user)):
 
 
 @app.get("/api/social/oauth/status")
-def social_oauth_status(_: dict = Depends(get_current_user)):
-    base = settings.public_base_url.rstrip("/")
-    return {
-        "instagram": oauth_configured("instagram"),
-        "tiktok": oauth_configured("tiktok"),
-        "public_base_url": settings.public_base_url,
-        "redirect_uris": {
-            "instagram": f"{base}/api/social/oauth/instagram/callback",
-            "tiktok": f"{base}/api/social/oauth/tiktok/callback",
-        },
-    }
+def social_oauth_status(request: Request, user: dict = Depends(get_current_user)):
+    base = public_base_from_headers(dict(request.headers), request.url.scheme)
+    return oauth_status_payload(base, include_config=user["role"] == "admin")
+
+
+@app.get("/api/admin/oauth-config")
+def admin_oauth_config(request: Request, _: dict = Depends(require_admin)):
+    base = public_base_from_headers(dict(request.headers), request.url.scheme)
+    return oauth_status_payload(base, include_config=True)
+
+
+@app.put("/api/admin/oauth-config")
+def update_oauth_config(body: OAuthConfigUpdate, request: Request, _: dict = Depends(require_admin)):
+    data = body.model_dump(exclude_unset=True)
+    secret_keys = {"instagram_client_secret", "tiktok_client_secret"}
+    for key, value in data.items():
+        if key in secret_keys and not (value or "").strip():
+            continue
+        save_oauth_setting(key, value or "")
+    base = public_base_from_headers(dict(request.headers), request.url.scheme)
+    return oauth_status_payload(base, include_config=True)
 
 
 @app.post("/api/social/link")
@@ -532,9 +546,10 @@ def unlink_social(platform: str, user: dict = Depends(get_current_user)):
 
 
 @app.get("/api/social/oauth/{platform}/start")
-def social_oauth_start(platform: str, user: dict = Depends(get_current_user)):
+def social_oauth_start(platform: str, request: Request, user: dict = Depends(get_current_user)):
     try:
-        url = start_oauth(platform, user["id"])
+        base = public_base_from_headers(dict(request.headers), request.url.scheme)
+        url = start_oauth(platform, user["id"], base)
     except ValueError as exc:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, str(exc)) from exc
     return {"url": url}
@@ -553,7 +568,7 @@ async def instagram_oauth_callback(
     if not payload or payload.get("platform") != "instagram":
         return _oauth_redirect(False, "instagram", "جلسة الربط انتهت — أعد المحاولة من اللوحة")
     try:
-        data = await exchange_instagram_code(code)
+        data = await exchange_instagram_code(code, payload.get("redirect_uri") or None)
         data["platform"] = "instagram"
         data["verified"] = True
         _save_social_connection(payload["user_id"], data)
@@ -575,7 +590,11 @@ async def tiktok_oauth_callback(
     if not payload or payload.get("platform") != "tiktok":
         return _oauth_redirect(False, "tiktok", "جلسة الربط انتهت — أعد المحاولة من اللوحة")
     try:
-        data = await exchange_tiktok_code(code, payload.get("code_verifier") or "")
+        data = await exchange_tiktok_code(
+            code,
+            payload.get("code_verifier") or "",
+            payload.get("redirect_uri") or None,
+        )
         data["platform"] = "tiktok"
         data["verified"] = True
         _save_social_connection(payload["user_id"], data)

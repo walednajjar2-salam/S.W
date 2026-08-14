@@ -96,6 +96,14 @@ class SocialLinkRequest(BaseModel):
         return self
 
 
+class OAuthConfigUpdate(BaseModel):
+    public_base_url: Optional[str] = Field(default=None, max_length=300)
+    instagram_client_id: Optional[str] = Field(default=None, max_length=200)
+    instagram_client_secret: Optional[str] = Field(default=None, max_length=300)
+    tiktok_client_key: Optional[str] = Field(default=None, max_length=200)
+    tiktok_client_secret: Optional[str] = Field(default=None, max_length=300)
+
+
 class UrlValidateRequest(BaseModel):
     url: str = Field(min_length=5, max_length=500)
     platform: Optional[str] = Field(default=None, max_length=40)

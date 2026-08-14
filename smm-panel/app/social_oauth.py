@@ -1,9 +1,10 @@
 import base64
 import hashlib
 import secrets
+import sqlite3
 from datetime import datetime, timedelta, timezone
 from typing import Any
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 
 import httpx
 
@@ -28,25 +29,125 @@ def _now_iso() -> str:
     return _now().isoformat()
 
 
-def _public_base() -> str:
-    return settings.public_base_url.rstrip("/")
+SETTING_KEYS = (
+    "public_base_url",
+    "instagram_client_id",
+    "instagram_client_secret",
+    "tiktok_client_key",
+    "tiktok_client_secret",
+)
+
+
+def _is_public_url(url: str) -> bool:
+    host = (urlparse(url).hostname or "").lower()
+    return bool(host) and host not in {"localhost", "127.0.0.1", "0.0.0.0"}
+
+
+def get_oauth_secrets() -> dict[str, str]:
+    stored: dict[str, str] = {}
+    with get_conn() as conn:
+        try:
+            rows = conn.execute("SELECT key, value FROM app_settings").fetchall()
+        except sqlite3.OperationalError:
+            rows = []
+        stored = {row["key"]: (row["value"] or "").strip() for row in rows}
+
+    def pick(key: str, env_val: str) -> str:
+        if stored.get(key):
+            return stored[key]
+        return (env_val or "").strip()
+
+    return {
+        "public_base_url": pick("public_base_url", settings.public_base_url),
+        "instagram_client_id": pick("instagram_client_id", settings.instagram_client_id),
+        "instagram_client_secret": pick(
+            "instagram_client_secret", settings.instagram_client_secret
+        ),
+        "tiktok_client_key": pick("tiktok_client_key", settings.tiktok_client_key),
+        "tiktok_client_secret": pick(
+            "tiktok_client_secret", settings.tiktok_client_secret
+        ),
+    }
+
+
+def save_oauth_setting(key: str, value: str) -> None:
+    if key not in SETTING_KEYS:
+        raise ValueError(f"إعداد غير مدعوم: {key}")
+    with get_conn() as conn:
+        conn.execute(
+            """
+            INSERT INTO app_settings (key, value) VALUES (?, ?)
+            ON CONFLICT(key) DO UPDATE SET value = excluded.value
+            """,
+            (key, (value or "").strip()),
+        )
+
+
+def resolve_public_base(request_base: str | None = None) -> str:
+    configured = (get_oauth_secrets().get("public_base_url") or "").rstrip("/")
+    if configured and _is_public_url(configured):
+        return configured
+    request_base = (request_base or "").rstrip("/")
+    if request_base:
+        return request_base
+    return configured or settings.public_base_url.rstrip("/")
+
+
+def public_base_from_headers(headers: dict[str, str], fallback_scheme: str = "https") -> str:
+    proto = (
+        (headers.get("x-forwarded-proto") or headers.get("X-Forwarded-Proto") or fallback_scheme)
+        .split(",")[0]
+        .strip()
+        or fallback_scheme
+    )
+    host = (
+        (headers.get("x-forwarded-host") or headers.get("X-Forwarded-Host") or headers.get("host") or headers.get("Host") or "")
+        .split(",")[0]
+        .strip()
+    )
+    request_base = f"{proto}://{host}" if host else ""
+    return resolve_public_base(request_base)
 
 
 def oauth_configured(platform: str) -> bool:
+    creds = get_oauth_secrets()
     platform = platform.lower()
     if platform == "instagram":
-        return bool(settings.instagram_client_id and settings.instagram_client_secret)
+        return bool(creds["instagram_client_id"] and creds["instagram_client_secret"])
     if platform == "tiktok":
-        return bool(settings.tiktok_client_key and settings.tiktok_client_secret)
+        return bool(creds["tiktok_client_key"] and creds["tiktok_client_secret"])
     return False
 
 
-def instagram_redirect_uri() -> str:
-    return f"{_public_base()}/api/social/oauth/instagram/callback"
+def instagram_redirect_uri(public_base: str | None = None) -> str:
+    return f"{resolve_public_base(public_base)}/api/social/oauth/instagram/callback"
 
 
-def tiktok_redirect_uri() -> str:
-    return f"{_public_base()}/api/social/oauth/tiktok/callback"
+def tiktok_redirect_uri(public_base: str | None = None) -> str:
+    return f"{resolve_public_base(public_base)}/api/social/oauth/tiktok/callback"
+
+
+def oauth_status_payload(public_base: str | None = None, include_config: bool = False) -> dict[str, Any]:
+    base = resolve_public_base(public_base)
+    creds = get_oauth_secrets()
+    payload: dict[str, Any] = {
+        "instagram": bool(creds["instagram_client_id"] and creds["instagram_client_secret"]),
+        "tiktok": bool(creds["tiktok_client_key"] and creds["tiktok_client_secret"]),
+        "public_base_url": base,
+        "redirect_uris": {
+            "instagram": f"{base}/api/social/oauth/instagram/callback",
+            "tiktok": f"{base}/api/social/oauth/tiktok/callback",
+        },
+    }
+    if include_config:
+        payload["config"] = {
+            "public_base_url": creds["public_base_url"],
+            "instagram_client_id": creds["instagram_client_id"],
+            "instagram_client_secret_set": bool(creds["instagram_client_secret"]),
+            "tiktok_client_key": creds["tiktok_client_key"],
+            "tiktok_client_secret_set": bool(creds["tiktok_client_secret"]),
+        }
+    return payload
 
 
 def parse_instagram_token_payload(body: dict[str, Any]) -> dict[str, Any]:
@@ -148,17 +249,22 @@ def _api_error_message(body: Any, fallback: str) -> str:
 
 
 def _save_oauth_state(
-    state: str, platform: str, user_id: int, code_verifier: str = ""
+    state: str,
+    platform: str,
+    user_id: int,
+    code_verifier: str = "",
+    redirect_uri: str = "",
 ) -> None:
     cutoff = (_now() - OAUTH_STATE_TTL).isoformat()
     with get_conn() as conn:
         conn.execute("DELETE FROM oauth_states WHERE created_at < ?", (cutoff,))
         conn.execute(
             """
-            INSERT INTO oauth_states (state, platform, user_id, code_verifier, created_at)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO oauth_states
+            (state, platform, user_id, code_verifier, redirect_uri, created_at)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
-            (state, platform, user_id, code_verifier, _now_iso()),
+            (state, platform, user_id, code_verifier, redirect_uri, _now_iso()),
         )
 
 
@@ -181,41 +287,48 @@ def pop_oauth_state(state: str) -> dict[str, Any] | None:
         "platform": row["platform"],
         "user_id": row["user_id"],
         "code_verifier": row["code_verifier"] or "",
+        "redirect_uri": row["redirect_uri"] if "redirect_uri" in row.keys() else "",
     }
 
 
-def start_oauth(platform: str, user_id: int) -> str:
+def start_oauth(platform: str, user_id: int, public_base: str | None = None) -> str:
     platform = platform.lower()
     state = secrets.token_urlsafe(24)
+    creds = get_oauth_secrets()
+    base = resolve_public_base(public_base)
 
     if platform == "instagram":
-        if not oauth_configured("instagram"):
+        if not (creds["instagram_client_id"] and creds["instagram_client_secret"]):
             raise ValueError(
-                "Instagram OAuth غير مُعد — أضف SMM_INSTAGRAM_CLIENT_ID و SMM_INSTAGRAM_CLIENT_SECRET"
+                "Instagram OAuth غير مُعد — احفظ App ID و Secret من لوحة الإدارة"
             )
-        _save_oauth_state(state, platform, user_id)
+        redirect_uri = f"{base}/api/social/oauth/instagram/callback"
+        _save_oauth_state(state, platform, user_id, redirect_uri=redirect_uri)
         params = urlencode(
             {
-                "client_id": settings.instagram_client_id,
-                "redirect_uri": instagram_redirect_uri(),
+                "client_id": creds["instagram_client_id"],
+                "redirect_uri": redirect_uri,
                 "response_type": "code",
                 "scope": "instagram_business_basic",
                 "state": state,
+                "enable_fb_login": "0",
+                "force_authentication": "1",
             }
         )
         return f"{INSTAGRAM_AUTHORIZE_URL}?{params}"
 
     if platform == "tiktok":
-        if not oauth_configured("tiktok"):
+        if not (creds["tiktok_client_key"] and creds["tiktok_client_secret"]):
             raise ValueError(
-                "TikTok OAuth غير مُعد — أضف SMM_TIKTOK_CLIENT_KEY و SMM_TIKTOK_CLIENT_SECRET"
+                "TikTok OAuth غير مُعد — احفظ Client Key و Secret من لوحة الإدارة"
             )
+        redirect_uri = f"{base}/api/social/oauth/tiktok/callback"
         verifier, challenge = _pkce_pair()
-        _save_oauth_state(state, platform, user_id, verifier)
+        _save_oauth_state(state, platform, user_id, verifier, redirect_uri)
         params = urlencode(
             {
-                "client_key": settings.tiktok_client_key,
-                "redirect_uri": tiktok_redirect_uri(),
+                "client_key": creds["tiktok_client_key"],
+                "redirect_uri": redirect_uri,
                 "response_type": "code",
                 "scope": "user.info.basic,user.info.profile",
                 "state": state,
@@ -245,17 +358,18 @@ async def _json_or_error(res: httpx.Response, fallback: str) -> dict[str, Any]:
     return body
 
 
-async def exchange_instagram_code(code: str) -> dict[str, Any]:
+async def exchange_instagram_code(code: str, redirect_uri: str | None = None) -> dict[str, Any]:
     code = sanitize_oauth_code(code)
     if not code:
         raise ValueError("رمز إنستجرام فارغ")
-    redirect_uri = instagram_redirect_uri()
+    creds = get_oauth_secrets()
+    redirect_uri = (redirect_uri or instagram_redirect_uri()).rstrip("/")
     async with httpx.AsyncClient(timeout=20.0) as client:
         token_res = await client.post(
             INSTAGRAM_TOKEN_URL,
             data={
-                "client_id": settings.instagram_client_id,
-                "client_secret": settings.instagram_client_secret,
+                "client_id": creds["instagram_client_id"],
+                "client_secret": creds["instagram_client_secret"],
                 "grant_type": "authorization_code",
                 "redirect_uri": redirect_uri,
                 "code": code,
@@ -271,7 +385,7 @@ async def exchange_instagram_code(code: str) -> dict[str, Any]:
                 f"{INSTAGRAM_GRAPH}/access_token",
                 params={
                     "grant_type": "ig_exchange_token",
-                    "client_secret": settings.instagram_client_secret,
+                    "client_secret": creds["instagram_client_secret"],
                     "access_token": short_token,
                 },
             )
@@ -304,16 +418,19 @@ async def exchange_instagram_code(code: str) -> dict[str, Any]:
     return instagram_profile_from_json(profile, access_token)
 
 
-async def exchange_tiktok_code(code: str, code_verifier: str = "") -> dict[str, Any]:
+async def exchange_tiktok_code(
+    code: str, code_verifier: str = "", redirect_uri: str | None = None
+) -> dict[str, Any]:
     code = sanitize_oauth_code(code)
     if not code:
         raise ValueError("رمز تيك توك فارغ")
+    creds = get_oauth_secrets()
     payload = {
-        "client_key": settings.tiktok_client_key,
-        "client_secret": settings.tiktok_client_secret,
+        "client_key": creds["tiktok_client_key"],
+        "client_secret": creds["tiktok_client_secret"],
         "code": code,
         "grant_type": "authorization_code",
-        "redirect_uri": tiktok_redirect_uri(),
+        "redirect_uri": (redirect_uri or tiktok_redirect_uri()).rstrip("/"),
     }
     if code_verifier:
         payload["code_verifier"] = code_verifier

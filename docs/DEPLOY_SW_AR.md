@@ -37,6 +37,8 @@ Redirect URIs (انسخها في لوحة Meta و TikTok Developers):
 - `{SMM_PUBLIC_BASE_URL}/api/social/oauth/instagram/callback`
 - `{SMM_PUBLIC_BASE_URL}/api/social/oauth/tiktok/callback`
 
+يمكن أيضاً حفظ مفاتيح إنستجرام وتيك توك من اللوحة: **ربط الحسابات → مفاتيح التطبيق** (حساب المدير)، بدون إعادة نشر.
+
 | `SMM_PAYMENT_PHONE` | رقم الهاتف للتواصل/التحويل |
 | `SMM_PAYMENT_ACCOUNT` | رقم الحساب أو IBAN |
 | `SMM_PAYMENT_BANK` | اسم البنك أو المحفظة (زين كاش، إلخ) |

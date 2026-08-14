@@ -191,12 +191,12 @@
                 <span class="social-platform-icon">📸</span>
                 <div>
                   <h3 style="margin:0;">Instagram</h3>
-                  <p class="stat-label" style="margin:4px 0 0;">اربط حسابك أو أدخل اسم المستخدم</p>
+                  <p class="stat-label" style="margin:4px 0 0;">ربط رسمي عبر Instagram Login</p>
                 </div>
               </div>
               <div id="instagramStatus" class="social-status">جاري التحميل...</div>
               <div style="display:flex; gap:8px; flex-wrap:wrap; margin:16px 0;">
-                <button class="btn btn-primary btn-sm" id="instagramOAuthBtn" onclick="startOAuth('instagram')">🔗 ربط عبر Instagram</button>
+                <button class="btn btn-primary btn-sm" id="instagramOAuthBtn" onclick="startOAuth('instagram')">🔗 ربط رسمي عبر Instagram</button>
                 <button class="btn btn-ghost btn-sm" onclick="unlinkSocial('instagram')">إلغاء الربط</button>
               </div>
               <form id="instagramLinkForm" class="social-manual-form">
@@ -213,12 +213,12 @@
                 <span class="social-platform-icon">🎵</span>
                 <div>
                   <h3 style="margin:0;">TikTok</h3>
-                  <p class="stat-label" style="margin:4px 0 0;">اربط حسابك أو أدخل اسم المستخدم</p>
+                  <p class="stat-label" style="margin:4px 0 0;">ربط رسمي عبر TikTok Login Kit</p>
                 </div>
               </div>
               <div id="tiktokStatus" class="social-status">جاري التحميل...</div>
               <div style="display:flex; gap:8px; flex-wrap:wrap; margin:16px 0;">
-                <button class="btn btn-primary btn-sm" id="tiktokOAuthBtn" onclick="startOAuth('tiktok')">🔗 ربط عبر TikTok</button>
+                <button class="btn btn-primary btn-sm" id="tiktokOAuthBtn" onclick="startOAuth('tiktok')">🔗 ربط رسمي عبر TikTok</button>
                 <button class="btn btn-ghost btn-sm" onclick="unlinkSocial('tiktok')">إلغاء الربط</button>
               </div>
               <form id="tiktokLinkForm" class="social-manual-form">
@@ -231,23 +231,41 @@
             </div>
           </div>
 
-          <div class="card card-glass" style="margin-top:20px;">
-            <h3 style="margin-top:0;">OAuth — للربط الرسمي</h3>
+          <div class="card card-glass" style="margin-top:20px;" id="oauthOfficialCard">
+            <h3 style="margin-top:0;">ربط رسمي (OAuth)</h3>
             <p style="color:var(--text-secondary); font-size:0.9rem;">
-              لربط OAuth الكامل، أضف في Railway Variables:
+              الربط الرسمي يفتح صفحة إنستجرام أو تيك توك ويوثّق الحساب.
+              يتطلب حساب Instagram <strong>Business/Creator</strong> وتطبيق TikTok Login Kit.
             </p>
-            <div class="table-wrap">
-              <table>
-                <tr><th>Variable</th><th>الوصف</th></tr>
-                <tr><td><code>SMM_PUBLIC_BASE_URL</code></td><td>رابط الموقع العام، مثال: https://YOUR-DOMAIN.up.railway.app</td></tr>
-                <tr><td><code>SMM_INSTAGRAM_CLIENT_ID</code></td><td>Instagram App ID من Meta Developers</td></tr>
-                <tr><td><code>SMM_INSTAGRAM_CLIENT_SECRET</code></td><td>Instagram App Secret</td></tr>
-                <tr><td><code>SMM_TIKTOK_CLIENT_KEY</code></td><td>Client Key من TikTok Developers</td></tr>
-                <tr><td><code>SMM_TIKTOK_CLIENT_SECRET</code></td><td>Client Secret من TikTok Developers</td></tr>
-              </table>
-            </div>
-            <p id="oauthRedirectUris" style="color:var(--text-secondary); font-size:0.85rem;"></p>
-            <p id="oauthConfigStatus" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0;"></p>
+            <p id="oauthConfigStatus" style="color:var(--text-muted); font-size:0.85rem;"></p>
+            <div id="oauthRedirectUris" style="color:var(--text-secondary); font-size:0.85rem;"></div>
+            <form id="oauthConfigForm" class="hidden" style="margin-top:16px;">
+              <h4 style="margin:0 0 12px;">مفاتيح التطبيق — المدير فقط</h4>
+              <div class="grid grid-2">
+                <div class="form-group">
+                  <label>رابط الموقع العام</label>
+                  <input id="oauthPublicBase" placeholder="https://YOUR-DOMAIN.up.railway.app" />
+                </div>
+                <div class="form-group">
+                  <label>Instagram App ID</label>
+                  <input id="oauthIgId" placeholder="من Meta Developers" />
+                </div>
+                <div class="form-group">
+                  <label>Instagram App Secret</label>
+                  <input id="oauthIgSecret" type="password" placeholder="يُحفظ ولا يُعرض" />
+                </div>
+                <div class="form-group">
+                  <label>TikTok Client Key</label>
+                  <input id="oauthTtKey" placeholder="من TikTok Developers" />
+                </div>
+                <div class="form-group">
+                  <label>TikTok Client Secret</label>
+                  <input id="oauthTtSecret" type="password" placeholder="يُحفظ ولا يُعرض" />
+                </div>
+              </div>
+              <button class="btn btn-primary" type="submit">حفظ مفاتيح الربط الرسمي</button>
+              <p id="oauthConfigMsg" class="hidden"></p>
+            </form>
           </div>
         </section>
 
@@ -429,23 +447,34 @@
         igBtn.disabled = !oauth.instagram;
         igBtn.title = oauth.instagram
           ? "ربط رسمي عبر Instagram Login"
-          : "أضف SMM_INSTAGRAM_CLIENT_ID و SMM_INSTAGRAM_CLIENT_SECRET في Railway";
+          : "احفظ Instagram App ID و Secret من لوحة الإدارة أولاً";
       }
       if (ttBtn) {
         ttBtn.disabled = !oauth.tiktok;
         ttBtn.title = oauth.tiktok
           ? "ربط رسمي عبر TikTok Login Kit"
-          : "أضف SMM_TIKTOK_CLIENT_KEY و SMM_TIKTOK_CLIENT_SECRET في Railway";
+          : "احفظ TikTok Client Key و Secret من لوحة الإدارة أولاً";
       }
       document.getElementById("oauthConfigStatus").innerHTML =
-        `Instagram OAuth: ${oauth.instagram ? "✅ مُفعّل" : "⚪ غير مُعد"} | TikTok OAuth: ${oauth.tiktok ? "✅ مُفعّل" : "⚪ غير مُعد"}`;
+        `Instagram الرسمي: ${oauth.instagram ? "✅ جاهز" : "⚪ يحتاج مفاتيح التطبيق"} | TikTok الرسمي: ${oauth.tiktok ? "✅ جاهز" : "⚪ يحتاج مفاتيح التطبيق"}`;
       const uris = oauth.redirect_uris || {};
       const uriBox = document.getElementById("oauthRedirectUris");
       if (uriBox) {
         uriBox.innerHTML = `
-          Redirect URI لإنستجرام: <code>${uris.instagram || "—"}</code><br/>
-          Redirect URI لتيك توك: <code>${uris.tiktok || "—"}</code>
+          <p style="margin:8px 0 4px;">انسخ Redirect URI إلى لوحة Meta و TikTok:</p>
+          <div class="payment-info-item"><code>${uris.instagram || "—"}</code> <button type="button" class="btn btn-ghost btn-sm" onclick="copyText('${(uris.instagram || "").replace(/'/g, "\\'")}')">نسخ</button></div>
+          <div class="payment-info-item" style="margin-top:8px;"><code>${uris.tiktok || "—"}</code> <button type="button" class="btn btn-ghost btn-sm" onclick="copyText('${(uris.tiktok || "").replace(/'/g, "\\'")}')">نسخ</button></div>
         `;
+      }
+      const form = document.getElementById("oauthConfigForm");
+      const isAdmin = getUser()?.role === "admin";
+      form?.classList.toggle("hidden", !isAdmin);
+      if (isAdmin && oauth.config) {
+        document.getElementById("oauthPublicBase").value = oauth.config.public_base_url || oauth.public_base_url || window.location.origin;
+        document.getElementById("oauthIgId").value = oauth.config.instagram_client_id || "";
+        document.getElementById("oauthTtKey").value = oauth.config.tiktok_client_key || "";
+        document.getElementById("oauthIgSecret").placeholder = oauth.config.instagram_client_secret_set ? "محفوظ — اتركه فارغاً للإبقاء" : "Instagram App Secret";
+        document.getElementById("oauthTtSecret").placeholder = oauth.config.tiktok_client_secret_set ? "محفوظ — اتركه فارغاً للإبقاء" : "TikTok Client Secret";
       }
     }
 
@@ -556,6 +585,33 @@
       if (!u) return;
       await linkManual("tiktok", u);
       e.target.reset();
+    });
+
+    document.getElementById("oauthConfigForm")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById("oauthConfigMsg");
+      const body = {
+        public_base_url: document.getElementById("oauthPublicBase").value.trim(),
+        instagram_client_id: document.getElementById("oauthIgId").value.trim(),
+        tiktok_client_key: document.getElementById("oauthTtKey").value.trim(),
+      };
+      const igSecret = document.getElementById("oauthIgSecret").value.trim();
+      const ttSecret = document.getElementById("oauthTtSecret").value.trim();
+      if (igSecret) body.instagram_client_secret = igSecret;
+      if (ttSecret) body.tiktok_client_secret = ttSecret;
+      try {
+        await api("/admin/oauth-config", { method: "PUT", body: JSON.stringify(body) });
+        document.getElementById("oauthIgSecret").value = "";
+        document.getElementById("oauthTtSecret").value = "";
+        msg.textContent = "✅ تم حفظ مفاتيح الربط الرسمي";
+        msg.className = "success";
+        showToast("تم تفعيل الربط الرسمي");
+        await loadSocialAccounts();
+      } catch (err) {
+        msg.textContent = err.message;
+        msg.className = "error";
+        showToast(err.message, "error");
+      }
     });
 
     function handleOAuthRedirect() {

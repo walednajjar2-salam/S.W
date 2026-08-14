@@ -59,10 +59,12 @@ def test_start_oauth_urls_and_persisted_state():
     assert ig.path == "/oauth/authorize"
     ig_qs = parse_qs(ig.query)
     assert ig_qs["scope"] == ["instagram_business_basic"]
+    assert ig_qs["enable_fb_login"] == ["0"]
     assert ig_qs["redirect_uri"] == ["https://sw.test/api/social/oauth/instagram/callback"]
     ig_state = pop_oauth_state(ig_qs["state"][0])
     assert ig_state["platform"] == "instagram"
     assert ig_state["user_id"] == 1
+    assert ig_state["redirect_uri"].endswith("/api/social/oauth/instagram/callback")
 
     tt_url = start_oauth("tiktok", 1)
     tt = urlparse(tt_url)
@@ -190,3 +192,48 @@ def test_health_reports_integrations(client):
     integrations = res.json()["integrations"]
     assert integrations["instagram_oauth"] is True
     assert integrations["tiktok_oauth"] is True
+
+
+def test_admin_saves_official_oauth_keys(client, auth_headers):
+    from app.social_oauth import save_oauth_setting
+
+    try:
+        res = client.put(
+            "/api/admin/oauth-config",
+            headers=auth_headers,
+            json={
+                "public_base_url": "https://live.example",
+                "instagram_client_id": "live-ig-id",
+                "instagram_client_secret": "live-ig-secret",
+                "tiktok_client_key": "live-tt-key",
+                "tiktok_client_secret": "live-tt-secret",
+            },
+        )
+        assert res.status_code == 200, res.text
+        body = res.json()
+        assert body["instagram"] is True
+        assert body["tiktok"] is True
+        assert body["config"]["instagram_client_id"] == "live-ig-id"
+        assert body["config"]["instagram_client_secret_set"] is True
+        assert "live-ig-secret" not in res.text
+        assert body["redirect_uris"]["instagram"] == (
+            "https://live.example/api/social/oauth/instagram/callback"
+        )
+
+        start = client.get("/api/social/oauth/instagram/start", headers=auth_headers)
+        qs = parse_qs(urlparse(start.json()["url"]).query)
+        assert qs["client_id"] == ["live-ig-id"]
+        assert qs["redirect_uri"] == [
+            "https://live.example/api/social/oauth/instagram/callback"
+        ]
+        assert qs["enable_fb_login"] == ["0"]
+        assert qs["force_authentication"] == ["1"]
+    finally:
+        for key in (
+            "public_base_url",
+            "instagram_client_id",
+            "instagram_client_secret",
+            "tiktok_client_key",
+            "tiktok_client_secret",
+        ):
+            save_oauth_setting(key, "")
