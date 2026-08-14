@@ -7,7 +7,8 @@
 | المكوّن | الوصف |
 |---------|--------|
 | **حسابات** | تسجيل، دخول، JWT، أدوار (user / admin) |
-| **كتalog خدمات** | متابعين، لايكات، مشاهدات (أسماء تجريبية) |
+| **كتالوج خدمات** | متابعين، لايكات، مشاهدات (أسماء تجريبية) |
+| **ربط إنستجرام وتيك توك** | ربط يدوي أو OAuth رسمي (Instagram Login + TikTok Login Kit) |
 | **طلبات** | رابط + كمية + خصم من المحفظة |
 | **محفظة** | شحن تجريبي (بدون بوابة دفع حقيقية) |
 | **Worker** | طابور تسليم **محاكى** — يحدّث `delivered` تلقائياً |
@@ -50,6 +51,28 @@ smm-panel/
 └── run.py
 ```
 
+## ربط إنستجرام وتيك توك
+
+من اللوحة → **ربط الحسابات**:
+
+1. **يدوياً:** الصق `@username` أو رابط الحساب — يعمل فوراً بدون مفاتيح.
+2. **OAuth رسمي:** أضف المتغيرات التالية ثم اضغط «ربط عبر Instagram / TikTok»:
+
+```bash
+export SMM_PUBLIC_BASE_URL="https://YOUR-DOMAIN.up.railway.app"
+export SMM_INSTAGRAM_CLIENT_ID="..."
+export SMM_INSTAGRAM_CLIENT_SECRET="..."
+export SMM_TIKTOK_CLIENT_KEY="..."
+export SMM_TIKTOK_CLIENT_SECRET="..."
+```
+
+Redirect URIs التي يجب تسجيلها في لوحة المطوّرين:
+
+- Instagram: `{SMM_PUBLIC_BASE_URL}/api/social/oauth/instagram/callback`
+- TikTok: `{SMM_PUBLIC_BASE_URL}/api/social/oauth/tiktok/callback`
+
+التسليم يبقى **محاكاة** حتى بعد ربط الحساب — لا بوتات ولا إرسال حقيقي للمنصات.
+
 ## كيف يعمل التسليم (محاكاة)
 
 ```
@@ -62,7 +85,7 @@ delivered += 8% من الكمية
 delivered >= quantity → status: completed
 ```
 
-**لا يوجد** HTTP requests لأي منصة.social.
+**لا يوجد** إرسال متابعين حقيقي لأي منصة. الربط يُستخدم للتحقق من الحساب والرابط فقط.
 
 ## متغيرات البيئة (اختياري)
 

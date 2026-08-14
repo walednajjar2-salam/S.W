@@ -93,6 +93,7 @@
                 </div>
                 <div class="form-group">
                   <label for="targetUrl">رابط الحساب / المنشور</label>
+                  <div id="connectedAccountsBar" class="connected-accounts-bar"></div>
                   <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
                     <button type="button" class="btn btn-ghost btn-sm" id="useConnectedBtn" onclick="useConnectedUrl()">استخدم الحساب المربوط</button>
                     <button type="button" class="btn btn-ghost btn-sm" onclick="validateTargetUrl()">✓ تحقق من الرابط</button>
@@ -195,13 +196,13 @@
               </div>
               <div id="instagramStatus" class="social-status">جاري التحميل...</div>
               <div style="display:flex; gap:8px; flex-wrap:wrap; margin:16px 0;">
-                <button class="btn btn-primary btn-sm" onclick="startOAuth('instagram')">🔗 ربط عبر Instagram</button>
+                <button class="btn btn-primary btn-sm" id="instagramOAuthBtn" onclick="startOAuth('instagram')">🔗 ربط عبر Instagram</button>
                 <button class="btn btn-ghost btn-sm" onclick="unlinkSocial('instagram')">إلغاء الربط</button>
               </div>
               <form id="instagramLinkForm" class="social-manual-form">
-                <label>أو اسم المستخدم يدوياً</label>
+                <label>أو اسم المستخدم / رابط الحساب</label>
                 <div style="display:flex; gap:8px;">
-                  <input type="text" id="instagramUsername" placeholder="@username" />
+                  <input type="text" id="instagramUsername" placeholder="@username أو instagram.com/username" />
                   <button class="btn btn-ghost btn-sm" type="submit">حفظ</button>
                 </div>
               </form>
@@ -217,13 +218,13 @@
               </div>
               <div id="tiktokStatus" class="social-status">جاري التحميل...</div>
               <div style="display:flex; gap:8px; flex-wrap:wrap; margin:16px 0;">
-                <button class="btn btn-primary btn-sm" onclick="startOAuth('tiktok')">🔗 ربط عبر TikTok</button>
+                <button class="btn btn-primary btn-sm" id="tiktokOAuthBtn" onclick="startOAuth('tiktok')">🔗 ربط عبر TikTok</button>
                 <button class="btn btn-ghost btn-sm" onclick="unlinkSocial('tiktok')">إلغاء الربط</button>
               </div>
               <form id="tiktokLinkForm" class="social-manual-form">
-                <label>أو اسم المستخدم يدوياً</label>
+                <label>أو اسم المستخدم / رابط الحساب</label>
                 <div style="display:flex; gap:8px;">
-                  <input type="text" id="tiktokUsername" placeholder="@username" />
+                  <input type="text" id="tiktokUsername" placeholder="@username أو tiktok.com/@username" />
                   <button class="btn btn-ghost btn-sm" type="submit">حفظ</button>
                 </div>
               </form>
@@ -238,13 +239,14 @@
             <div class="table-wrap">
               <table>
                 <tr><th>Variable</th><th>الوصف</th></tr>
-                <tr><td><code>SMM_PUBLIC_BASE_URL</code></td><td>https://web-production-f3cc8.up.railway.app</td></tr>
-                <tr><td><code>SMM_INSTAGRAM_CLIENT_ID</code></td><td>من Meta Developers</td></tr>
-                <tr><td><code>SMM_INSTAGRAM_CLIENT_SECRET</code></td><td>من Meta Developers</td></tr>
-                <tr><td><code>SMM_TIKTOK_CLIENT_KEY</code></td><td>من TikTok Developers</td></tr>
-                <tr><td><code>SMM_TIKTOK_CLIENT_SECRET</code></td><td>من TikTok Developers</td></tr>
+                <tr><td><code>SMM_PUBLIC_BASE_URL</code></td><td>رابط الموقع العام، مثال: https://YOUR-DOMAIN.up.railway.app</td></tr>
+                <tr><td><code>SMM_INSTAGRAM_CLIENT_ID</code></td><td>Instagram App ID من Meta Developers</td></tr>
+                <tr><td><code>SMM_INSTAGRAM_CLIENT_SECRET</code></td><td>Instagram App Secret</td></tr>
+                <tr><td><code>SMM_TIKTOK_CLIENT_KEY</code></td><td>Client Key من TikTok Developers</td></tr>
+                <tr><td><code>SMM_TIKTOK_CLIENT_SECRET</code></td><td>Client Secret من TikTok Developers</td></tr>
               </table>
             </div>
+            <p id="oauthRedirectUris" style="color:var(--text-secondary); font-size:0.85rem;"></p>
             <p id="oauthConfigStatus" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0;"></p>
           </div>
         </section>
@@ -403,14 +405,48 @@
       validateTargetUrl();
     }
 
+    function renderConnectedAccountsBar() {
+      const bar = document.getElementById("connectedAccountsBar");
+      if (!bar) return;
+      const ig = getConnection("instagram");
+      const tt = getConnection("tiktok");
+      bar.innerHTML = `
+        <span class="connected-chip ${ig ? "linked" : ""}">📸 Instagram ${ig ? `@${ig.username}` : "غير مربوط"}</span>
+        <span class="connected-chip ${tt ? "linked" : ""}">🎵 TikTok ${tt ? `@${tt.username}` : "غير مربوط"}</span>
+      `;
+    }
+
     async function loadSocialAccounts() {
       socialConnections = await api("/social/connections");
       renderSocialStatus("instagram");
       renderSocialStatus("tiktok");
+      renderConnectedAccountsBar();
 
       const oauth = await api("/social/oauth/status");
+      const igBtn = document.getElementById("instagramOAuthBtn");
+      const ttBtn = document.getElementById("tiktokOAuthBtn");
+      if (igBtn) {
+        igBtn.disabled = !oauth.instagram;
+        igBtn.title = oauth.instagram
+          ? "ربط رسمي عبر Instagram Login"
+          : "أضف SMM_INSTAGRAM_CLIENT_ID و SMM_INSTAGRAM_CLIENT_SECRET في Railway";
+      }
+      if (ttBtn) {
+        ttBtn.disabled = !oauth.tiktok;
+        ttBtn.title = oauth.tiktok
+          ? "ربط رسمي عبر TikTok Login Kit"
+          : "أضف SMM_TIKTOK_CLIENT_KEY و SMM_TIKTOK_CLIENT_SECRET في Railway";
+      }
       document.getElementById("oauthConfigStatus").innerHTML =
         `Instagram OAuth: ${oauth.instagram ? "✅ مُفعّل" : "⚪ غير مُعد"} | TikTok OAuth: ${oauth.tiktok ? "✅ مُفعّل" : "⚪ غير مُعد"}`;
+      const uris = oauth.redirect_uris || {};
+      const uriBox = document.getElementById("oauthRedirectUris");
+      if (uriBox) {
+        uriBox.innerHTML = `
+          Redirect URI لإنستجرام: <code>${uris.instagram || "—"}</code><br/>
+          Redirect URI لتيك توك: <code>${uris.tiktok || "—"}</code>
+        `;
+      }
     }
 
     function renderSocialStatus(platform) {
@@ -431,9 +467,11 @@
     async function startOAuth(platform) {
       try {
         const data = await api(`/social/oauth/${platform}/start`);
+        if (!data?.url) throw new Error("تعذّر إنشاء رابط الربط");
         window.location.href = data.url;
       } catch (err) {
         showToast(err.message, "error");
+        showTab("accounts");
       }
     }
 
@@ -448,12 +486,16 @@
     }
 
     async function linkManual(platform, username) {
-      await api("/social/link", {
-        method: "POST",
-        body: JSON.stringify({ platform, username }),
-      });
-      showToast(`تم ربط @${username.replace("@", "")}`);
-      await loadSocialAccounts();
+      try {
+        await api("/social/link", {
+          method: "POST",
+          body: JSON.stringify({ platform, username }),
+        });
+        showToast(`تم ربط ${platform} ✓`);
+        await loadSocialAccounts();
+      } catch (err) {
+        showToast(err.message, "error");
+      }
     }
 
     async function validateTargetUrl() {
@@ -556,6 +598,7 @@
       selectedServiceId = parseInt(document.getElementById("serviceId").value, 10);
       renderServiceCards();
       updatePricePreview();
+      updateUrlPlaceholder();
     });
     document.getElementById("quantity").addEventListener("input", updatePricePreview);
 
@@ -725,7 +768,7 @@
       handleOAuthRedirect();
       await loadServices();
       await refreshUser();
-      socialConnections = await api("/social/connections");
+      await loadSocialAccounts();
       refreshTimer = setInterval(() => {
         const active = document.querySelector(".nav-item.active")?.dataset.tab;
         if (active === "orders") loadOrders();

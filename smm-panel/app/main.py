@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote
 import json
 
 from fastapi import Depends, FastAPI, HTTPException, Query, status
@@ -34,6 +35,7 @@ from app.config import settings
 from app.platforms import (
     instagram_profile_url,
     preview_url,
+    resolve_social_url,
     tiktok_profile_url,
     validate_url_for_platform,
 )
@@ -148,6 +150,14 @@ def _save_social_connection(user_id: int, data: dict) -> dict:
     return _social_public(dict(row))
 
 
+def _oauth_redirect(ok: bool, platform: str, msg: str = "") -> RedirectResponse:
+    if ok:
+        return RedirectResponse(f"/panel?oauth=success&platform={platform}")
+    return RedirectResponse(
+        f"/panel?oauth=error&platform={platform}&msg={quote(msg[:160])}"
+    )
+
+
 @app.get("/api/health")
 def health():
     return {
@@ -256,17 +266,22 @@ def update_service(
 
 
 @app.post("/api/orders")
-def create_order(body: OrderCreate, user: dict = Depends(get_current_user)):
+async def create_order(body: OrderCreate, user: dict = Depends(get_current_user)):
     with get_conn() as conn:
         svc = conn.execute(
             "SELECT * FROM services WHERE id = ? AND active = 1", (body.service_id,)
         ).fetchone()
         if not svc:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "الخدمة غير متاحة")
-        ok, url_msg, parsed = validate_url_for_platform(body.target_url, svc["platform"])
-        if not ok:
-            raise HTTPException(status.HTTP_400_BAD_REQUEST, url_msg)
-        target_url = parsed["url"] if parsed else body.target_url
+        svc = dict(svc)
+
+    resolved = await resolve_social_url(body.target_url)
+    ok, url_msg, parsed = validate_url_for_platform(resolved, svc["platform"])
+    if not ok:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, url_msg)
+    target_url = parsed["url"] if parsed else resolved
+
+    with get_conn() as conn:
         if body.quantity < svc["min_qty"] or body.quantity > svc["max_qty"]:
             raise HTTPException(
                 status.HTTP_400_BAD_REQUEST,
@@ -462,19 +477,32 @@ def list_social_connections(user: dict = Depends(get_current_user)):
 
 @app.get("/api/social/oauth/status")
 def social_oauth_status(_: dict = Depends(get_current_user)):
+    base = settings.public_base_url.rstrip("/")
     return {
         "instagram": oauth_configured("instagram"),
         "tiktok": oauth_configured("tiktok"),
         "public_base_url": settings.public_base_url,
+        "redirect_uris": {
+            "instagram": f"{base}/api/social/oauth/instagram/callback",
+            "tiktok": f"{base}/api/social/oauth/tiktok/callback",
+        },
     }
 
 
 @app.post("/api/social/link")
-def link_social_manual(body: SocialLinkRequest, user: dict = Depends(get_current_user)):
+async def link_social_manual(body: SocialLinkRequest, user: dict = Depends(get_current_user)):
     if body.platform == "instagram":
         profile_url = instagram_profile_url(body.username)
     else:
         profile_url = tiktok_profile_url(body.username)
+
+    meta = {"verified_via": "manual"}
+    try:
+        preview = await preview_url(profile_url, body.platform)
+        if preview.get("preview"):
+            meta["preview"] = preview["preview"]
+    except Exception:
+        pass
 
     return _save_social_connection(
         user["id"],
@@ -485,7 +513,7 @@ def link_social_manual(body: SocialLinkRequest, user: dict = Depends(get_current
             "profile_url": profile_url,
             "access_token": "",
             "verified": False,
-            "meta": {"verified_via": "manual"},
+            "meta": meta,
         },
     )
 
@@ -517,22 +545,21 @@ async def instagram_oauth_callback(
     code: str = Query(default=""),
     state: str = Query(default=""),
     error: str = Query(default=""),
+    error_description: str = Query(default=""),
 ):
     if error:
-        return RedirectResponse(f"/panel?oauth=error&platform=instagram&msg={error}")
+        return _oauth_redirect(False, "instagram", error_description or error)
     payload = pop_oauth_state(state)
     if not payload or payload.get("platform") != "instagram":
-        return RedirectResponse("/panel?oauth=error&platform=instagram&msg=invalid_state")
+        return _oauth_redirect(False, "instagram", "جلسة الربط انتهت — أعد المحاولة من اللوحة")
     try:
         data = await exchange_instagram_code(code)
         data["platform"] = "instagram"
         data["verified"] = True
         _save_social_connection(payload["user_id"], data)
-        return RedirectResponse("/panel?oauth=success&platform=instagram")
+        return _oauth_redirect(True, "instagram")
     except Exception as exc:
-        return RedirectResponse(
-            f"/panel?oauth=error&platform=instagram&msg={str(exc)[:120]}"
-        )
+        return _oauth_redirect(False, "instagram", str(exc))
 
 
 @app.get("/api/social/oauth/tiktok/callback")
@@ -540,22 +567,21 @@ async def tiktok_oauth_callback(
     code: str = Query(default=""),
     state: str = Query(default=""),
     error: str = Query(default=""),
+    error_description: str = Query(default=""),
 ):
     if error:
-        return RedirectResponse(f"/panel?oauth=error&platform=tiktok&msg={error}")
+        return _oauth_redirect(False, "tiktok", error_description or error)
     payload = pop_oauth_state(state)
     if not payload or payload.get("platform") != "tiktok":
-        return RedirectResponse("/panel?oauth=error&platform=tiktok&msg=invalid_state")
+        return _oauth_redirect(False, "tiktok", "جلسة الربط انتهت — أعد المحاولة من اللوحة")
     try:
-        data = await exchange_tiktok_code(code)
+        data = await exchange_tiktok_code(code, payload.get("code_verifier") or "")
         data["platform"] = "tiktok"
         data["verified"] = True
         _save_social_connection(payload["user_id"], data)
-        return RedirectResponse("/panel?oauth=success&platform=tiktok")
+        return _oauth_redirect(True, "tiktok")
     except Exception as exc:
-        return RedirectResponse(
-            f"/panel?oauth=error&platform=tiktok&msg={str(exc)[:120]}"
-        )
+        return _oauth_redirect(False, "tiktok", str(exc))
 
 
 @app.post("/api/platforms/validate")

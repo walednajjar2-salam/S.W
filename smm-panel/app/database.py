@@ -92,5 +92,14 @@ def init_db() -> None:
                 FOREIGN KEY (user_id) REFERENCES users(id),
                 UNIQUE(user_id, platform)
             );
+
+            CREATE TABLE IF NOT EXISTS oauth_states (
+                state TEXT PRIMARY KEY,
+                platform TEXT NOT NULL,
+                user_id INTEGER NOT NULL,
+                code_verifier TEXT NOT NULL DEFAULT '',
+                created_at TEXT NOT NULL DEFAULT (datetime('now')),
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            );
             """
         )

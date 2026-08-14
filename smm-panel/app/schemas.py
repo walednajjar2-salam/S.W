@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
 
 
 class RegisterRequest(BaseModel):
@@ -84,6 +84,16 @@ class SocialLinkRequest(BaseModel):
     @classmethod
     def clean_username(cls, v: str) -> str:
         return v.strip().lstrip("@")
+
+    @model_validator(mode="after")
+    def extract_handle(self):
+        from app.platforms import extract_username, is_valid_social_username
+
+        handle = extract_username(self.username, self.platform)
+        if not handle or not is_valid_social_username(handle):
+            raise ValueError("أدخل اسم مستخدم صالح أو رابط حساب إنستجرام/تيك توك")
+        self.username = handle
+        return self
 
 
 class UrlValidateRequest(BaseModel):

@@ -31,6 +31,12 @@
 | `SMM_INSTAGRAM_CLIENT_SECRET` | (اختياري) OAuth إنستجرام |
 | `SMM_TIKTOK_CLIENT_KEY` | (اختياري) OAuth تيك توك |
 | `SMM_TIKTOK_CLIENT_SECRET` | (اختياري) OAuth تيك توك |
+
+Redirect URIs (انسخها في لوحة Meta و TikTok Developers):
+
+- `{SMM_PUBLIC_BASE_URL}/api/social/oauth/instagram/callback`
+- `{SMM_PUBLIC_BASE_URL}/api/social/oauth/tiktok/callback`
+
 | `SMM_PAYMENT_PHONE` | رقم الهاتف للتواصل/التحويل |
 | `SMM_PAYMENT_ACCOUNT` | رقم الحساب أو IBAN |
 | `SMM_PAYMENT_BANK` | اسم البنك أو المحفظة (زين كاش، إلخ) |
