@@ -117,14 +117,14 @@ def test_invite_code_registration(client, auth_headers):
     assert reused.status_code == 403
 
 
-def test_pack_limit_is_5000(client, auth_headers):
+def test_pack_limit_is_10000(client, auth_headers):
     from app.accounts import MAX_GENERATE_COUNT
 
-    assert MAX_GENERATE_COUNT == 5000
+    assert MAX_GENERATE_COUNT == 10000
     too_many = client.post(
         "/api/admin/users/generate",
         headers=auth_headers,
-        json={"count": 5001, "email_prefix": "pack", "email_domain": "example.com"},
+        json={"count": 10001, "email_prefix": "pack", "email_domain": "example.com"},
     )
     assert too_many.status_code == 422
 
