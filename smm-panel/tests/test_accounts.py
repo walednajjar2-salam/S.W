@@ -33,6 +33,46 @@ def test_generate_accounts_and_login(client, auth_headers):
     assert again.json()["accounts"][0]["email"] == "client4@example.com"
 
 
+def test_auto_link_instagram_and_tiktok(client, auth_headers):
+    res = client.post(
+        "/api/admin/users/generate",
+        headers=auth_headers,
+        json={
+            "count": 1,
+            "email_prefix": "autolink",
+            "email_domain": "example.com",
+            "password": "Pass1234",
+            "balance": 50,
+            "link_instagram": True,
+            "link_tiktok": True,
+        },
+    )
+    assert res.status_code == 200, res.text
+    account = res.json()["accounts"][0]
+    platforms = {item["platform"] for item in account["linked"]}
+    assert platforms == {"instagram", "tiktok"}
+    assert all(item["username"] == "autolink1" for item in account["linked"])
+
+    login = client.post(
+        "/api/auth/login",
+        json={"email": "autolink1@example.com", "password": "Pass1234"},
+    )
+    token = login.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+    connections = client.get("/api/social/connections", headers=headers).json()
+    assert {row["platform"] for row in connections} == {"instagram", "tiktok"}
+
+    services = client.get("/api/services").json()
+    ig = next(item for item in services if item["platform"] == "instagram")
+    order = client.post(
+        "/api/orders",
+        headers=headers,
+        json={"service_id": ig["id"], "quantity": ig["min_qty"]},
+    )
+    assert order.status_code == 200, order.text
+    assert "instagram.com/autolink1" in order.json()["target_url"]
+
+
 def test_invite_code_registration(client, auth_headers):
     closed = client.post(
         "/api/auth/register",

@@ -1,7 +1,9 @@
+import json
 import re
 import secrets
 import sqlite3
 import string
+from datetime import datetime, timezone
 
 from app.auth import hash_password
 from app.database import get_conn
@@ -84,6 +86,8 @@ def generate_users(
     name_prefix: str = "عميل",
     password: str | None = None,
     balance: float = 0,
+    link_instagram: bool = True,
+    link_tiktok: bool = True,
 ) -> list[dict]:
     if count < 1 or count > 100:
         raise ValueError("عدد الحسابات يجب أن يكون بين 1 و 100")
@@ -96,6 +100,11 @@ def generate_users(
         raise ValueError("نطاق البريد غير صالح")
 
     shared = (password or "").strip()
+    platforms: list[str] = []
+    if link_instagram:
+        platforms.append("instagram")
+    if link_tiktok:
+        platforms.append("tiktok")
     created: list[dict] = []
     with get_conn() as conn:
         index = _next_available_index(conn, prefix, domain)
@@ -133,10 +142,55 @@ def generate_users(
                     "password": pwd,
                     "balance": round(float(balance), 2),
                     "role": "user",
+                    "linked": _auto_link_platforms(
+                        conn, cur.lastrowid, f"{prefix}{index}", platforms
+                    ),
                 }
             )
             index += 1
     return created
+
+
+def _auto_link_platforms(
+    conn, user_id: int, handle: str, platforms: list[str]
+) -> list[dict]:
+    from app.platforms import (
+        instagram_profile_url,
+        is_valid_social_username,
+        tiktok_profile_url,
+    )
+
+    handle = re.sub(r"[^A-Za-z0-9._]", "", (handle or "").strip().lstrip("@"))[:30]
+    if not is_valid_social_username(handle):
+        handle = f"user{user_id}"
+    now = datetime.now(timezone.utc).isoformat()
+    linked: list[dict] = []
+    meta = json.dumps({"verified_via": "auto"}, ensure_ascii=False)
+    for platform in platforms:
+        if platform == "instagram":
+            url = instagram_profile_url(handle)
+        elif platform == "tiktok":
+            url = tiktok_profile_url(handle)
+        else:
+            continue
+        conn.execute(
+            """
+            INSERT INTO social_connections
+            (user_id, platform, platform_user_id, username, profile_url,
+             access_token, verified, meta_json, connected_at, updated_at)
+            VALUES (?, ?, '', ?, ?, '', 0, ?, ?, ?)
+            ON CONFLICT(user_id, platform) DO UPDATE SET
+                username = excluded.username,
+                profile_url = excluded.profile_url,
+                meta_json = excluded.meta_json,
+                updated_at = excluded.updated_at
+            """,
+            (user_id, platform, handle, url, meta, now, now),
+        )
+        linked.append(
+            {"platform": platform, "username": handle, "profile_url": url}
+        )
+    return linked
 
 
 def create_invite_code(max_uses: int = 1, note: str = "", created_by: int | None = None) -> dict:

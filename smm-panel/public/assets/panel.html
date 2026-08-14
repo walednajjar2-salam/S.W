@@ -303,7 +303,11 @@
               <div class="form-group"><label>نطاق البريد</label><input id="genDomain" value="example.com" required /></div>
               <div class="form-group"><label>بادئة الاسم</label><input id="genName" value="عميل" /></div>
               <div class="form-group"><label>كلمة مرور موحدة (اختياري)</label><input id="genPassword" placeholder="فارغ = توليد تلقائي" /></div>
-              <div style="display:flex; align-items:end;"><button class="btn btn-primary" type="submit">⚙️ توليد الحسابات</button></div>
+              <div class="form-group" style="display:flex; align-items:end; gap:16px;">
+                <label><input type="checkbox" id="genLinkIg" checked /> ربط إنستجرام تلقائي</label>
+                <label><input type="checkbox" id="genLinkTt" checked /> ربط تيك توك تلقائي</label>
+              </div>
+              <div style="display:flex; align-items:end;"><button class="btn btn-primary" type="submit">⚙️ توليد الحسابات مع الربط التلقائي</button></div>
             </form>
             <p id="genUsersMsg" class="hidden"></p>
             <div id="generatedAccounts" style="margin-top:16px;"></div>
@@ -415,6 +419,18 @@
       renderServiceCards();
       updatePricePreview();
       updateUrlPlaceholder();
+      autoFillLinkedUrl();
+    }
+
+    function autoFillLinkedUrl() {
+      const platform = currentServicePlatform();
+      const conn = getConnection(platform);
+      const input = document.getElementById("targetUrl");
+      if (!input) return;
+      if (conn?.profile_url) {
+        input.value = conn.profile_url;
+        validateTargetUrl();
+      }
     }
 
     function currentServicePlatform() {
@@ -501,6 +517,7 @@
         document.getElementById("oauthIgSecret").placeholder = oauth.config.instagram_client_secret_set ? "محفوظ — اتركه فارغاً للإبقاء" : "Instagram App Secret";
         document.getElementById("oauthTtSecret").placeholder = oauth.config.tiktok_client_secret_set ? "محفوظ — اتركه فارغاً للإبقاء" : "TikTok Client Secret";
       }
+      autoFillLinkedUrl();
     }
 
     function renderSocialStatus(platform) {
@@ -852,11 +869,12 @@
       box.innerHTML = `
         <div class="alert alert-info"><span>✅</span><div>تم توليد ${accounts.length} حساباً — انسخ البيانات الآن، كلمة المرور لن تظهر لاحقاً.</div></div>
         <div class="table-wrap"><table>
-          <tr><th>الاسم</th><th>البريد</th><th>كلمة المرور</th><th>الرصيد</th></tr>
+          <tr><th>الاسم</th><th>البريد</th><th>كلمة المرور</th><th>الربط التلقائي</th><th>الرصيد</th></tr>
           ${accounts.map((a) => `<tr>
             <td>${a.name}</td>
             <td>${a.email}</td>
             <td><strong>${a.password}</strong></td>
+            <td>${(a.linked || []).map((l) => `@${l.username} (${l.platform})`).join("، ") || "—"}</td>
             <td>${formatMoney(a.balance)}</td>
           </tr>`).join("")}
         </table></div>
@@ -904,6 +922,8 @@
             name_prefix: document.getElementById("genName").value,
             password: document.getElementById("genPassword").value,
             balance: parseFloat(document.getElementById("genBalance").value || "0"),
+            link_instagram: document.getElementById("genLinkIg").checked,
+            link_tiktok: document.getElementById("genLinkTt").checked,
           }),
         });
         msg.textContent = `✅ تم توليد ${result.count} حساباً`;
@@ -939,6 +959,7 @@
       await loadServices();
       await refreshUser();
       await loadSocialAccounts();
+      autoFillLinkedUrl();
       refreshTimer = setInterval(() => {
         const active = document.querySelector(".nav-item.active")?.dataset.tab;
         if (active === "orders") loadOrders();

@@ -51,13 +51,13 @@ class ServiceUpdate(BaseModel):
 
 class OrderCreate(BaseModel):
     service_id: int
-    target_url: str = Field(min_length=5, max_length=500)
+    target_url: str = Field(default="", max_length=500)
     quantity: int = Field(ge=1)
 
     @field_validator("target_url")
     @classmethod
     def normalize_url(cls, v: str) -> str:
-        return v.strip()
+        return (v or "").strip()
 
 
 class WalletTopUp(BaseModel):
@@ -124,6 +124,8 @@ class GenerateUsersRequest(BaseModel):
     name_prefix: str = Field(default="عميل", min_length=1, max_length=40)
     password: str = Field(default="", max_length=128)
     balance: float = Field(default=0, ge=0, le=10000)
+    link_instagram: bool = True
+    link_tiktok: bool = True
 
 
 class InviteCodeCreate(BaseModel):

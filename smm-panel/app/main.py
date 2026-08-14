@@ -326,7 +326,24 @@ async def create_order(body: OrderCreate, user: dict = Depends(get_current_user)
             raise HTTPException(status.HTTP_404_NOT_FOUND, "الخدمة غير متاحة")
         svc = dict(svc)
 
-    resolved = await resolve_social_url(body.target_url)
+    target = body.target_url.strip()
+    if not target:
+        with get_conn() as conn:
+            linked = conn.execute(
+                """
+                SELECT profile_url FROM social_connections
+                WHERE user_id = ? AND platform = ?
+                """,
+                (user["id"], svc["platform"]),
+            ).fetchone()
+        if not linked:
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST,
+                "لا يوجد حساب مربوط تلقائياً لهذه المنصة — اربط الحساب أو أدخل الرابط",
+            )
+        target = linked["profile_url"]
+
+    resolved = await resolve_social_url(target)
     ok, url_msg, parsed = validate_url_for_platform(resolved, svc["platform"])
     if not ok:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, url_msg)
@@ -489,6 +506,8 @@ def admin_generate_users(body: GenerateUsersRequest, _: dict = Depends(require_a
             name_prefix=body.name_prefix,
             password=body.password or None,
             balance=body.balance,
+            link_instagram=body.link_instagram,
+            link_tiktok=body.link_tiktok,
         )
     except ValueError as exc:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
