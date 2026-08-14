@@ -295,9 +295,14 @@
           </div>
 
           <div class="card card-glass" style="margin-bottom:20px;">
-            <h3 style="margin-top:0;">توليد حسابات</h3>
+            <h3 style="margin-top:0;">توليد حسابات — حتى 1000 في حزمة واحدة</h3>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+              <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('genCount').value=5">5</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('genCount').value=100">100</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('genCount').value=1000">حزمة 1000</button>
+            </div>
             <form id="generateUsersForm" class="grid grid-2">
-              <div class="form-group"><label>العدد</label><input type="number" id="genCount" min="1" max="100" value="5" required /></div>
+              <div class="form-group"><label>العدد</label><input type="number" id="genCount" min="1" max="1000" value="1000" required /></div>
               <div class="form-group"><label>الرصيد الابتدائي</label><input type="number" id="genBalance" min="0" step="0.01" value="50" /></div>
               <div class="form-group"><label>بادئة البريد</label><input id="genPrefix" value="user" required /></div>
               <div class="form-group"><label>نطاق البريد</label><input id="genDomain" value="example.com" required /></div>
@@ -866,11 +871,16 @@
       const box = document.getElementById("generatedAccounts");
       if (!box) return;
       lastGeneratedCredentials = accounts.map((a) => `${a.email}\t${a.password}`).join("\n");
+      const preview = accounts.slice(0, 20);
+      const extra = accounts.length > preview.length
+        ? `<p style="color:var(--text-muted); font-size:0.85rem;">عرض أول ${preview.length} من ${accounts.length} — استخدم النسخ للحصول على الحزمة كاملة.</p>`
+        : "";
       box.innerHTML = `
-        <div class="alert alert-info"><span>✅</span><div>تم توليد ${accounts.length} حساباً — انسخ البيانات الآن، كلمة المرور لن تظهر لاحقاً.</div></div>
+        <div class="alert alert-info"><span>✅</span><div>تم توليد <strong>${accounts.length}</strong> حساباً في حزمة واحدة — كلمة المرور موحدة. انسخ البيانات الآن.</div></div>
+        ${extra}
         <div class="table-wrap"><table>
           <tr><th>الاسم</th><th>البريد</th><th>كلمة المرور</th><th>الربط التلقائي</th><th>الرصيد</th></tr>
-          ${accounts.map((a) => `<tr>
+          ${preview.map((a) => `<tr>
             <td>${a.name}</td>
             <td>${a.email}</td>
             <td><strong>${a.password}</strong></td>
@@ -878,7 +888,7 @@
             <td>${formatMoney(a.balance)}</td>
           </tr>`).join("")}
         </table></div>
-        <button class="btn btn-ghost btn-sm" style="margin-top:10px;" type="button" onclick="copyText(lastGeneratedCredentials)">نسخ البريد وكلمة المرور</button>
+        <button class="btn btn-ghost btn-sm" style="margin-top:10px;" type="button" onclick="copyText(lastGeneratedCredentials)">نسخ الحزمة كاملة (${accounts.length})</button>
       `;
     }
 
@@ -912,11 +922,15 @@
     document.getElementById("generateUsersForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const msg = document.getElementById("genUsersMsg");
+      const btn = e.target.querySelector("button[type=submit]");
+      const count = parseInt(document.getElementById("genCount").value, 10);
+      btn.disabled = true;
+      btn.textContent = count >= 100 ? `جاري توليد ${count} حساباً...` : "جاري التوليد...";
       try {
         const result = await api("/admin/users/generate", {
           method: "POST",
           body: JSON.stringify({
-            count: parseInt(document.getElementById("genCount").value, 10),
+            count,
             email_prefix: document.getElementById("genPrefix").value,
             email_domain: document.getElementById("genDomain").value,
             name_prefix: document.getElementById("genName").value,
@@ -926,7 +940,7 @@
             link_tiktok: document.getElementById("genLinkTt").checked,
           }),
         });
-        msg.textContent = `✅ تم توليد ${result.count} حساباً`;
+        msg.textContent = `✅ تم توليد ${result.count} حساباً في حزمة واحدة`;
         msg.className = "success";
         showToast(`تم توليد ${result.count} حساباً`);
         renderGeneratedAccounts(result.accounts);
@@ -935,6 +949,9 @@
         msg.textContent = err.message;
         msg.className = "error";
         showToast(err.message, "error");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "⚙️ توليد الحسابات مع الربط التلقائي";
       }
     });
 

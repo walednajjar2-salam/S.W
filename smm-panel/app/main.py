@@ -477,7 +477,7 @@ def wallet_topup(body: WalletTopUp, user: dict = Depends(get_current_user)):
 def admin_users(_: dict = Depends(require_admin)):
     with get_conn() as conn:
         rows = conn.execute(
-            "SELECT id, email, name, role, balance, created_at FROM users ORDER BY id"
+            "SELECT id, email, name, role, balance, created_at FROM users ORDER BY id DESC LIMIT 300"
         ).fetchall()
     return [dict(r) for r in rows]
 

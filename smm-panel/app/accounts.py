@@ -11,6 +11,7 @@ from app.database import get_conn
 EMAIL_PREFIX_RE = re.compile(r"^[a-z0-9](?:[a-z0-9._-]{0,30}[a-z0-9])?$", re.I)
 DOMAIN_RE = re.compile(r"^[a-z0-9](?:[a-z0-9.-]{0,60}[a-z0-9])$", re.I)
 INVITE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+MAX_GENERATE_COUNT = 1000
 
 
 def generate_password(length: int = 10) -> str:
@@ -89,8 +90,8 @@ def generate_users(
     link_instagram: bool = True,
     link_tiktok: bool = True,
 ) -> list[dict]:
-    if count < 1 or count > 100:
-        raise ValueError("عدد الحسابات يجب أن يكون بين 1 و 100")
+    if count < 1 or count > MAX_GENERATE_COUNT:
+        raise ValueError(f"عدد الحسابات يجب أن يكون بين 1 و {MAX_GENERATE_COUNT}")
     prefix = (email_prefix or "user").strip().lower().replace(" ", "")
     domain = (email_domain or "example.com").strip().lower().replace(" ", "")
     names = (name_prefix or "عميل").strip() or "عميل"
@@ -99,13 +100,16 @@ def generate_users(
     if not DOMAIN_RE.fullmatch(domain):
         raise ValueError("نطاق البريد غير صالح")
 
-    shared = (password or "").strip()
+    shared = (password or "").strip() or generate_password()
+    password_hash = hash_password(shared)
     platforms: list[str] = []
     if link_instagram:
         platforms.append("instagram")
     if link_tiktok:
         platforms.append("tiktok")
     created: list[dict] = []
+    social_rows: list[tuple] = []
+    wallet_rows: list[tuple] = []
     with get_conn() as conn:
         index = _next_available_index(conn, prefix, domain)
         for _ in range(count):
@@ -117,43 +121,60 @@ def generate_users(
                 if not taken:
                     break
                 index += 1
-            pwd = shared or generate_password()
             name = f"{names} {index}"
             cur = conn.execute(
                 """
                 INSERT INTO users (email, password_hash, name, role, balance)
                 VALUES (?, ?, ?, 'user', ?)
                 """,
-                (email, hash_password(pwd), name, float(balance)),
+                (email, password_hash, name, float(balance)),
             )
+            user_id = cur.lastrowid
             if balance:
-                conn.execute(
-                    """
-                    INSERT INTO wallet_transactions (user_id, amount, kind, note)
-                    VALUES (?, ?, 'admin_adjust', 'رصيد ابتدائي')
-                    """,
-                    (cur.lastrowid, float(balance)),
-                )
+                wallet_rows.append((user_id, float(balance), "admin_adjust", "رصيد ابتدائي"))
+            linked, link_rows = _auto_link_rows(user_id, f"{prefix}{index}", platforms)
+            social_rows.extend(link_rows)
             created.append(
                 {
-                    "id": cur.lastrowid,
+                    "id": user_id,
                     "email": email,
                     "name": name,
-                    "password": pwd,
+                    "password": shared,
                     "balance": round(float(balance), 2),
                     "role": "user",
-                    "linked": _auto_link_platforms(
-                        conn, cur.lastrowid, f"{prefix}{index}", platforms
-                    ),
+                    "linked": linked,
                 }
             )
             index += 1
+        if wallet_rows:
+            conn.executemany(
+                """
+                INSERT INTO wallet_transactions (user_id, amount, kind, note)
+                VALUES (?, ?, ?, ?)
+                """,
+                wallet_rows,
+            )
+        if social_rows:
+            conn.executemany(
+                """
+                INSERT INTO social_connections
+                (user_id, platform, platform_user_id, username, profile_url,
+                 access_token, verified, meta_json, connected_at, updated_at)
+                VALUES (?, ?, '', ?, ?, '', 0, ?, ?, ?)
+                ON CONFLICT(user_id, platform) DO UPDATE SET
+                    username = excluded.username,
+                    profile_url = excluded.profile_url,
+                    meta_json = excluded.meta_json,
+                    updated_at = excluded.updated_at
+                """,
+                social_rows,
+            )
     return created
 
 
-def _auto_link_platforms(
-    conn, user_id: int, handle: str, platforms: list[str]
-) -> list[dict]:
+def _auto_link_rows(
+    user_id: int, handle: str, platforms: list[str]
+) -> tuple[list[dict], list[tuple]]:
     from app.platforms import (
         instagram_profile_url,
         is_valid_social_username,
@@ -164,8 +185,9 @@ def _auto_link_platforms(
     if not is_valid_social_username(handle):
         handle = f"user{user_id}"
     now = datetime.now(timezone.utc).isoformat()
-    linked: list[dict] = []
     meta = json.dumps({"verified_via": "auto"}, ensure_ascii=False)
+    linked: list[dict] = []
+    rows: list[tuple] = []
     for platform in platforms:
         if platform == "instagram":
             url = instagram_profile_url(handle)
@@ -173,24 +195,9 @@ def _auto_link_platforms(
             url = tiktok_profile_url(handle)
         else:
             continue
-        conn.execute(
-            """
-            INSERT INTO social_connections
-            (user_id, platform, platform_user_id, username, profile_url,
-             access_token, verified, meta_json, connected_at, updated_at)
-            VALUES (?, ?, '', ?, ?, '', 0, ?, ?, ?)
-            ON CONFLICT(user_id, platform) DO UPDATE SET
-                username = excluded.username,
-                profile_url = excluded.profile_url,
-                meta_json = excluded.meta_json,
-                updated_at = excluded.updated_at
-            """,
-            (user_id, platform, handle, url, meta, now, now),
-        )
-        linked.append(
-            {"platform": platform, "username": handle, "profile_url": url}
-        )
-    return linked
+        rows.append((user_id, platform, handle, url, meta, now, now))
+        linked.append({"platform": platform, "username": handle, "profile_url": url})
+    return linked, rows
 
 
 def create_invite_code(max_uses: int = 1, note: str = "", created_by: int | None = None) -> dict:

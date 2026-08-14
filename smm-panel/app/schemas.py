@@ -118,7 +118,7 @@ class AdminCreateUser(BaseModel):
 
 
 class GenerateUsersRequest(BaseModel):
-    count: int = Field(ge=1, le=100)
+    count: int = Field(ge=1, le=1000)
     email_prefix: str = Field(default="user", min_length=1, max_length=32)
     email_domain: str = Field(default="example.com", min_length=3, max_length=80)
     name_prefix: str = Field(default="عميل", min_length=1, max_length=40)

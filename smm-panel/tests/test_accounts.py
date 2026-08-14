@@ -117,6 +117,18 @@ def test_invite_code_registration(client, auth_headers):
     assert reused.status_code == 403
 
 
+def test_pack_limit_is_1000(client, auth_headers):
+    from app.accounts import MAX_GENERATE_COUNT
+
+    assert MAX_GENERATE_COUNT == 1000
+    too_many = client.post(
+        "/api/admin/users/generate",
+        headers=auth_headers,
+        json={"count": 1001, "email_prefix": "pack", "email_domain": "example.com"},
+    )
+    assert too_many.status_code == 422
+
+
 def test_register_page_and_status(client):
     page = client.get("/register")
     assert page.status_code == 200
