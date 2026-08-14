@@ -93,6 +93,7 @@
                 </div>
                 <div class="form-group">
                   <label for="targetUrl">رابط الحساب / المنشور</label>
+                  <div id="connectedAccountsBar" class="connected-accounts-bar"></div>
                   <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
                     <button type="button" class="btn btn-ghost btn-sm" id="useConnectedBtn" onclick="useConnectedUrl()">استخدم الحساب المربوط</button>
                     <button type="button" class="btn btn-ghost btn-sm" onclick="validateTargetUrl()">✓ تحقق من الرابط</button>
@@ -117,10 +118,11 @@
               <div class="card">
                 <h3 style="margin-top:0; font-size:1rem;">💡 نصائح</h3>
                 <ul style="color:var(--text-secondary); font-size:0.88rem; padding-right:20px; margin:0;">
+                  <li>ضع رابط الحساب أو المنشور المطلوب — الحسابات المولَّدة تضغط متابعة أو لايك عليه داخل اللوحة</li>
                   <li>تأكد من صحة الرابط قبل الإرسال</li>
                   <li>الحد الأدنى والأقصى يتغيران حسب الخدمة</li>
                   <li>التقدم يُحدَّث تلقائياً كل ثوانٍ</li>
-                  <li>هذا مشروع تعليمي — لا تأثير حقيقي</li>
+                  <li>هذا مشروع تعليمي — لا تأثير حقيقي على إنستجرام أو تيك توك</li>
                 </ul>
               </div>
             </div>
@@ -190,18 +192,18 @@
                 <span class="social-platform-icon">📸</span>
                 <div>
                   <h3 style="margin:0;">Instagram</h3>
-                  <p class="stat-label" style="margin:4px 0 0;">اربط حسابك أو أدخل اسم المستخدم</p>
+                  <p class="stat-label" style="margin:4px 0 0;">ربط رسمي عبر Instagram Login</p>
                 </div>
               </div>
               <div id="instagramStatus" class="social-status">جاري التحميل...</div>
               <div style="display:flex; gap:8px; flex-wrap:wrap; margin:16px 0;">
-                <button class="btn btn-primary btn-sm" onclick="startOAuth('instagram')">🔗 ربط عبر Instagram</button>
+                <button class="btn btn-primary btn-sm" id="instagramOAuthBtn" onclick="startOAuth('instagram')">🔗 ربط رسمي عبر Instagram</button>
                 <button class="btn btn-ghost btn-sm" onclick="unlinkSocial('instagram')">إلغاء الربط</button>
               </div>
               <form id="instagramLinkForm" class="social-manual-form">
-                <label>أو اسم المستخدم يدوياً</label>
+                <label>أو اسم المستخدم / رابط الحساب</label>
                 <div style="display:flex; gap:8px;">
-                  <input type="text" id="instagramUsername" placeholder="@username" />
+                  <input type="text" id="instagramUsername" placeholder="@username أو instagram.com/username" />
                   <button class="btn btn-ghost btn-sm" type="submit">حفظ</button>
                 </div>
               </form>
@@ -212,40 +214,59 @@
                 <span class="social-platform-icon">🎵</span>
                 <div>
                   <h3 style="margin:0;">TikTok</h3>
-                  <p class="stat-label" style="margin:4px 0 0;">اربط حسابك أو أدخل اسم المستخدم</p>
+                  <p class="stat-label" style="margin:4px 0 0;">ربط رسمي عبر TikTok Login Kit</p>
                 </div>
               </div>
               <div id="tiktokStatus" class="social-status">جاري التحميل...</div>
               <div style="display:flex; gap:8px; flex-wrap:wrap; margin:16px 0;">
-                <button class="btn btn-primary btn-sm" onclick="startOAuth('tiktok')">🔗 ربط عبر TikTok</button>
+                <button class="btn btn-primary btn-sm" id="tiktokOAuthBtn" onclick="startOAuth('tiktok')">🔗 ربط رسمي عبر TikTok</button>
                 <button class="btn btn-ghost btn-sm" onclick="unlinkSocial('tiktok')">إلغاء الربط</button>
               </div>
               <form id="tiktokLinkForm" class="social-manual-form">
-                <label>أو اسم المستخدم يدوياً</label>
+                <label>أو اسم المستخدم / رابط الحساب</label>
                 <div style="display:flex; gap:8px;">
-                  <input type="text" id="tiktokUsername" placeholder="@username" />
+                  <input type="text" id="tiktokUsername" placeholder="@username أو tiktok.com/@username" />
                   <button class="btn btn-ghost btn-sm" type="submit">حفظ</button>
                 </div>
               </form>
             </div>
           </div>
 
-          <div class="card card-glass" style="margin-top:20px;">
-            <h3 style="margin-top:0;">OAuth — للربط الرسمي</h3>
+          <div class="card card-glass" style="margin-top:20px;" id="oauthOfficialCard">
+            <h3 style="margin-top:0;">ربط رسمي (OAuth)</h3>
             <p style="color:var(--text-secondary); font-size:0.9rem;">
-              لربط OAuth الكامل، أضف في Railway Variables:
+              الربط الرسمي يفتح صفحة إنستجرام أو تيك توك ويوثّق الحساب.
+              يتطلب حساب Instagram <strong>Business/Creator</strong> وتطبيق TikTok Login Kit.
             </p>
-            <div class="table-wrap">
-              <table>
-                <tr><th>Variable</th><th>الوصف</th></tr>
-                <tr><td><code>SMM_PUBLIC_BASE_URL</code></td><td>https://web-production-f3cc8.up.railway.app</td></tr>
-                <tr><td><code>SMM_INSTAGRAM_CLIENT_ID</code></td><td>من Meta Developers</td></tr>
-                <tr><td><code>SMM_INSTAGRAM_CLIENT_SECRET</code></td><td>من Meta Developers</td></tr>
-                <tr><td><code>SMM_TIKTOK_CLIENT_KEY</code></td><td>من TikTok Developers</td></tr>
-                <tr><td><code>SMM_TIKTOK_CLIENT_SECRET</code></td><td>من TikTok Developers</td></tr>
-              </table>
-            </div>
-            <p id="oauthConfigStatus" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0;"></p>
+            <p id="oauthConfigStatus" style="color:var(--text-muted); font-size:0.85rem;"></p>
+            <div id="oauthRedirectUris" style="color:var(--text-secondary); font-size:0.85rem;"></div>
+            <form id="oauthConfigForm" class="hidden" style="margin-top:16px;">
+              <h4 style="margin:0 0 12px;">مفاتيح التطبيق — المدير فقط</h4>
+              <div class="grid grid-2">
+                <div class="form-group">
+                  <label>رابط الموقع العام</label>
+                  <input id="oauthPublicBase" placeholder="https://YOUR-DOMAIN.up.railway.app" />
+                </div>
+                <div class="form-group">
+                  <label>Instagram App ID</label>
+                  <input id="oauthIgId" placeholder="من Meta Developers" />
+                </div>
+                <div class="form-group">
+                  <label>Instagram App Secret</label>
+                  <input id="oauthIgSecret" type="password" placeholder="يُحفظ ولا يُعرض" />
+                </div>
+                <div class="form-group">
+                  <label>TikTok Client Key</label>
+                  <input id="oauthTtKey" placeholder="من TikTok Developers" />
+                </div>
+                <div class="form-group">
+                  <label>TikTok Client Secret</label>
+                  <input id="oauthTtSecret" type="password" placeholder="يُحفظ ولا يُعرض" />
+                </div>
+              </div>
+              <button class="btn btn-primary" type="submit">حفظ مفاتيح الربط الرسمي</button>
+              <p id="oauthConfigMsg" class="hidden"></p>
+            </form>
           </div>
         </section>
 
@@ -272,6 +293,46 @@
           <div class="card" style="margin-bottom:20px;">
             <h3 style="margin-top:0;">الخدمات</h3>
             <div id="servicesAdmin"></div>
+          </div>
+
+          <div class="card card-glass" style="margin-bottom:20px;">
+            <h3 style="margin-top:0;">توليد حسابات — حتى 10000 في حزمة واحدة</h3>
+            <p style="color:var(--text-secondary); font-size:0.88rem; margin-top:0;">
+              الحسابات المربوطة تلقائياً تُستخدم للضغط على <strong>متابعة</strong> و<strong>لايك</strong>
+              على رابط كل طلب داخل اللوحة (محاكاة تعليمية — بدون بوتات على المنصات الحقيقية).
+            </p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+              <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('genCount').value=5">5</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('genCount').value=100">100</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('genCount').value=1000">حزمة 1000</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('genCount').value=5000">حزمة 5000</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('genCount').value=10000">حزمة 10000</button>
+            </div>
+            <form id="generateUsersForm" class="grid grid-2">
+              <div class="form-group"><label>العدد</label><input type="number" id="genCount" min="1" max="10000" value="10000" required /></div>
+              <div class="form-group"><label>الرصيد الابتدائي</label><input type="number" id="genBalance" min="0" step="0.01" value="50" /></div>
+              <div class="form-group"><label>بادئة البريد</label><input id="genPrefix" value="user" required /></div>
+              <div class="form-group"><label>نطاق البريد</label><input id="genDomain" value="example.com" required /></div>
+              <div class="form-group"><label>بادئة الاسم</label><input id="genName" value="عميل" /></div>
+              <div class="form-group"><label>كلمة مرور موحدة (اختياري)</label><input id="genPassword" placeholder="فارغ = توليد تلقائي" /></div>
+              <div class="form-group" style="display:flex; align-items:end; gap:16px;">
+                <label><input type="checkbox" id="genLinkIg" checked /> ربط إنستجرام تلقائي</label>
+                <label><input type="checkbox" id="genLinkTt" checked /> ربط تيك توك تلقائي</label>
+              </div>
+              <div style="display:flex; align-items:end;"><button class="btn btn-primary" type="submit">⚙️ توليد الحسابات مع الربط التلقائي</button></div>
+            </form>
+            <p id="genUsersMsg" class="hidden"></p>
+            <div id="generatedAccounts" style="margin-top:16px;"></div>
+          </div>
+
+          <div class="card card-glass" style="margin-bottom:20px;">
+            <h3 style="margin-top:0;">أكواد الدعوة</h3>
+            <form id="inviteForm" class="grid grid-2">
+              <div class="form-group"><label>عدد الاستخدامات</label><input type="number" id="inviteUses" min="1" max="1000" value="10" /></div>
+              <div class="form-group"><label>ملاحظة</label><input id="inviteNote" placeholder="دفعة العملاء..." /></div>
+              <div style="display:flex; align-items:end;"><button class="btn btn-primary" type="submit">🎟️ إنشاء كود</button></div>
+            </form>
+            <div id="inviteCodesAdmin" style="margin-top:16px;"></div>
           </div>
 
           <div class="card" style="margin-bottom:20px;">
@@ -370,6 +431,18 @@
       renderServiceCards();
       updatePricePreview();
       updateUrlPlaceholder();
+      autoFillLinkedUrl();
+    }
+
+    function autoFillLinkedUrl() {
+      const platform = currentServicePlatform();
+      const conn = getConnection(platform);
+      const input = document.getElementById("targetUrl");
+      if (!input) return;
+      if (conn?.profile_url) {
+        input.value = conn.profile_url;
+        validateTargetUrl();
+      }
     }
 
     function currentServicePlatform() {
@@ -403,14 +476,60 @@
       validateTargetUrl();
     }
 
+    function renderConnectedAccountsBar() {
+      const bar = document.getElementById("connectedAccountsBar");
+      if (!bar) return;
+      const ig = getConnection("instagram");
+      const tt = getConnection("tiktok");
+      bar.innerHTML = `
+        <span class="connected-chip ${ig ? "linked" : ""}">📸 Instagram ${ig ? `@${ig.username}` : "غير مربوط"}</span>
+        <span class="connected-chip ${tt ? "linked" : ""}">🎵 TikTok ${tt ? `@${tt.username}` : "غير مربوط"}</span>
+      `;
+    }
+
     async function loadSocialAccounts() {
       socialConnections = await api("/social/connections");
       renderSocialStatus("instagram");
       renderSocialStatus("tiktok");
+      renderConnectedAccountsBar();
 
       const oauth = await api("/social/oauth/status");
+      const igBtn = document.getElementById("instagramOAuthBtn");
+      const ttBtn = document.getElementById("tiktokOAuthBtn");
+      if (igBtn) {
+        igBtn.disabled = !oauth.instagram;
+        igBtn.title = oauth.instagram
+          ? "ربط رسمي عبر Instagram Login"
+          : "احفظ Instagram App ID و Secret من لوحة الإدارة أولاً";
+      }
+      if (ttBtn) {
+        ttBtn.disabled = !oauth.tiktok;
+        ttBtn.title = oauth.tiktok
+          ? "ربط رسمي عبر TikTok Login Kit"
+          : "احفظ TikTok Client Key و Secret من لوحة الإدارة أولاً";
+      }
       document.getElementById("oauthConfigStatus").innerHTML =
-        `Instagram OAuth: ${oauth.instagram ? "✅ مُفعّل" : "⚪ غير مُعد"} | TikTok OAuth: ${oauth.tiktok ? "✅ مُفعّل" : "⚪ غير مُعد"}`;
+        `Instagram الرسمي: ${oauth.instagram ? "✅ جاهز" : "⚪ يحتاج مفاتيح التطبيق"} | TikTok الرسمي: ${oauth.tiktok ? "✅ جاهز" : "⚪ يحتاج مفاتيح التطبيق"}`;
+      const uris = oauth.redirect_uris || {};
+      const uriBox = document.getElementById("oauthRedirectUris");
+      if (uriBox) {
+        uriBox.innerHTML = `
+          <p style="margin:8px 0 4px;">انسخ Redirect URI إلى لوحة Meta و TikTok:</p>
+          <div class="payment-info-item"><code>${uris.instagram || "—"}</code> <button type="button" class="btn btn-ghost btn-sm" onclick="copyText('${(uris.instagram || "").replace(/'/g, "\\'")}')">نسخ</button></div>
+          <div class="payment-info-item" style="margin-top:8px;"><code>${uris.tiktok || "—"}</code> <button type="button" class="btn btn-ghost btn-sm" onclick="copyText('${(uris.tiktok || "").replace(/'/g, "\\'")}')">نسخ</button></div>
+        `;
+      }
+      const form = document.getElementById("oauthConfigForm");
+      const isAdmin = getUser()?.role === "admin";
+      form?.classList.toggle("hidden", !isAdmin);
+      if (isAdmin && oauth.config) {
+        document.getElementById("oauthPublicBase").value = oauth.config.public_base_url || oauth.public_base_url || window.location.origin;
+        document.getElementById("oauthIgId").value = oauth.config.instagram_client_id || "";
+        document.getElementById("oauthTtKey").value = oauth.config.tiktok_client_key || "";
+        document.getElementById("oauthIgSecret").placeholder = oauth.config.instagram_client_secret_set ? "محفوظ — اتركه فارغاً للإبقاء" : "Instagram App Secret";
+        document.getElementById("oauthTtSecret").placeholder = oauth.config.tiktok_client_secret_set ? "محفوظ — اتركه فارغاً للإبقاء" : "TikTok Client Secret";
+      }
+      autoFillLinkedUrl();
     }
 
     function renderSocialStatus(platform) {
@@ -431,9 +550,11 @@
     async function startOAuth(platform) {
       try {
         const data = await api(`/social/oauth/${platform}/start`);
+        if (!data?.url) throw new Error("تعذّر إنشاء رابط الربط");
         window.location.href = data.url;
       } catch (err) {
         showToast(err.message, "error");
+        showTab("accounts");
       }
     }
 
@@ -448,12 +569,16 @@
     }
 
     async function linkManual(platform, username) {
-      await api("/social/link", {
-        method: "POST",
-        body: JSON.stringify({ platform, username }),
-      });
-      showToast(`تم ربط @${username.replace("@", "")}`);
-      await loadSocialAccounts();
+      try {
+        await api("/social/link", {
+          method: "POST",
+          body: JSON.stringify({ platform, username }),
+        });
+        showToast(`تم ربط ${platform} ✓`);
+        await loadSocialAccounts();
+      } catch (err) {
+        showToast(err.message, "error");
+      }
     }
 
     async function validateTargetUrl() {
@@ -516,6 +641,33 @@
       e.target.reset();
     });
 
+    document.getElementById("oauthConfigForm")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById("oauthConfigMsg");
+      const body = {
+        public_base_url: document.getElementById("oauthPublicBase").value.trim(),
+        instagram_client_id: document.getElementById("oauthIgId").value.trim(),
+        tiktok_client_key: document.getElementById("oauthTtKey").value.trim(),
+      };
+      const igSecret = document.getElementById("oauthIgSecret").value.trim();
+      const ttSecret = document.getElementById("oauthTtSecret").value.trim();
+      if (igSecret) body.instagram_client_secret = igSecret;
+      if (ttSecret) body.tiktok_client_secret = ttSecret;
+      try {
+        await api("/admin/oauth-config", { method: "PUT", body: JSON.stringify(body) });
+        document.getElementById("oauthIgSecret").value = "";
+        document.getElementById("oauthTtSecret").value = "";
+        msg.textContent = "✅ تم حفظ مفاتيح الربط الرسمي";
+        msg.className = "success";
+        showToast("تم تفعيل الربط الرسمي");
+        await loadSocialAccounts();
+      } catch (err) {
+        msg.textContent = err.message;
+        msg.className = "error";
+        showToast(err.message, "error");
+      }
+    });
+
     function handleOAuthRedirect() {
       const params = new URLSearchParams(window.location.search);
       const oauth = params.get("oauth");
@@ -556,6 +708,7 @@
       selectedServiceId = parseInt(document.getElementById("serviceId").value, 10);
       renderServiceCards();
       updatePricePreview();
+      updateUrlPlaceholder();
     });
     document.getElementById("quantity").addEventListener("input", updatePricePreview);
 
@@ -692,6 +845,58 @@
 
       const orders = await api("/orders");
       renderOrders(orders, "allOrdersAdmin", true);
+
+      await loadInviteCodes();
+    }
+
+    async function loadInviteCodes() {
+      const codes = await api("/admin/invite-codes");
+      const box = document.getElementById("inviteCodesAdmin");
+      if (!box) return;
+      box.innerHTML = codes.length ? `
+        <div class="table-wrap"><table>
+          <tr><th>الكود</th><th>الاستخدام</th><th>الحالة</th><th>ملاحظة</th><th></th></tr>
+          ${codes.map((c) => `<tr>
+            <td><strong class="payment-copy" onclick="copyText('${c.code}')">${c.code} 📋</strong></td>
+            <td>${c.used_count} / ${c.max_uses}</td>
+            <td>${c.active ? '<span class="badge badge-completed">نشط</span>' : '<span class="badge badge-pending">متوقف</span>'}</td>
+            <td>${c.note || "—"}</td>
+            <td>${c.active ? `<button class="btn btn-ghost btn-sm" onclick="disableInvite(${c.id})">إيقاف</button>` : ""}</td>
+          </tr>`).join("")}
+        </table></div>` : renderEmptyState("🎟️", "لا توجد أكواد دعوة بعد");
+    }
+
+    async function disableInvite(id) {
+      await api(`/admin/invite-codes/${id}/disable`, { method: "POST" });
+      showToast("تم إيقاف الكود");
+      loadInviteCodes();
+    }
+
+    let lastGeneratedCredentials = "";
+
+    function renderGeneratedAccounts(accounts) {
+      const box = document.getElementById("generatedAccounts");
+      if (!box) return;
+      lastGeneratedCredentials = accounts.map((a) => `${a.email}\t${a.password}`).join("\n");
+      const preview = accounts.slice(0, 20);
+      const extra = accounts.length > preview.length
+        ? `<p style="color:var(--text-muted); font-size:0.85rem;">عرض أول ${preview.length} من ${accounts.length} — استخدم النسخ للحصول على الحزمة كاملة.</p>`
+        : "";
+      box.innerHTML = `
+        <div class="alert alert-info"><span>✅</span><div>تم توليد <strong>${accounts.length}</strong> حساباً في حزمة واحدة — كلمة المرور موحدة. انسخ البيانات الآن.</div></div>
+        ${extra}
+        <div class="table-wrap"><table>
+          <tr><th>الاسم</th><th>البريد</th><th>كلمة المرور</th><th>الربط التلقائي</th><th>الرصيد</th></tr>
+          ${preview.map((a) => `<tr>
+            <td>${a.name}</td>
+            <td>${a.email}</td>
+            <td><strong>${a.password}</strong></td>
+            <td>${(a.linked || []).map((l) => `@${l.username} (${l.platform})`).join("، ") || "—"}</td>
+            <td>${formatMoney(a.balance)}</td>
+          </tr>`).join("")}
+        </table></div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:10px;" type="button" onclick="copyText(lastGeneratedCredentials)">نسخ الحزمة كاملة (${accounts.length})</button>
+      `;
     }
 
     async function adjustBalance(userId) {
@@ -721,11 +926,64 @@
       loadServices();
     });
 
+    document.getElementById("generateUsersForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById("genUsersMsg");
+      const btn = e.target.querySelector("button[type=submit]");
+      const count = parseInt(document.getElementById("genCount").value, 10);
+      btn.disabled = true;
+      btn.textContent = count >= 100 ? `جاري توليد ${count} حساباً...` : "جاري التوليد...";
+      try {
+        const result = await api("/admin/users/generate", {
+          method: "POST",
+          body: JSON.stringify({
+            count,
+            email_prefix: document.getElementById("genPrefix").value,
+            email_domain: document.getElementById("genDomain").value,
+            name_prefix: document.getElementById("genName").value,
+            password: document.getElementById("genPassword").value,
+            balance: parseFloat(document.getElementById("genBalance").value || "0"),
+            link_instagram: document.getElementById("genLinkIg").checked,
+            link_tiktok: document.getElementById("genLinkTt").checked,
+          }),
+        });
+        msg.textContent = `✅ تم توليد ${result.count} حساباً في حزمة واحدة`;
+        msg.className = "success";
+        showToast(`تم توليد ${result.count} حساباً`);
+        renderGeneratedAccounts(result.accounts);
+        loadAdmin();
+      } catch (err) {
+        msg.textContent = err.message;
+        msg.className = "error";
+        showToast(err.message, "error");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "⚙️ توليد الحسابات مع الربط التلقائي";
+      }
+    });
+
+    document.getElementById("inviteForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const created = await api("/admin/invite-codes", {
+        method: "POST",
+        body: JSON.stringify({
+          max_uses: parseInt(document.getElementById("inviteUses").value, 10),
+          note: document.getElementById("inviteNote").value,
+        }),
+      });
+      showToast(`تم إنشاء الكود ${created.code}`);
+      copyText(created.code);
+      e.target.reset();
+      document.getElementById("inviteUses").value = "10";
+      loadInviteCodes();
+    });
+
     async function init() {
       handleOAuthRedirect();
       await loadServices();
       await refreshUser();
-      socialConnections = await api("/social/connections");
+      await loadSocialAccounts();
+      autoFillLinkedUrl();
       refreshTimer = setInterval(() => {
         const active = document.querySelector(".nav-item.active")?.dataset.tab;
         if (active === "orders") loadOrders();

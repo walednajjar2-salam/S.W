@@ -1,9 +1,10 @@
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote
 import json
 
-from fastapi import Depends, FastAPI, HTTPException, Query, status
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -17,9 +18,13 @@ from app.auth import (
 )
 from app.database import get_conn, init_db
 from app.schemas import (
+    AdminCreateUser,
     AuthResponse,
     BalanceAdjust,
+    GenerateUsersRequest,
+    InviteCodeCreate,
     LoginRequest,
+    OAuthConfigUpdate,
     OrderCreate,
     RegisterRequest,
     ServiceCreate,
@@ -28,12 +33,21 @@ from app.schemas import (
     UrlValidateRequest,
     WalletTopUp,
 )
+from app.accounts import (
+    consume_invite_code,
+    create_invite_code,
+    create_user,
+    disable_invite_code,
+    generate_users,
+    list_invite_codes,
+)
 from app.seed import seed_if_empty
 from app.worker import worker
 from app.config import settings
 from app.platforms import (
     instagram_profile_url,
     preview_url,
+    resolve_social_url,
     tiktok_profile_url,
     validate_url_for_platform,
 )
@@ -41,9 +55,13 @@ from app.social_oauth import (
     exchange_instagram_code,
     exchange_tiktok_code,
     oauth_configured,
+    oauth_status_payload,
     pop_oauth_state,
+    public_base_from_headers,
+    save_oauth_setting,
     start_oauth,
 )
+from app.engagement import attach_engagement, order_engagement_payload
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "public"
 ASSETS_DIR = STATIC_DIR / "assets"
@@ -148,6 +166,14 @@ def _save_social_connection(user_id: int, data: dict) -> dict:
     return _social_public(dict(row))
 
 
+def _oauth_redirect(ok: bool, platform: str, msg: str = "") -> RedirectResponse:
+    if ok:
+        return RedirectResponse(f"/panel?oauth=success&platform={platform}")
+    return RedirectResponse(
+        f"/panel?oauth=error&platform={platform}&msg={quote(msg[:160])}"
+    )
+
+
 @app.get("/api/health")
 def health():
     return {
@@ -163,12 +189,48 @@ def health():
     }
 
 
+@app.get("/api/auth/register-status")
+def register_status():
+    with get_conn() as conn:
+        active = conn.execute(
+            """
+            SELECT COUNT(*) AS c FROM invite_codes
+            WHERE active = 1 AND used_count < max_uses
+            """
+        ).fetchone()["c"]
+    return {"open": False, "requires_invite": True, "has_active_codes": bool(active)}
+
+
 @app.post("/api/auth/register", response_model=AuthResponse)
-def register(_: RegisterRequest):
-    raise HTTPException(
-        status.HTTP_403_FORBIDDEN,
-        "التسجيل مغلق — حساب المدير Najjar فقط",
-    )
+def register(body: RegisterRequest):
+    try:
+        with get_conn() as conn:
+            exists = conn.execute(
+                "SELECT id FROM users WHERE email = ?", (body.email.lower(),)
+            ).fetchone()
+            if exists:
+                raise ValueError("البريد مستخدم مسبقاً")
+            consume_invite_code(conn, body.invite_code)
+            cur = conn.execute(
+                """
+                INSERT INTO users (email, password_hash, name, role, balance)
+                VALUES (?, ?, ?, 'user', ?)
+                """,
+                (
+                    body.email.lower(),
+                    hash_password(body.password),
+                    body.name.strip(),
+                    settings.default_user_balance,
+                ),
+            )
+            row = conn.execute(
+                "SELECT * FROM users WHERE id = ?", (cur.lastrowid,)
+            ).fetchone()
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, str(exc)) from exc
+    user = dict(row)
+    token = create_access_token(user["id"], user["role"])
+    return AuthResponse(access_token=token, user=_user_public(user))
 
 
 @app.post("/api/auth/login", response_model=AuthResponse)
@@ -256,17 +318,39 @@ def update_service(
 
 
 @app.post("/api/orders")
-def create_order(body: OrderCreate, user: dict = Depends(get_current_user)):
+async def create_order(body: OrderCreate, user: dict = Depends(get_current_user)):
     with get_conn() as conn:
         svc = conn.execute(
             "SELECT * FROM services WHERE id = ? AND active = 1", (body.service_id,)
         ).fetchone()
         if not svc:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "الخدمة غير متاحة")
-        ok, url_msg, parsed = validate_url_for_platform(body.target_url, svc["platform"])
-        if not ok:
-            raise HTTPException(status.HTTP_400_BAD_REQUEST, url_msg)
-        target_url = parsed["url"] if parsed else body.target_url
+        svc = dict(svc)
+
+    target = body.target_url.strip()
+    if not target:
+        with get_conn() as conn:
+            linked = conn.execute(
+                """
+                SELECT profile_url FROM social_connections
+                WHERE user_id = ? AND platform = ?
+                """,
+                (user["id"], svc["platform"]),
+            ).fetchone()
+        if not linked:
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST,
+                "لا يوجد حساب مربوط تلقائياً لهذه المنصة — اربط الحساب أو أدخل الرابط",
+            )
+        target = linked["profile_url"]
+
+    resolved = await resolve_social_url(target)
+    ok, url_msg, parsed = validate_url_for_platform(resolved, svc["platform"])
+    if not ok:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, url_msg)
+    target_url = parsed["url"] if parsed else resolved
+
+    with get_conn() as conn:
         if body.quantity < svc["min_qty"] or body.quantity > svc["max_qty"]:
             raise HTTPException(
                 status.HTTP_400_BAD_REQUEST,
@@ -320,7 +404,7 @@ def create_order(body: OrderCreate, user: dict = Depends(get_current_user)):
         new_balance = conn.execute(
             "SELECT balance FROM users WHERE id = ?", (user["id"],)
         ).fetchone()["balance"]
-    result = dict(order)
+        result = attach_engagement([dict(order)], conn)[0]
     result["balance_after"] = round(new_balance, 2)
     return result
 
@@ -351,7 +435,26 @@ def list_orders(user: dict = Depends(get_current_user)):
                 """,
                 (user["id"],),
             ).fetchall()
-    return [dict(r) for r in rows]
+        return attach_engagement([dict(r) for r in rows], conn)
+
+
+@app.get("/api/orders/{order_id}/engagement")
+def get_order_engagement(order_id: int, user: dict = Depends(get_current_user)):
+    with get_conn() as conn:
+        order = conn.execute(
+            """
+            SELECT o.*, s.name AS service_name, s.platform
+            FROM orders o
+            JOIN services s ON s.id = o.service_id
+            WHERE o.id = ?
+            """,
+            (order_id,),
+        ).fetchone()
+        if not order:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "الطلب غير موجود")
+        if user["role"] != "admin" and order["user_id"] != user["id"]:
+            raise HTTPException(status.HTTP_403_FORBIDDEN, "غير مصرح")
+        return order_engagement_payload(conn, dict(order))
 
 
 @app.get("/api/wallet/transactions")
@@ -394,9 +497,62 @@ def wallet_topup(body: WalletTopUp, user: dict = Depends(get_current_user)):
 def admin_users(_: dict = Depends(require_admin)):
     with get_conn() as conn:
         rows = conn.execute(
-            "SELECT id, email, name, role, balance, created_at FROM users ORDER BY id"
+            "SELECT id, email, name, role, balance, created_at FROM users ORDER BY id DESC LIMIT 300"
         ).fetchall()
     return [dict(r) for r in rows]
+
+
+@app.post("/api/admin/users")
+def admin_create_user(body: AdminCreateUser, _: dict = Depends(require_admin)):
+    try:
+        user = create_user(
+            email=str(body.email),
+            password=body.password,
+            name=body.name,
+            balance=body.balance,
+        )
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+    return user
+
+
+@app.post("/api/admin/users/generate")
+def admin_generate_users(body: GenerateUsersRequest, _: dict = Depends(require_admin)):
+    try:
+        created = generate_users(
+            count=body.count,
+            email_prefix=body.email_prefix,
+            email_domain=body.email_domain,
+            name_prefix=body.name_prefix,
+            password=body.password or None,
+            balance=body.balance,
+            link_instagram=body.link_instagram,
+            link_tiktok=body.link_tiktok,
+        )
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+    return {"count": len(created), "accounts": created}
+
+
+@app.get("/api/admin/invite-codes")
+def admin_invite_codes(_: dict = Depends(require_admin)):
+    return list_invite_codes()
+
+
+@app.post("/api/admin/invite-codes")
+def admin_create_invite(body: InviteCodeCreate, user: dict = Depends(require_admin)):
+    try:
+        return create_invite_code(body.max_uses, body.note, user["id"])
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+
+
+@app.post("/api/admin/invite-codes/{code_id}/disable")
+def admin_disable_invite(code_id: int, _: dict = Depends(require_admin)):
+    try:
+        return disable_invite_code(code_id)
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, str(exc)) from exc
 
 
 @app.post("/api/admin/users/{user_id}/balance")
@@ -461,20 +617,43 @@ def list_social_connections(user: dict = Depends(get_current_user)):
 
 
 @app.get("/api/social/oauth/status")
-def social_oauth_status(_: dict = Depends(get_current_user)):
-    return {
-        "instagram": oauth_configured("instagram"),
-        "tiktok": oauth_configured("tiktok"),
-        "public_base_url": settings.public_base_url,
-    }
+def social_oauth_status(request: Request, user: dict = Depends(get_current_user)):
+    base = public_base_from_headers(dict(request.headers), request.url.scheme)
+    return oauth_status_payload(base, include_config=user["role"] == "admin")
+
+
+@app.get("/api/admin/oauth-config")
+def admin_oauth_config(request: Request, _: dict = Depends(require_admin)):
+    base = public_base_from_headers(dict(request.headers), request.url.scheme)
+    return oauth_status_payload(base, include_config=True)
+
+
+@app.put("/api/admin/oauth-config")
+def update_oauth_config(body: OAuthConfigUpdate, request: Request, _: dict = Depends(require_admin)):
+    data = body.model_dump(exclude_unset=True)
+    secret_keys = {"instagram_client_secret", "tiktok_client_secret"}
+    for key, value in data.items():
+        if key in secret_keys and not (value or "").strip():
+            continue
+        save_oauth_setting(key, value or "")
+    base = public_base_from_headers(dict(request.headers), request.url.scheme)
+    return oauth_status_payload(base, include_config=True)
 
 
 @app.post("/api/social/link")
-def link_social_manual(body: SocialLinkRequest, user: dict = Depends(get_current_user)):
+async def link_social_manual(body: SocialLinkRequest, user: dict = Depends(get_current_user)):
     if body.platform == "instagram":
         profile_url = instagram_profile_url(body.username)
     else:
         profile_url = tiktok_profile_url(body.username)
+
+    meta = {"verified_via": "manual"}
+    try:
+        preview = await preview_url(profile_url, body.platform)
+        if preview.get("preview"):
+            meta["preview"] = preview["preview"]
+    except Exception:
+        pass
 
     return _save_social_connection(
         user["id"],
@@ -485,7 +664,7 @@ def link_social_manual(body: SocialLinkRequest, user: dict = Depends(get_current
             "profile_url": profile_url,
             "access_token": "",
             "verified": False,
-            "meta": {"verified_via": "manual"},
+            "meta": meta,
         },
     )
 
@@ -504,9 +683,10 @@ def unlink_social(platform: str, user: dict = Depends(get_current_user)):
 
 
 @app.get("/api/social/oauth/{platform}/start")
-def social_oauth_start(platform: str, user: dict = Depends(get_current_user)):
+def social_oauth_start(platform: str, request: Request, user: dict = Depends(get_current_user)):
     try:
-        url = start_oauth(platform, user["id"])
+        base = public_base_from_headers(dict(request.headers), request.url.scheme)
+        url = start_oauth(platform, user["id"], base)
     except ValueError as exc:
         raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, str(exc)) from exc
     return {"url": url}
@@ -517,22 +697,21 @@ async def instagram_oauth_callback(
     code: str = Query(default=""),
     state: str = Query(default=""),
     error: str = Query(default=""),
+    error_description: str = Query(default=""),
 ):
     if error:
-        return RedirectResponse(f"/panel?oauth=error&platform=instagram&msg={error}")
+        return _oauth_redirect(False, "instagram", error_description or error)
     payload = pop_oauth_state(state)
     if not payload or payload.get("platform") != "instagram":
-        return RedirectResponse("/panel?oauth=error&platform=instagram&msg=invalid_state")
+        return _oauth_redirect(False, "instagram", "جلسة الربط انتهت — أعد المحاولة من اللوحة")
     try:
-        data = await exchange_instagram_code(code)
+        data = await exchange_instagram_code(code, payload.get("redirect_uri") or None)
         data["platform"] = "instagram"
         data["verified"] = True
         _save_social_connection(payload["user_id"], data)
-        return RedirectResponse("/panel?oauth=success&platform=instagram")
+        return _oauth_redirect(True, "instagram")
     except Exception as exc:
-        return RedirectResponse(
-            f"/panel?oauth=error&platform=instagram&msg={str(exc)[:120]}"
-        )
+        return _oauth_redirect(False, "instagram", str(exc))
 
 
 @app.get("/api/social/oauth/tiktok/callback")
@@ -540,22 +719,25 @@ async def tiktok_oauth_callback(
     code: str = Query(default=""),
     state: str = Query(default=""),
     error: str = Query(default=""),
+    error_description: str = Query(default=""),
 ):
     if error:
-        return RedirectResponse(f"/panel?oauth=error&platform=tiktok&msg={error}")
+        return _oauth_redirect(False, "tiktok", error_description or error)
     payload = pop_oauth_state(state)
     if not payload or payload.get("platform") != "tiktok":
-        return RedirectResponse("/panel?oauth=error&platform=tiktok&msg=invalid_state")
+        return _oauth_redirect(False, "tiktok", "جلسة الربط انتهت — أعد المحاولة من اللوحة")
     try:
-        data = await exchange_tiktok_code(code)
+        data = await exchange_tiktok_code(
+            code,
+            payload.get("code_verifier") or "",
+            payload.get("redirect_uri") or None,
+        )
         data["platform"] = "tiktok"
         data["verified"] = True
         _save_social_connection(payload["user_id"], data)
-        return RedirectResponse("/panel?oauth=success&platform=tiktok")
+        return _oauth_redirect(True, "tiktok")
     except Exception as exc:
-        return RedirectResponse(
-            f"/panel?oauth=error&platform=tiktok&msg={str(exc)[:120]}"
-        )
+        return _oauth_redirect(False, "tiktok", str(exc))
 
 
 @app.post("/api/platforms/validate")
@@ -606,6 +788,11 @@ def index():
 @app.get("/login")
 def login_page():
     return FileResponse(ASSETS_DIR / "login.html")
+
+
+@app.get("/register")
+def register_page():
+    return FileResponse(ASSETS_DIR / "register.html")
 
 
 @app.get("/panel")

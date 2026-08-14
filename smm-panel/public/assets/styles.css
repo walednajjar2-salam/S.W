@@ -98,7 +98,36 @@ img { max-width: 100%; display: block; }
   white-space: nowrap;
 }
 
-.btn:active { transform: scale(0.98); }
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.connected-accounts-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.connected-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.82rem;
+}
+
+.connected-chip.linked {
+  border-color: rgba(16, 185, 129, 0.45);
+  color: var(--success);
+}
 
 .btn-primary {
   background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
@@ -842,6 +871,22 @@ tr:hover td { background: rgba(255, 255, 255, 0.02); }
   font-size: 0.82rem;
   color: var(--text-secondary);
   margin-bottom: 12px;
+}
+
+.engagement-line {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: var(--primary-light);
+}
+
+.engagement-details {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(124, 58, 237, 0.12);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  word-break: break-word;
 }
 
 /* ─── Wallet ─── */
