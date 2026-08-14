@@ -87,6 +87,25 @@ def main() -> int:
         if "instagram" not in (status.get("redirect_uris") or {}):
             raise RuntimeError("oauth redirect URIs missing")
 
+        wait(f"{base}/register")
+        _, generated = request(
+            f"{base}/api/admin/users/generate",
+            method="POST",
+            data=b'{"count":1,"email_prefix":"smoke","email_domain":"example.com","password":"Smoke123"}',
+            headers=auth,
+        )
+        if not generated.get("accounts"):
+            raise RuntimeError(f"account generate failed: {generated}")
+
+        _, invite = request(
+            f"{base}/api/admin/invite-codes",
+            method="POST",
+            data=b'{"max_uses":1,"note":"smoke"}',
+            headers=auth,
+        )
+        if not str(invite.get("code", "")).startswith("SW-"):
+            raise RuntimeError(f"invite code failed: {invite}")
+
         print("OK: production smoke test passed")
         return 0
     finally:

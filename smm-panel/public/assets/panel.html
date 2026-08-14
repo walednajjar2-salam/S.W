@@ -294,6 +294,31 @@
             <div id="servicesAdmin"></div>
           </div>
 
+          <div class="card card-glass" style="margin-bottom:20px;">
+            <h3 style="margin-top:0;">توليد حسابات</h3>
+            <form id="generateUsersForm" class="grid grid-2">
+              <div class="form-group"><label>العدد</label><input type="number" id="genCount" min="1" max="100" value="5" required /></div>
+              <div class="form-group"><label>الرصيد الابتدائي</label><input type="number" id="genBalance" min="0" step="0.01" value="50" /></div>
+              <div class="form-group"><label>بادئة البريد</label><input id="genPrefix" value="user" required /></div>
+              <div class="form-group"><label>نطاق البريد</label><input id="genDomain" value="example.com" required /></div>
+              <div class="form-group"><label>بادئة الاسم</label><input id="genName" value="عميل" /></div>
+              <div class="form-group"><label>كلمة مرور موحدة (اختياري)</label><input id="genPassword" placeholder="فارغ = توليد تلقائي" /></div>
+              <div style="display:flex; align-items:end;"><button class="btn btn-primary" type="submit">⚙️ توليد الحسابات</button></div>
+            </form>
+            <p id="genUsersMsg" class="hidden"></p>
+            <div id="generatedAccounts" style="margin-top:16px;"></div>
+          </div>
+
+          <div class="card card-glass" style="margin-bottom:20px;">
+            <h3 style="margin-top:0;">أكواد الدعوة</h3>
+            <form id="inviteForm" class="grid grid-2">
+              <div class="form-group"><label>عدد الاستخدامات</label><input type="number" id="inviteUses" min="1" max="1000" value="10" /></div>
+              <div class="form-group"><label>ملاحظة</label><input id="inviteNote" placeholder="دفعة العملاء..." /></div>
+              <div style="display:flex; align-items:end;"><button class="btn btn-primary" type="submit">🎟️ إنشاء كود</button></div>
+            </form>
+            <div id="inviteCodesAdmin" style="margin-top:16px;"></div>
+          </div>
+
           <div class="card" style="margin-bottom:20px;">
             <h3 style="margin-top:0;">المستخدمون</h3>
             <div id="usersAdmin"></div>
@@ -791,6 +816,52 @@
 
       const orders = await api("/orders");
       renderOrders(orders, "allOrdersAdmin", true);
+
+      await loadInviteCodes();
+    }
+
+    async function loadInviteCodes() {
+      const codes = await api("/admin/invite-codes");
+      const box = document.getElementById("inviteCodesAdmin");
+      if (!box) return;
+      box.innerHTML = codes.length ? `
+        <div class="table-wrap"><table>
+          <tr><th>الكود</th><th>الاستخدام</th><th>الحالة</th><th>ملاحظة</th><th></th></tr>
+          ${codes.map((c) => `<tr>
+            <td><strong class="payment-copy" onclick="copyText('${c.code}')">${c.code} 📋</strong></td>
+            <td>${c.used_count} / ${c.max_uses}</td>
+            <td>${c.active ? '<span class="badge badge-completed">نشط</span>' : '<span class="badge badge-pending">متوقف</span>'}</td>
+            <td>${c.note || "—"}</td>
+            <td>${c.active ? `<button class="btn btn-ghost btn-sm" onclick="disableInvite(${c.id})">إيقاف</button>` : ""}</td>
+          </tr>`).join("")}
+        </table></div>` : renderEmptyState("🎟️", "لا توجد أكواد دعوة بعد");
+    }
+
+    async function disableInvite(id) {
+      await api(`/admin/invite-codes/${id}/disable`, { method: "POST" });
+      showToast("تم إيقاف الكود");
+      loadInviteCodes();
+    }
+
+    let lastGeneratedCredentials = "";
+
+    function renderGeneratedAccounts(accounts) {
+      const box = document.getElementById("generatedAccounts");
+      if (!box) return;
+      lastGeneratedCredentials = accounts.map((a) => `${a.email}\t${a.password}`).join("\n");
+      box.innerHTML = `
+        <div class="alert alert-info"><span>✅</span><div>تم توليد ${accounts.length} حساباً — انسخ البيانات الآن، كلمة المرور لن تظهر لاحقاً.</div></div>
+        <div class="table-wrap"><table>
+          <tr><th>الاسم</th><th>البريد</th><th>كلمة المرور</th><th>الرصيد</th></tr>
+          ${accounts.map((a) => `<tr>
+            <td>${a.name}</td>
+            <td>${a.email}</td>
+            <td><strong>${a.password}</strong></td>
+            <td>${formatMoney(a.balance)}</td>
+          </tr>`).join("")}
+        </table></div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:10px;" type="button" onclick="copyText(lastGeneratedCredentials)">نسخ البريد وكلمة المرور</button>
+      `;
     }
 
     async function adjustBalance(userId) {
@@ -818,6 +889,49 @@
       e.target.reset();
       loadAdmin();
       loadServices();
+    });
+
+    document.getElementById("generateUsersForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById("genUsersMsg");
+      try {
+        const result = await api("/admin/users/generate", {
+          method: "POST",
+          body: JSON.stringify({
+            count: parseInt(document.getElementById("genCount").value, 10),
+            email_prefix: document.getElementById("genPrefix").value,
+            email_domain: document.getElementById("genDomain").value,
+            name_prefix: document.getElementById("genName").value,
+            password: document.getElementById("genPassword").value,
+            balance: parseFloat(document.getElementById("genBalance").value || "0"),
+          }),
+        });
+        msg.textContent = `✅ تم توليد ${result.count} حساباً`;
+        msg.className = "success";
+        showToast(`تم توليد ${result.count} حساباً`);
+        renderGeneratedAccounts(result.accounts);
+        loadAdmin();
+      } catch (err) {
+        msg.textContent = err.message;
+        msg.className = "error";
+        showToast(err.message, "error");
+      }
+    });
+
+    document.getElementById("inviteForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const created = await api("/admin/invite-codes", {
+        method: "POST",
+        body: JSON.stringify({
+          max_uses: parseInt(document.getElementById("inviteUses").value, 10),
+          note: document.getElementById("inviteNote").value,
+        }),
+      });
+      showToast(`تم إنشاء الكود ${created.code}`);
+      copyText(created.code);
+      e.target.reset();
+      document.getElementById("inviteUses").value = "10";
+      loadInviteCodes();
     });
 
     async function init() {

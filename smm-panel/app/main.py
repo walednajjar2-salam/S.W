@@ -18,8 +18,11 @@ from app.auth import (
 )
 from app.database import get_conn, init_db
 from app.schemas import (
+    AdminCreateUser,
     AuthResponse,
     BalanceAdjust,
+    GenerateUsersRequest,
+    InviteCodeCreate,
     LoginRequest,
     OAuthConfigUpdate,
     OrderCreate,
@@ -29,6 +32,14 @@ from app.schemas import (
     SocialLinkRequest,
     UrlValidateRequest,
     WalletTopUp,
+)
+from app.accounts import (
+    consume_invite_code,
+    create_invite_code,
+    create_user,
+    disable_invite_code,
+    generate_users,
+    list_invite_codes,
 )
 from app.seed import seed_if_empty
 from app.worker import worker
@@ -177,12 +188,48 @@ def health():
     }
 
 
+@app.get("/api/auth/register-status")
+def register_status():
+    with get_conn() as conn:
+        active = conn.execute(
+            """
+            SELECT COUNT(*) AS c FROM invite_codes
+            WHERE active = 1 AND used_count < max_uses
+            """
+        ).fetchone()["c"]
+    return {"open": False, "requires_invite": True, "has_active_codes": bool(active)}
+
+
 @app.post("/api/auth/register", response_model=AuthResponse)
-def register(_: RegisterRequest):
-    raise HTTPException(
-        status.HTTP_403_FORBIDDEN,
-        "التسجيل مغلق — حساب المدير Najjar فقط",
-    )
+def register(body: RegisterRequest):
+    try:
+        with get_conn() as conn:
+            exists = conn.execute(
+                "SELECT id FROM users WHERE email = ?", (body.email.lower(),)
+            ).fetchone()
+            if exists:
+                raise ValueError("البريد مستخدم مسبقاً")
+            consume_invite_code(conn, body.invite_code)
+            cur = conn.execute(
+                """
+                INSERT INTO users (email, password_hash, name, role, balance)
+                VALUES (?, ?, ?, 'user', ?)
+                """,
+                (
+                    body.email.lower(),
+                    hash_password(body.password),
+                    body.name.strip(),
+                    settings.default_user_balance,
+                ),
+            )
+            row = conn.execute(
+                "SELECT * FROM users WHERE id = ?", (cur.lastrowid,)
+            ).fetchone()
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, str(exc)) from exc
+    user = dict(row)
+    token = create_access_token(user["id"], user["role"])
+    return AuthResponse(access_token=token, user=_user_public(user))
 
 
 @app.post("/api/auth/login", response_model=AuthResponse)
@@ -418,6 +465,57 @@ def admin_users(_: dict = Depends(require_admin)):
     return [dict(r) for r in rows]
 
 
+@app.post("/api/admin/users")
+def admin_create_user(body: AdminCreateUser, _: dict = Depends(require_admin)):
+    try:
+        user = create_user(
+            email=str(body.email),
+            password=body.password,
+            name=body.name,
+            balance=body.balance,
+        )
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+    return user
+
+
+@app.post("/api/admin/users/generate")
+def admin_generate_users(body: GenerateUsersRequest, _: dict = Depends(require_admin)):
+    try:
+        created = generate_users(
+            count=body.count,
+            email_prefix=body.email_prefix,
+            email_domain=body.email_domain,
+            name_prefix=body.name_prefix,
+            password=body.password or None,
+            balance=body.balance,
+        )
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+    return {"count": len(created), "accounts": created}
+
+
+@app.get("/api/admin/invite-codes")
+def admin_invite_codes(_: dict = Depends(require_admin)):
+    return list_invite_codes()
+
+
+@app.post("/api/admin/invite-codes")
+def admin_create_invite(body: InviteCodeCreate, user: dict = Depends(require_admin)):
+    try:
+        return create_invite_code(body.max_uses, body.note, user["id"])
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+
+
+@app.post("/api/admin/invite-codes/{code_id}/disable")
+def admin_disable_invite(code_id: int, _: dict = Depends(require_admin)):
+    try:
+        return disable_invite_code(code_id)
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, str(exc)) from exc
+
+
 @app.post("/api/admin/users/{user_id}/balance")
 def admin_adjust_balance(
     user_id: int, body: BalanceAdjust, _: dict = Depends(require_admin)
@@ -651,6 +749,11 @@ def index():
 @app.get("/login")
 def login_page():
     return FileResponse(ASSETS_DIR / "login.html")
+
+
+@app.get("/register")
+def register_page():
+    return FileResponse(ASSETS_DIR / "register.html")
 
 
 @app.get("/panel")

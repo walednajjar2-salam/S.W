@@ -7,6 +7,7 @@ class RegisterRequest(BaseModel):
     email: EmailStr
     password: str = Field(min_length=6, max_length=128)
     name: str = Field(min_length=2, max_length=80)
+    invite_code: str = Field(default="", max_length=40)
 
 
 class LoginRequest(BaseModel):
@@ -107,3 +108,24 @@ class OAuthConfigUpdate(BaseModel):
 class UrlValidateRequest(BaseModel):
     url: str = Field(min_length=5, max_length=500)
     platform: Optional[str] = Field(default=None, max_length=40)
+
+
+class AdminCreateUser(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=6, max_length=128)
+    name: str = Field(min_length=2, max_length=80)
+    balance: float = Field(default=0, ge=0, le=10000)
+
+
+class GenerateUsersRequest(BaseModel):
+    count: int = Field(ge=1, le=100)
+    email_prefix: str = Field(default="user", min_length=1, max_length=32)
+    email_domain: str = Field(default="example.com", min_length=3, max_length=80)
+    name_prefix: str = Field(default="عميل", min_length=1, max_length=40)
+    password: str = Field(default="", max_length=128)
+    balance: float = Field(default=0, ge=0, le=10000)
+
+
+class InviteCodeCreate(BaseModel):
+    max_uses: int = Field(default=1, ge=1, le=1000)
+    note: str = Field(default="", max_length=200)
