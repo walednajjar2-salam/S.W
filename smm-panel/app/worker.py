@@ -1,10 +1,10 @@
 import math
 import threading
-import time
 from datetime import datetime, timezone
 
 from app.config import settings
 from app.database import get_conn
+from app.engagement import assign_actions
 
 
 class DeliveryWorker:
@@ -33,21 +33,31 @@ class DeliveryWorker:
         with get_conn() as conn:
             rows = conn.execute(
                 """
-                SELECT id, quantity, delivered
-                FROM orders
-                WHERE status = 'processing'
-                ORDER BY id ASC
+                SELECT o.id, o.user_id, o.quantity, o.delivered, o.target_url,
+                       s.name AS service_name, s.platform
+                FROM orders o
+                JOIN services s ON s.id = o.service_id
+                WHERE o.status = 'processing'
+                ORDER BY o.id ASC
                 LIMIT 20
                 """
             ).fetchall()
 
             now = datetime.now(timezone.utc).isoformat()
             for row in rows:
-                order_id = row["id"]
-                quantity = row["quantity"]
-                delivered = row["delivered"]
-                batch = max(1, math.ceil(quantity * settings.delivery_batch_ratio))
-                new_delivered = min(quantity, delivered + batch)
+                order = dict(row)
+                quantity = order["quantity"]
+                delivered = order["delivered"]
+                remaining = quantity - delivered
+                if remaining <= 0:
+                    continue
+                batch = min(
+                    remaining,
+                    max(1, math.ceil(quantity * settings.delivery_batch_ratio)),
+                )
+                clicked = assign_actions(conn, order, batch)
+                increment = clicked if clicked else batch
+                new_delivered = min(quantity, delivered + increment)
                 status = "completed" if new_delivered >= quantity else "processing"
                 conn.execute(
                     """
@@ -55,7 +65,7 @@ class DeliveryWorker:
                     SET delivered = ?, status = ?, updated_at = ?
                     WHERE id = ?
                     """,
-                    (new_delivered, status, now, order_id),
+                    (new_delivered, status, now, order["id"]),
                 )
 
 

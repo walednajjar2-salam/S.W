@@ -7,7 +7,7 @@ DEFAULT_SERVICES = [
     {
         "platform": "instagram",
         "name": "متابعين إنستجرام",
-        "description": "محاكاة تسليم — بدون بوتات حقيقية",
+        "description": "الحسابات المولَّدة تضغط متابعة على الرابط داخل اللوحة — بدون بوتات حقيقية",
         "min_qty": 100,
         "max_qty": 50000,
         "price_per_1000": 2.5,
@@ -15,7 +15,7 @@ DEFAULT_SERVICES = [
     {
         "platform": "instagram",
         "name": "لايكات إنستجرام",
-        "description": "محاكاة تسليم على رابط منشور",
+        "description": "الحسابات المولَّدة تضغط لايك على رابط المنشور داخل اللوحة",
         "min_qty": 50,
         "max_qty": 20000,
         "price_per_1000": 1.2,
@@ -23,7 +23,7 @@ DEFAULT_SERVICES = [
     {
         "platform": "tiktok",
         "name": "متابعين تيك توك",
-        "description": "محاكاة تسليم — تعليمي فقط",
+        "description": "الحسابات المولَّدة تضغط متابعة على الرابط داخل اللوحة — تعليمي فقط",
         "min_qty": 100,
         "max_qty": 100000,
         "price_per_1000": 1.8,

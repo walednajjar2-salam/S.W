@@ -118,6 +118,25 @@ def init_db() -> None:
                 created_by INTEGER,
                 created_at TEXT NOT NULL DEFAULT (datetime('now'))
             );
+
+            CREATE TABLE IF NOT EXISTS engagement_actions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                order_id INTEGER NOT NULL,
+                actor_user_id INTEGER NOT NULL,
+                action TEXT NOT NULL,
+                target_url TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'clicked',
+                clicked_at TEXT NOT NULL DEFAULT (datetime('now')),
+                created_at TEXT NOT NULL DEFAULT (datetime('now')),
+                FOREIGN KEY (order_id) REFERENCES orders(id),
+                FOREIGN KEY (actor_user_id) REFERENCES users(id),
+                UNIQUE(order_id, actor_user_id)
+            );
+
+            CREATE INDEX IF NOT EXISTS idx_engagement_order
+                ON engagement_actions(order_id);
+            CREATE INDEX IF NOT EXISTS idx_engagement_actor
+                ON engagement_actions(actor_user_id);
             """
         )
         _ensure_column(conn, "oauth_states", "redirect_uri", "TEXT NOT NULL DEFAULT ''")

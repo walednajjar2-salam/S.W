@@ -122,6 +122,42 @@ function renderEmptyState(icon, text) {
   return `<div class="empty-state"><div class="empty-state-icon">${icon}</div><p>${text}</p></div>`;
 }
 
+function actionLabel(action) {
+  const map = { follow: "متابعة", like: "لايك", view: "مشاهدة", subscribe: "اشتراك" };
+  return map[action] || action;
+}
+
+function engagementSummary(o) {
+  const e = o.engagement || {};
+  const label = e.action_label || actionLabel(e.action);
+  const n = Number(e.assigned || 0);
+  return `<div class="engagement-line">
+    👆 ${n.toLocaleString()} حساب ضغطوا <strong>${label}</strong> على الرابط المطلوب
+    <button type="button" class="btn btn-ghost btn-sm" style="margin-right:8px;" onclick="loadOrderEngagement(${o.id})">عرض من ضغط</button>
+  </div>
+  <div id="engagement-${o.id}" class="engagement-details hidden"></div>`;
+}
+
+async function loadOrderEngagement(orderId) {
+  const box = document.getElementById(`engagement-${orderId}`);
+  try {
+    const data = await api(`/orders/${orderId}/engagement`);
+    const names = (data.actors || [])
+      .map((a) => `@${a.username || a.name || "حساب"}`)
+      .join("، ");
+    const html = `<div><strong>${Number(data.assigned || 0).toLocaleString()}</strong> حساب نفّذوا ${data.action_label} على <span dir="ltr">${data.target_url}</span></div>
+      <div style="margin-top:6px;">${names || "لم يُسند أي حساب بعد — سيبدأ العامل عند التحديث التالي."}</div>`;
+    if (box) {
+      box.innerHTML = html;
+      box.classList.remove("hidden");
+    } else {
+      showToast(`${data.assigned} حساب نفّذوا ${data.action_label}`, "success");
+    }
+  } catch (err) {
+    showToast(err.message || "تعذّر تحميل من ضغطوا", "error");
+  }
+}
+
 function renderOrderCards(rows, admin = false) {
   if (!rows.length) return renderEmptyState("📭", "لا توجد طلبات بعد");
   return rows.map((o) => {
@@ -139,6 +175,7 @@ function renderOrderCards(rows, admin = false) {
       </div>
       <div>${o.delivered.toLocaleString()} / ${o.quantity.toLocaleString()} (${pct}%)</div>
       <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
+      ${engagementSummary(o)}
     </div>`;
   }).join("");
 }
@@ -165,6 +202,7 @@ function renderOrdersTable(rows, admin = false) {
         <td style="min-width:140px;">
           <div style="font-size:0.82rem; color:var(--text-secondary);">${o.delivered}/${o.quantity} (${pct}%)</div>
           <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
+          <div class="engagement-line">${Number((o.engagement && o.engagement.assigned) || 0).toLocaleString()} × ${(o.engagement && o.engagement.action_label) || "ضغط"}</div>
         </td>
         <td>${statusBadge(o.status)}</td>
         <td><strong>${formatMoney(o.amount)}</strong></td>

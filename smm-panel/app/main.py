@@ -61,6 +61,7 @@ from app.social_oauth import (
     save_oauth_setting,
     start_oauth,
 )
+from app.engagement import attach_engagement, order_engagement_payload
 
 STATIC_DIR = Path(__file__).resolve().parent.parent / "public"
 ASSETS_DIR = STATIC_DIR / "assets"
@@ -403,7 +404,7 @@ async def create_order(body: OrderCreate, user: dict = Depends(get_current_user)
         new_balance = conn.execute(
             "SELECT balance FROM users WHERE id = ?", (user["id"],)
         ).fetchone()["balance"]
-    result = dict(order)
+        result = attach_engagement([dict(order)], conn)[0]
     result["balance_after"] = round(new_balance, 2)
     return result
 
@@ -434,7 +435,26 @@ def list_orders(user: dict = Depends(get_current_user)):
                 """,
                 (user["id"],),
             ).fetchall()
-    return [dict(r) for r in rows]
+        return attach_engagement([dict(r) for r in rows], conn)
+
+
+@app.get("/api/orders/{order_id}/engagement")
+def get_order_engagement(order_id: int, user: dict = Depends(get_current_user)):
+    with get_conn() as conn:
+        order = conn.execute(
+            """
+            SELECT o.*, s.name AS service_name, s.platform
+            FROM orders o
+            JOIN services s ON s.id = o.service_id
+            WHERE o.id = ?
+            """,
+            (order_id,),
+        ).fetchone()
+        if not order:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "الطلب غير موجود")
+        if user["role"] != "admin" and order["user_id"] != user["id"]:
+            raise HTTPException(status.HTTP_403_FORBIDDEN, "غير مصرح")
+        return order_engagement_payload(conn, dict(order))
 
 
 @app.get("/api/wallet/transactions")

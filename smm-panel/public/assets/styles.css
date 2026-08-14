@@ -873,6 +873,22 @@ tr:hover td { background: rgba(255, 255, 255, 0.02); }
   margin-bottom: 12px;
 }
 
+.engagement-line {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: var(--primary-light);
+}
+
+.engagement-details {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(124, 58, 237, 0.12);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  word-break: break-word;
+}
+
 /* ─── Wallet ─── */
 .wallet-balance-card {
   text-align: center;
