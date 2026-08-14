@@ -295,14 +295,15 @@
           </div>
 
           <div class="card card-glass" style="margin-bottom:20px;">
-            <h3 style="margin-top:0;">توليد حسابات — حتى 1000 في حزمة واحدة</h3>
+            <h3 style="margin-top:0;">توليد حسابات — حتى 5000 في حزمة واحدة</h3>
             <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
               <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('genCount').value=5">5</button>
               <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('genCount').value=100">100</button>
-              <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('genCount').value=1000">حزمة 1000</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="document.getElementById('genCount').value=1000">حزمة 1000</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('genCount').value=5000">حزمة 5000</button>
             </div>
             <form id="generateUsersForm" class="grid grid-2">
-              <div class="form-group"><label>العدد</label><input type="number" id="genCount" min="1" max="1000" value="1000" required /></div>
+              <div class="form-group"><label>العدد</label><input type="number" id="genCount" min="1" max="5000" value="5000" required /></div>
               <div class="form-group"><label>الرصيد الابتدائي</label><input type="number" id="genBalance" min="0" step="0.01" value="50" /></div>
               <div class="form-group"><label>بادئة البريد</label><input id="genPrefix" value="user" required /></div>
               <div class="form-group"><label>نطاق البريد</label><input id="genDomain" value="example.com" required /></div>

@@ -11,7 +11,7 @@ from app.database import get_conn
 EMAIL_PREFIX_RE = re.compile(r"^[a-z0-9](?:[a-z0-9._-]{0,30}[a-z0-9])?$", re.I)
 DOMAIN_RE = re.compile(r"^[a-z0-9](?:[a-z0-9.-]{0,60}[a-z0-9])$", re.I)
 INVITE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
-MAX_GENERATE_COUNT = 1000
+MAX_GENERATE_COUNT = 5000
 
 
 def generate_password(length: int = 10) -> str:
